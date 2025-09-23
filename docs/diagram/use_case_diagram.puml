@@ -1,0 +1,55 @@
+@startuml usecase_diagram
+left to right direction
+skinparam packageStyle rectangle
+
+actor User
+
+rectangle "Bible Memorization App" {
+    (Přihlášení pomocí Google účtu) as UC1
+    (Odhlášení) as UC2
+    (Smazání účtu) as UC3
+
+    (Zobrazit text bible) as UC4
+    (Změna překladu bible) as UC5
+    (Změna jazyka aplikace) as UC14
+    (Změna light/dark mode) as UC15
+    (Změna velikosti textu) as UC16
+
+    (Uložení verše k zapamatování) as UC6
+    (Skrz Bibli) as UC6a
+    (Skrz referenci) as UC6b
+
+    (Procvičení doporučených veršů) as UC7
+    (Procvičení konkrétního verše) as UC8
+    (Zobrazení statistik) as UC9
+
+    (Přidání přítele) as UC10
+    (Odebrání přítele) as UC11
+    (Zobrazení statistik přítele) as UC12
+    (Zobrazení žebříčku) as UC13
+}
+
+' Associations
+User --> UC1
+User --> UC2
+User --> UC3
+
+User --> UC4
+User --> UC5
+User --> UC14
+User --> UC15
+User --> UC16
+
+User --> UC6
+UC6 .> UC6a : <<include>>
+UC6 .> UC6b : <<include>>
+
+User --> UC7
+User --> UC8
+User --> UC9
+
+User --> UC10
+User --> UC11
+User --> UC12
+User --> UC13
+@enduml
