@@ -1,5 +1,7 @@
-/cloudflared
+/cloudflare
 /aws
+.env
+.vscode
 
 # compiled output
 /dist

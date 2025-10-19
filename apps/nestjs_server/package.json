@@ -6,7 +6,13 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "start:tunnel": "concurrently \"npm run start:dev\" \"cloudflared tunnel --config ./cloudflared/config.yml run\"",
+    "docker:build": "docker compose -f docker-compose.yml build",
+    "docker:up": "docker compose -f docker-compose.yml up -d",
+    "docker:down": "docker compose -f docker-compose.yml down",
+    "docker:logs": "docker compose -f docker-compose.yml logs -f",
+    "docker:rebuild": "docker compose -f docker-compose.yml down && docker compose -f docker-compose.yml build && docker compose -f docker-compose.yml up -d",
+    "docker:status": "docker container ls",
+    "seed": "ts-node db/seed.ts",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
@@ -24,6 +30,8 @@
     "@nestjs/common": "^11.0.1",
     "@nestjs/core": "^11.0.1",
     "@nestjs/platform-express": "^11.0.1",
+    "dotenv": "^17.2.3",
+    "pg": "^8.16.3",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"
   },
