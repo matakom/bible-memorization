@@ -2,12 +2,8 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile.dev
-    volumes:
-      - .:/app
-      - /app/node_modules
-    command: npm run start:dev
-    container_name: nestjs_app
+      dockerfile: Dockerfile.prod
+    container_name: nestjs_app_prod
     depends_on:
       - db
     ports:
@@ -17,27 +13,25 @@ services:
     restart: unless-stopped
 
   db:
-    image: postgres:15
-    container_name: postgres_db
+    image: postgres:18
+    container_name: postgres_db_prod
     environment:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=${DB_NAME}
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - db_data_prod:/var/lib/postgresql/data
     restart: unless-stopped
-    ports:
-      - "5432:5432"
 
   tunnel:
     image: cloudflare/cloudflared:latest
-    container_name: cf_tunnel
-    command: tunnel --config /etc/cloudflare/config.yml run
+    container_name: cf_tunnel_prod
+    command: tunnel --config /etc/cloudflared/config.yml run
     volumes:
-      - ./cloudflare:/etc/cloudflare:ro
+      - /srv/bible_memorization/cloudflared:/etc/cloudflared:ro
     depends_on:
       - app
     restart: unless-stopped
 
 volumes:
-  db_data:
+  db_data_prod:
