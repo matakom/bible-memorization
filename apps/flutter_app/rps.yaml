@@ -1,0 +1,6 @@
+scripts:
+  run:dev: "flutter run --dart-define=BASE_URL=http://bible_memorization.dev.matakom.com"
+  run:dev:prod: "flutter run --dart-define=BASE_URL=http://bible_memorization.prod.matakom.com"
+  build:apk: "flutter build apk --dart-define=BASE_URL=http://bible_memorization.prod.matakom.com"
+  build:aab: "flutter build appbundle --dart-define=BASE_URL=http://bible_memorization.prod.matakom.com"
+  build:ios: "flutter build ipa --dart-define=BASE_URL=http://bible_memorization.prod.matakom.com"

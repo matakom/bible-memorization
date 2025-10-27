@@ -2,3 +2,5 @@ idea/
 .env
 .env.local
 .env.prod
+build/
+
