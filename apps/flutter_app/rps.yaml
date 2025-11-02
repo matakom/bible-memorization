@@ -1,6 +1,15 @@
 scripts:
-  run:dev: "flutter run --dart-define=BASE_URL=http://bible_memorization.dev.matakom.com"
-  run:dev:prod: "flutter run --dart-define=BASE_URL=http://bible_memorization.prod.matakom.com"
-  build:apk: "flutter build apk --dart-define=BASE_URL=http://bible_memorization.prod.matakom.com"
-  build:aab: "flutter build appbundle --dart-define=BASE_URL=http://bible_memorization.prod.matakom.com"
-  build:ios: "flutter build ipa --dart-define=BASE_URL=http://bible_memorization.prod.matakom.com"
+  # Code Generation
+  gen:watch: "dart run build_runner watch --delete-conflicting-outputs"
+  gen:build: "dart run build_runner build --delete-conflicting-outputs"
+  
+  # App Commands
+  run:dev: "flutter run"
+  install:dev: "flutter install"
+  
+  run:prod: "flutter run --release"
+  install:prod: "flutter install --release"
+
+  build:apk: "flutter build apk"
+  build:aab: "flutter build appbundle"
+  build:ios: "flutter build ipa"

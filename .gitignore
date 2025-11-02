@@ -3,4 +3,6 @@ idea/
 .env.local
 .env.prod
 build/
-
+.vscode/
+google-services.json
+apps/flutter_app/android/build/
