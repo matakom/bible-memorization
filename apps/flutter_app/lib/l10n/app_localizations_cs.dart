@@ -15,7 +15,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get login_signInButton => 'Přihlásit se';
 
   @override
-  String get login_errorOnSignIn => 'Sign-in failed';
+  String get login_errorOnSignIn => 'Přihlášení se nezdařilo';
 
   @override
   String get reader_navbar => 'Bible';
@@ -39,7 +39,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get settings_signOutButton => 'Odhlásit se';
 
   @override
-  String get settings_errorOnSignOut => 'Sign-out failed';
+  String get settings_errorOnSignOut => 'Odhlášení se nezdařilo';
 
   @override
   String get settings_appsLanguage => 'Jazyk aplikace';

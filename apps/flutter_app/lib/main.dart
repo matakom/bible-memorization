@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/l10n/app_localizations.dart';
 import 'package:flutter_app/providers/locale_provider.dart';
 import 'package:flutter_app/providers/router_provider.dart';
+import 'package:flutter_app/providers/theme_provider.dart';
+import 'package:flutter_app/themes/amber_dark.dart';
+import 'package:flutter_app/themes/amber_light.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -26,8 +29,16 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(goRouterProvider);
     final Locale currentLocale = ref.watch(localeProvider);
+    final ThemeMode currentThemeMode = ref.watch(themeProvider);
     return MaterialApp.router(
       routerConfig: router,
+
+      // Theme
+      theme: lightTheme,
+      darkTheme: darkTheme,
+      themeMode: currentThemeMode,
+
+      // Localization
       locale: currentLocale,
       supportedLocales: AppLocalizations.supportedLocales,
       localizationsDelegates: const [
