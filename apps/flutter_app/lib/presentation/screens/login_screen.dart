@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/providers/auth_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '/l10n/l10n_extension.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -24,7 +25,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Sign-in failed: $e')),
+          SnackBar(content: Text('${context.l10n.login_errorOnSignIn} $e')),
         );
       }
     }
@@ -39,13 +40,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Login')),
+      appBar: AppBar(title: Text(context.l10n.login_screenTitle)),
       body: Center(
         child: _isLoading
             ? const CircularProgressIndicator()
             : ElevatedButton.icon(
                 icon: const Icon(Icons.login),
-                label: const Text('Sign in with Google'),
+                label: Text(context.l10n.login_signInButton),
                 onPressed: _signIn,
               ),
       ),

@@ -1,0 +1,22 @@
+{
+  "@@locale": "cs",
+
+  "login_screenTitle": "Přihlášení",
+  "login_signInButton": "Přihlásit se",
+  "login_errorOnSignIn": "Přihlášení se nezdařilo",
+  
+  "reader_navbar": "Bible",
+
+  "stats_navbar": "Statistiky",
+
+  "practice_navbar": "Trénink",
+
+  "social_navbar": "Přátelé",
+
+  "settings_navbar": "Nastavení",
+  "settings_screenTitle": "Nastavení",
+  "settings_signOutButton": "Odhlásit se",
+  "settings_errorOnSignOut": "Odhlášení se nezdařilo",
+  "settings_appsLanguage": "Jazyk aplikace"
+
+}

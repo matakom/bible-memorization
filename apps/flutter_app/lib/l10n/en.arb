@@ -1,0 +1,22 @@
+{
+  "@@locale": "en",
+
+  "login_screenTitle": "Login",
+  "login_signInButton": "Sign in",
+  "login_errorOnSignIn": "Sign-in failed",
+  
+  "reader_navbar": "Bible",
+
+  "stats_navbar": "Stats",
+
+  "practice_navbar": "Practice",
+
+  "social_navbar": "Friends",
+
+  "settings_navbar": "Settings",
+  "settings_screenTitle": "Settings",
+  "settings_signOutButton": "Sign out",
+  "settings_errorOnSignOut": "Sign-out failed",
+  "settings_appsLanguage": "App's language"
+
+}

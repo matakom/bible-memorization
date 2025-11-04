@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/l10n/l10n_extension.dart';
+import 'package:flutter_app/presentation/widgets/locale_select.dart';
 import 'package:flutter_app/providers/auth_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -23,7 +25,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       if (mounted) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text('Sign-out failed: $e')));
+        ).showSnackBar(SnackBar(content: Text('${context.l10n.settings_errorOnSignOut} $e')));
       }
     }
 
@@ -37,15 +39,20 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
+      appBar: AppBar(title: Text(context.l10n.settings_screenTitle)),
       body: Center(
-        child: _isLoading
-            ? const CircularProgressIndicator()
-            : ElevatedButton.icon(
-                icon: const Icon(Icons.login),
-                label: const Text('Sign out'),
-                onPressed: _signOut,
-              ),
+        child: Column(
+          children: [
+            _isLoading
+                ? const CircularProgressIndicator()
+                : ElevatedButton.icon(
+                    icon: const Icon(Icons.login),
+                    label: Text(context.l10n.settings_signOutButton),
+                    onPressed: _signOut,
+                  ),
+            LocaleSelect()
+          ],
+        ),
       ),
     );
   }

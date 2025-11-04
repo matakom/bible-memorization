@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/l10n/l10n_extension.dart';
 import 'package:go_router/go_router.dart';
 
 class AppShell extends StatelessWidget {
@@ -14,31 +15,31 @@ class AppShell extends StatelessWidget {
         onDestinationSelected: (int index) {
           _onItemTapped(index, context);
         },
-        destinations: const <Widget>[
+        destinations: <Widget>[
           NavigationDestination(
             icon: Icon(Icons.book_outlined),
             selectedIcon: Icon(Icons.book),
-            label: 'Reader',
+            label: context.l10n.reader_navbar,
           ),
           NavigationDestination(
             icon: Icon(Icons.stacked_bar_chart),
             selectedIcon: Icon(Icons.stacked_bar_chart),
-            label: 'Stats',
+            label: context.l10n.stats_navbar,
           ),
           NavigationDestination(
             icon: Icon(Icons.fitness_center_outlined),
             selectedIcon: Icon(Icons.fitness_center),
-            label: 'Practice',
+            label: context.l10n.practice_navbar,
           ),
           NavigationDestination(
             icon: Icon(Icons.people_outline),
             selectedIcon: Icon(Icons.people),
-            label: 'Social',
+            label: context.l10n.social_navbar,
           ),
           NavigationDestination(
             icon: Icon(Icons.settings_outlined),
             selectedIcon: Icon(Icons.settings),
-            label: 'Settings',
+            label: context.l10n.settings_navbar,
           ),
         ],
       ),
