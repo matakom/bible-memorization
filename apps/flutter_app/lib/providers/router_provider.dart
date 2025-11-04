@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/presentation/screens/home_screen.dart';
+import 'package:flutter_app/presentation/screens/settings_screen.dart';
 import 'package:flutter_app/presentation/screens/login_screen.dart';
 import 'package:flutter_app/presentation/screens/practice_screen.dart';
 import 'package:flutter_app/presentation/screens/reader_screen.dart';
-import 'package:flutter_app/presentation/screens/settings_screen.dart';
 import 'package:flutter_app/presentation/screens/social_screen.dart';
 import 'package:flutter_app/presentation/screens/splash_screen.dart';
 import 'package:flutter_app/presentation/screens/stats_screen.dart';
+import 'package:flutter_app/presentation/widgets/app_shell.dart';
 import 'package:flutter_app/providers/auth_provider.dart';
-import 'package:flutter_app/providers/spash_provider.dart';
+import 'package:flutter_app/providers/splash_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_app/utils/debugger.dart';
@@ -26,9 +26,13 @@ final goRouterProvider = Provider<GoRouter>((ref) {
     refreshListenable.value++;
   });
 
+  final GlobalKey<NavigatorState> _rootNavigatorKey =
+      GlobalKey<NavigatorState>();
+
   return GoRouter(
     initialLocation: '/splash',
     refreshListenable: refreshListenable,
+    navigatorKey: _rootNavigatorKey,
     redirect: (BuildContext context, GoRouterState state) {
       final authState = ref.read(authStreamProvider);
       final splashDone = ref.watch(splashDelayProvider).hasValue;
@@ -46,16 +50,16 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       // Redirect to login page
       if (!isLoggedIn && !isGoingToLogin) {
         Debugger.log('not logged in');
-        Debugger.log('redirecting to login page');
+        Debugger.log('redirecting to /login');
         return '/login';
       }
 
-      // Redirect to home
+      // Redirect to practice
       if (isLoggedIn && (isGoingToLogin || isGoingToSplash)) {
         Debugger.log('logged in');
-        Debugger.log('redirecting to /');
-        
-        return '/';
+        Debugger.log('redirecting to /practice');
+
+        return '/practice';
       }
 
       // Nothing needed
@@ -78,41 +82,42 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       ),
 
       // Protected routes
-      GoRoute(
-        path: '/',
-        builder: (BuildContext context, GoRouterState state) {
-          return const HomeScreen();
+      ShellRoute(
+        builder: (context, state, child) {
+          return AppShell(child);
         },
-      ),
-      GoRoute(
-        path: '/reader',
-        builder: (BuildContext context, GoRouterState state) {
-          return const ReaderScreen();
-        },
-      ),
-      GoRoute(
-        path: '/stats',
-        builder: (BuildContext context, GoRouterState state) {
-          return const StatsScreen();
-        },
-      ),
-      GoRoute(
-        path: '/practice',
-        builder: (BuildContext context, GoRouterState state) {
-          return const PracticeScreen();
-        },
-      ),
-      GoRoute(
-        path: '/social',
-        builder: (BuildContext context, GoRouterState state) {
-          return const SocialScreen();
-        },
-      ),
-      GoRoute(
-        path: '/settings',
-        builder: (BuildContext context, GoRouterState state) {
-          return const SettingsScreen();
-        },
+        routes: [
+          GoRoute(
+            path: '/reader',
+            builder: (BuildContext context, GoRouterState state) {
+              return const ReaderScreen();
+            },
+          ),
+          GoRoute(
+            path: '/stats',
+            builder: (BuildContext context, GoRouterState state) {
+              return const StatsScreen();
+            },
+          ),
+          GoRoute(
+            path: '/practice',
+            builder: (BuildContext context, GoRouterState state) {
+              return const PracticeScreen();
+            },
+          ),
+          GoRoute(
+            path: '/social',
+            builder: (BuildContext context, GoRouterState state) {
+              return const SocialScreen();
+            },
+          ),
+          GoRoute(
+            path: '/settings',
+            builder: (BuildContext context, GoRouterState state) {
+              return const SettingsScreen();
+            },
+          ),
+        ],
       ),
     ],
   );
