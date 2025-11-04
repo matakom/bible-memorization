@@ -12,11 +12,25 @@ class AuthRepository {
   }) : _auth = auth,
         _googleSignIn = googleSignIn;
 
-  Future<void> signInWithGoogle() async {
+  Future<String?> signInWithGoogle() async {
     final GoogleSignInAccount account = await _googleSignIn.authenticate();
     final GoogleSignInAuthentication authentication = account.authentication;
     final AuthCredential credentials = GoogleAuthProvider.credential(idToken: authentication.idToken);
     await _auth.signInWithCredential(credentials);
+    if(_auth.currentUser != null){
+      final String? token = await _auth.currentUser!.getIdToken();
+      return token;
+    }
+    return null;
+  }
+
+  Future<String?> getAuthToken() async {
+    if (_auth.currentUser != null) {
+      // Automatically refreshes the token if it's expired
+      final String? token = await _auth.currentUser!.getIdToken(true);
+      return token;
+    }
+    return null;
   }
   
   Future<void> signOut() async {
