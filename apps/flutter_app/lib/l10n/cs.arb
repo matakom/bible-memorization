@@ -17,6 +17,8 @@
   "settings_screenTitle": "Nastavení",
   "settings_signOutButton": "Odhlásit se",
   "settings_errorOnSignOut": "Odhlášení se nezdařilo",
-  "settings_appsLanguage": "Jazyk aplikace"
-
+  "settings_appsLanguage": "Jazyk aplikace",
+  "settings_theme_light": "Světlý",
+  "settings_theme_dark": "Tmavý",
+  "settings_theme_system": "Systém"
 }

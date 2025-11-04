@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/l10n/l10n_extension.dart';
 import 'package:flutter_app/providers/theme_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -16,18 +17,18 @@ class ThemeSelect extends ConsumerWidget {
           ref.read(themeProvider.notifier).setTheme(newTheme);
         }
       },
-      items: const [
+      items: [
         DropdownMenuItem(
           value: ThemeMode.light,
-          child: Text('Light'),
+          child: Text(context.l10n.settings_theme_light),
         ),
         DropdownMenuItem(
           value: ThemeMode.dark,
-          child: Text('Dark'),
+          child: Text(context.l10n.settings_theme_dark),
         ),
         DropdownMenuItem(
           value: ThemeMode.system,
-          child: Text('System Default'),
+          child: Text(context.l10n.settings_theme_system),
         ),
       ],
     );

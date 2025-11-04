@@ -43,4 +43,13 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get settings_appsLanguage => 'Jazyk aplikace';
+
+  @override
+  String get settings_theme_light => 'Světlý';
+
+  @override
+  String get settings_theme_dark => 'Tmavý';
+
+  @override
+  String get settings_theme_system => 'Systém';
 }
