@@ -10,7 +10,7 @@ CREATE TABLE users (
     first_name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
-    daily_verse_order INT NOT NULL DEFAULT 1,
+    daily_verse_streak INT NOT NULL DEFAULT 0,
     language VARCHAR(10) NOT NULL DEFAULT 'en',
     theme VARCHAR(20) NOT NULL DEFAULT 'light',
     registered_at TIMESTAMP NOT NULL DEFAULT NOW(),

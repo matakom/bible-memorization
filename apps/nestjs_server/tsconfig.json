@@ -20,7 +20,8 @@
     "noFallthroughCasesInSwitch": false
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    ".eslintrc.js"
   ],
   "exclude": [
     "node_modules",

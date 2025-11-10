@@ -20,6 +20,8 @@
   "settings_appsLanguage": "App's language",
   "settings_theme_light": "Light",
   "settings_theme_dark": "Dark",
-  "settings_theme_system": "System default"
+  "settings_theme_system": "System default",
+
+  "settings_token_button": "Print token"
 
 }

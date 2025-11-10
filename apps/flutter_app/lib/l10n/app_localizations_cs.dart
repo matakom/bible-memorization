@@ -52,4 +52,7 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get settings_theme_system => 'Systém';
+
+  @override
+  String get settings_token_button => 'Vypiš token';
 }

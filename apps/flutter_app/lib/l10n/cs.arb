@@ -20,5 +20,7 @@
   "settings_appsLanguage": "Jazyk aplikace",
   "settings_theme_light": "Světlý",
   "settings_theme_dark": "Tmavý",
-  "settings_theme_system": "Systém"
+  "settings_theme_system": "Systém",
+
+  "settings_token_button": "Vypiš token"
 }

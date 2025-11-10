@@ -10,6 +10,20 @@ class UserRepository {
   Future<void> checkHealth() async {
     await _dio.get('/health');
   }
+  Future<void> setLocale(String locale) async{
+    await _dio.patch('/user/settings', data: {'locale': locale});
+  }
+  Future<void> setTheme(String theme) async{
+    await _dio.patch('/user/settings', data: {'theme': theme});
+  }
+  Future<Map<String, String>> getUserSettings() async {
+    final response = await _dio.get('/user/settings');
+    final data = response.data as Map<String, dynamic>;
+    return {
+      'language': data['language'] as String,
+      'theme': data['theme'] as String,
+    };
+  }
 }
 
 final userRepositoryProvider = FutureProvider<UserRepository>((ref) async {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/l10n/l10n_extension.dart';
+import 'package:flutter_app/presentation/widgets/get_token_button.dart';
 import 'package:flutter_app/presentation/widgets/locale_select.dart';
 import 'package:flutter_app/presentation/widgets/sign_out_button.dart';
 import 'package:flutter_app/presentation/widgets/theme_select.dart';
@@ -16,7 +17,8 @@ class SettingsScreen extends StatelessWidget {
           children: [
             SignOutButton(),
             LocaleSelect(),
-            ThemeSelect()
+            ThemeSelect(),
+            GetTokenButton()
           ],
         ),
       ),

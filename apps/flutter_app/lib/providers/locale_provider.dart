@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/data/repositories/user_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class LocaleNotifier extends Notifier<Locale> {
@@ -7,8 +8,14 @@ class LocaleNotifier extends Notifier<Locale> {
     return const Locale('en');
   }
 
-  void setLocale(Locale newLocale) {
+  void initialize(Locale initialLocale) {
+    state = initialLocale;
+  }
+
+  Future<void> setLocale(Locale newLocale) async {
     state = newLocale;
+    final userRepository = await ref.read(userRepositoryProvider.future);
+    await userRepository.setLocale(newLocale.toString());
   }
 }
 

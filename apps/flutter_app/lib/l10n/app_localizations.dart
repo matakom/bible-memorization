@@ -187,6 +187,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'System default'**
   String get settings_theme_system;
+
+  /// No description provided for @settings_token_button.
+  ///
+  /// In en, this message translates to:
+  /// **'Print token'**
+  String get settings_token_button;
 }
 
 class _AppLocalizationsDelegate

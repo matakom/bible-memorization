@@ -52,4 +52,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settings_theme_system => 'System default';
+
+  @override
+  String get settings_token_button => 'Print token';
 }

@@ -21,9 +21,9 @@ services:
     image: postgres:18
     container_name: postgres_db
     environment:
-      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_USER=${DB_USERNAME} 
       - POSTGRES_PASSWORD=${DB_PASSWORD}
-      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_DB=${DB_DATABASE}
     volumes:
       - db_data:/var/lib/postgresql/data
     restart: on-failure
