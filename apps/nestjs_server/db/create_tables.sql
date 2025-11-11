@@ -5,7 +5,7 @@
 -- =============================================
 -- Users table
 -- =============================================
-CREATE TABLE users (
+CREATE TABLE user (
     id SERIAL PRIMARY KEY,
     first_name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL,
@@ -20,7 +20,7 @@ CREATE TABLE users (
 -- =============================================
 -- Saved Verses table
 -- =============================================
-CREATE TABLE saved_verses (
+CREATE TABLE verse (
     id SERIAL PRIMARY KEY,
     user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     book VARCHAR(50) NOT NULL,
@@ -29,13 +29,13 @@ CREATE TABLE saved_verses (
     translation VARCHAR(50) NOT NULL,
     next_review_date DATE,
     last_review_date DATE,
-    difficulty SMALLINT DEFAULT 1 CHECK (difficulty BETWEEN 1 AND 5)
+    difficulty SMALLINT
 );
 
 -- =============================================
 -- Exercises table
 -- =============================================
-CREATE TABLE exercises (
+CREATE TABLE exercise (
     id SERIAL PRIMARY KEY,
     user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     saved_verse_id INT NOT NULL REFERENCES saved_verses(id) ON DELETE CASCADE,
@@ -48,7 +48,7 @@ CREATE TABLE exercises (
 -- =============================================
 -- Friendships table
 -- =============================================
-CREATE TABLE friendships (
+CREATE TABLE friendship (
     id SERIAL PRIMARY KEY,
     status VARCHAR(20) NOT NULL CHECK (status IN ('pending', 'accepted', 'rejected')),
     user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,

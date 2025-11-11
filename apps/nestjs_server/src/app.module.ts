@@ -10,6 +10,8 @@ import { User } from './user/user.entity';
 import { AuthModule } from './auth/auth.module';
 import { FriendshipsModule } from './friendships/friendships.module';
 import { Friendship } from './friendships/friendships.entity';
+import { VerseModule } from './verse/verse.module';
+import { Verse } from './verse/verse.entity';
 
 @Module({
   imports: [
@@ -29,7 +31,7 @@ import { Friendship } from './friendships/friendships.entity';
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_DATABASE'),
 
-        entities: [User, Friendship],
+        entities: [User, Friendship, Verse],
 
         // 'synchronize: true' is for development only.
         synchronize: true,
@@ -37,7 +39,8 @@ import { Friendship } from './friendships/friendships.entity';
     }),
     UserModule,
     AuthModule,
-    FriendshipsModule
+    FriendshipsModule,
+    VerseModule
   ],
   controllers: [AppController],
   providers: [AppService],
