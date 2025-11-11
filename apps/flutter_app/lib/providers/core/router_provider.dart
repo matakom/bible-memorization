@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/presentation/screens/friends_stats_screen.dart';
 import 'package:flutter_app/presentation/screens/settings_screen.dart';
 import 'package:flutter_app/presentation/screens/login_screen.dart';
 import 'package:flutter_app/presentation/screens/practice_screen.dart';
@@ -8,8 +9,7 @@ import 'package:flutter_app/presentation/screens/splash_screen.dart';
 import 'package:flutter_app/presentation/screens/stats_screen.dart';
 import 'package:flutter_app/presentation/widgets/app_shell.dart';
 import 'package:flutter_app/providers/auth_provider.dart';
-import 'package:flutter_app/providers/settings_loading_provider.dart';
-import 'package:flutter_app/providers/splash_provider.dart';
+import 'package:flutter_app/providers/settings/settings_loading_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_app/utils/debugger.dart';
@@ -36,14 +36,13 @@ final goRouterProvider = Provider<GoRouter>((ref) {
     navigatorKey: _rootNavigatorKey,
     redirect: (BuildContext context, GoRouterState state) {
       final authState = ref.read(authStreamProvider);
-      final splashDone = ref.watch(splashDelayProvider).hasValue;
 
       final settingsAreLoading = ref.watch(settingsLoadingProvider);
 
       final location = state.matchedLocation;
 
       // Prevents the app from flashing the login screen while it is checking for a cached user
-      if (authState.isLoading || !splashDone || settingsAreLoading) {
+      if (authState.isLoading || settingsAreLoading) {
         return location == '/splash' ? null : '/splash';
       }
 
@@ -114,6 +113,15 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             builder: (BuildContext context, GoRouterState state) {
               return const SocialScreen();
             },
+            routes: [
+              GoRoute(
+                path: ':userId',
+                builder: (context, state) {
+                  final userId = state.pathParameters['userId']!;
+                  return FriendStatsScreen(userId: userId);
+                },
+              ),
+            ],
           ),
           GoRoute(
             path: '/settings',

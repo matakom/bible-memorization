@@ -21,7 +21,7 @@ export class User {
     email: string;
 
     @Column({ name: 'daily_verse_streak', default: 0 })
-    dailyVerseOrder: number;
+    dailyVerseStreak: number;
 
     @Column({ name: 'friend_code', unique: true, length: 6, nullable: false })
     friendCode: string;

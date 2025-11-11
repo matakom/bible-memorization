@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/providers/auth_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../utils/debugger.dart';
+import '../../../utils/debugger.dart';
 import '/l10n/l10n_extension.dart';
 
 class GetTokenButton extends ConsumerStatefulWidget {

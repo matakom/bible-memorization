@@ -34,6 +34,14 @@ export class UserController {
         );
     }
 
+    @Get()
+    @UseGuards(AuthGuard('jwt'))
+    getUser(
+        @GetUser() user: User
+    ) {
+        return user;
+    }
+
     @Get('settings')
     @UseGuards(AuthGuard('jwt'))
     async getUserSettings(

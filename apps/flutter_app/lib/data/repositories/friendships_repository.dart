@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_app/api/dio_client.dart';
-import 'package:flutter_app/providers/security_context_provider.dart';
+import 'package:flutter_app/providers/core/security_context_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class FriendshipsException implements Exception {
@@ -18,16 +18,11 @@ class FriendshipsRepository {
 
   Future<void> sendFriendRequest(String friendCode) async {
     try {
-      await _dio.post(
-        '/friendships',
-        data: {
-          'friendCode': friendCode,
-        },
-      );
+      await _dio.post('/friendships', data: {'friendCode': friendCode});
     } on DioException catch (e) {
       if (e.response != null && e.response?.data['message'] != null) {
         final errorMessage = e.response?.data['message'];
-        
+
         if (errorMessage == 'User with this friend code not found.') {
           throw FriendshipsException('User not found. Please check the code.');
         }
@@ -35,16 +30,42 @@ class FriendshipsRepository {
           throw FriendshipsException('You cannot add yourself.');
         }
         if (errorMessage == 'A friendship or pending request already exists.') {
-          throw FriendshipsException('You are already friends or have a pending request.');
+          throw FriendshipsException('You are already friends or have a pending request.',);
         }
       }
-      throw FriendshipsException('An unknown error occurred. Please try again.');
+      throw FriendshipsException('An unknown error occurred. Please try again.',);
     }
   }
 
+  Future<List<dynamic>> fetchFriendships() async {
+    try {
+      final response = await _dio.get('/friendships');
+      return response.data as List<dynamic>;
+    } on DioException catch (e) {
+      throw FriendshipsException('Failed to fetch friendships: ${e.message}');
+    }
+  }
+
+  Future<void> acceptRequest(int friendshipId) async {
+    try {
+      await _dio.patch('/friendships/$friendshipId/accept');
+    } on DioException catch (e) {
+      throw FriendshipsException('Failed to accept request: ${e.message}');
+    }
+  }
+
+  Future<void> rejectRequest(int friendshipId) async {
+    try {
+      await _dio.patch('/friendships/$friendshipId/reject');
+    } on DioException catch (e) {
+      throw FriendshipsException('Failed to reject request: ${e.message}');
+    }
+  }
 }
 
-final friendshipsRepositoryProvider = FutureProvider<FriendshipsRepository>((ref) async {
+final friendshipsRepositoryProvider = FutureProvider<FriendshipsRepository>((
+  ref,
+) async {
   final securityContext = await ref.watch(securityContextFutureProvider.future);
   final dio = createDioClient(securityContext, ref);
   return FriendshipsRepository(dio: dio);

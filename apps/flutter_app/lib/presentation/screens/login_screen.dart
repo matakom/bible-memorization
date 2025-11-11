@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '/l10n/l10n_extension.dart';
-import 'package:flutter_app/presentation/widgets/sign_in_button.dart';
+import 'package:flutter_app/presentation/widgets/authentication/sign_in_button.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});

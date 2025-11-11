@@ -1,5 +1,5 @@
 import 'package:flutter_app/l10n/app_localizations.dart';
-import 'package:flutter_app/providers/locale_provider.dart';
+import 'package:flutter_app/providers/settings/language_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 
@@ -8,14 +8,14 @@ class LocaleSelect extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final Locale currentLocale = ref.watch(localeProvider);
+    final Locale currentLocale = ref.watch(languageProvider);
 
     return DropdownButton<Locale>(
       value: currentLocale, 
       
       onChanged: (Locale? newLocale) {
         if (newLocale != null) {
-          ref.read(localeProvider.notifier).setLocale(newLocale); 
+          ref.read(languageProvider.notifier).setLanguage(newLocale); 
         }
       },
       

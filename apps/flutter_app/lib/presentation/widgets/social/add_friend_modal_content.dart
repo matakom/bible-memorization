@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app/data/repositories/friendships_repository.dart';
 import 'package:flutter_app/l10n/l10n_extension.dart';
+import 'package:flutter_app/providers/friendships/friendships_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Modal content for adding a friend by entering a 6-character code.
@@ -53,12 +54,23 @@ class _AddFriendModalContentState extends ConsumerState<AddFriendModalContent> {
     // Handle paste
     if (value.length > 1) {
       final chars = value.replaceAll(RegExp(r'[^A-Za-z0-9]'), '').split('');
-      for (int i = 0; i < 6; i++) {
-        _controllers[i].text = i < chars.length ? chars[i] : '';
+      
+      for (int i = 0; i < chars.length; i++) {
+        int controllerIdx = idx + i;
+        if (controllerIdx < 6) {
+          _controllers[controllerIdx].text = chars[i];
+          _controllers[controllerIdx].selection =
+              TextSelection.fromPosition(const TextPosition(offset: 1));
+        }
       }
-      // Move focus to last field if code is full, else to next empty
-      int nextIdx = chars.length >= 6 ? 5 : chars.length;
-      _focusNodes[nextIdx < 6 ? nextIdx : 5].requestFocus();
+      
+      // Move focus
+      int nextIdx = idx + chars.length;
+      if (nextIdx >= 6) {
+        _focusNodes[5].requestFocus(); // Focus last box
+      } else {
+        _focusNodes[nextIdx].requestFocus(); // Focus next empty box
+      }
       setState(() {});
       return;
     }
@@ -83,8 +95,7 @@ class _AddFriendModalContentState extends ConsumerState<AddFriendModalContent> {
     });
 
     try {
-      final friendshipsRepository = await ref.read(friendshipsRepositoryProvider.future);
-      await friendshipsRepository.sendFriendRequest(friendCode);
+      await ref.read(friendshipsProvider.notifier).addFriend(friendCode);
 
       if (mounted) Navigator.pop(context);
     } on FriendshipsException catch (e) {
@@ -125,7 +136,7 @@ class _AddFriendModalContentState extends ConsumerState<AddFriendModalContent> {
           focusNode: _focusNodes[idx],
           autofocus: idx == 0,
           textAlign: TextAlign.center,
-          maxLength: 1,
+          maxLength: 6,
           keyboardType: TextInputType.text,
           textInputAction: idx == 5
               ? TextInputAction.done
@@ -165,7 +176,6 @@ class _AddFriendModalContentState extends ConsumerState<AddFriendModalContent> {
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
-            // Code input fields
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

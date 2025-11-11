@@ -1,6 +1,9 @@
 {
   "@@locale": "cs",
 
+  "common_comingSoon": "Již brzy!",
+
+
   "login_screenTitle": "Přihlášení",
   "login_signInButton": "Přihlásit se",
   "login_errorOnSignIn": "Přihlášení se nezdařilo",
@@ -28,6 +31,15 @@
   "social_addFriend": "Přidat přítele",
   "social_sendRequest": "Odeslat žádost",
   "social_yourCode": "Váš kód",
-  "social_codeFetchError": "Chyba při získávání kódu"
+  "social_codeFetchError": "Chyba při získávání kódu",
+  "social_nothingHere": "Nic zde...",
+  "social_nothingToSeeHereYet": "Zatím zde nic není. Začněte přidáním přátel!",
+  "social_friendRequest": "Žádost o přátelství",
+  "social_friends": "Přátelé",
+  "social_sentRequests": "Odeslané žádosti",
+  "social_rejectedByMe": "Odmítnuto mnou",
+  "social_rejectedByThem": "Odmítnuto jimi",
   
+  "friendsStats_screenTitle": "Statistiky přátel",
+  "friendsStats_future": "Zde se zobrazí statistiky."
 }

@@ -9,6 +9,9 @@ class AppLocalizationsCs extends AppLocalizations {
   AppLocalizationsCs([String locale = 'cs']) : super(locale);
 
   @override
+  String get common_comingSoon => 'Již brzy!';
+
+  @override
   String get login_screenTitle => 'Přihlášení';
 
   @override
@@ -70,4 +73,32 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get social_codeFetchError => 'Chyba při získávání kódu';
+
+  @override
+  String get social_nothingHere => 'Nic zde...';
+
+  @override
+  String get social_nothingToSeeHereYet =>
+      'Zatím zde nic není. Začněte přidáním přátel!';
+
+  @override
+  String get social_friendRequest => 'Žádost o přátelství';
+
+  @override
+  String get social_friends => 'Přátelé';
+
+  @override
+  String get social_sentRequests => 'Odeslané žádosti';
+
+  @override
+  String get social_rejectedByMe => 'Odmítnuto mnou';
+
+  @override
+  String get social_rejectedByThem => 'Odmítnuto jimi';
+
+  @override
+  String get friendsStats_screenTitle => 'Statistiky přátel';
+
+  @override
+  String get friendsStats_future => 'Zde se zobrazí statistiky.';
 }

@@ -9,6 +9,9 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
+  String get common_comingSoon => 'Coming soon!';
+
+  @override
   String get login_screenTitle => 'Login';
 
   @override
@@ -70,4 +73,33 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get social_codeFetchError => 'Error fetching code';
+
+  @override
+  String get social_nothingHere => 'Nothing here...';
+
+  @override
+  String get social_nothingToSeeHereYet =>
+      'Nothing to see here yet. Start by adding some friends!';
+
+  @override
+  String get social_friendRequest => 'Friend request';
+
+  @override
+  String get social_friends => 'Friends';
+
+  @override
+  String get social_sentRequests => 'Sent requests';
+
+  @override
+  String get social_rejectedByMe => 'Rejected by me';
+
+  @override
+  String get social_rejectedByThem => 'Rejected by them';
+
+  @override
+  String get friendsStats_screenTitle => 'Friend Stats';
+
+  @override
+  String get friendsStats_future =>
+      'This is where the stats will be displayed.';
 }

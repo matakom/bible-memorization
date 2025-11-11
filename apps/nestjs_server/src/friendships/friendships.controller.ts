@@ -5,7 +5,10 @@ import {
     Body,
     UsePipes,
     ValidationPipe,
-    UseGuards
+    UseGuards,
+    Get,
+    Patch,
+    Param
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from '../auth/get-user.decorator';
@@ -28,4 +31,29 @@ export class FriendshipsController {
     ): Promise<Friendship> {
         return this.friendshipsService.createRequest(createFriendshipDto, user);
     }
+
+    @Get()
+    @UseGuards(AuthGuard('jwt'))
+    async getFriendships(@GetUser() user: User): Promise<Friendship[]> {
+        return this.friendshipsService.findAllForUser(user);
+    }
+
+    @Patch(':friendshipId/accept')
+    @UseGuards(AuthGuard('jwt'))
+    acceptFriendship(
+        @Param('friendshipId') friendshipId: number,
+        @GetUser() user: User,
+    ) {
+        return this.friendshipsService.acceptFriendship(friendshipId, user);
+    }
+
+    @Patch(':friendshipId/reject')
+    @UseGuards(AuthGuard('jwt'))
+    rejectFriendship(
+        @Param('friendshipId') friendshipId: number,
+        @GetUser() user: User,
+    ) {
+        return this.friendshipsService.rejectFriendship(friendshipId, user);
+    }
 }
+

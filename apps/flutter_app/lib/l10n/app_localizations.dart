@@ -98,6 +98,12 @@ abstract class AppLocalizations {
     Locale('en'),
   ];
 
+  /// No description provided for @common_comingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming soon!'**
+  String get common_comingSoon;
+
   /// No description provided for @login_screenTitle.
   ///
   /// In en, this message translates to:
@@ -223,6 +229,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Error fetching code'**
   String get social_codeFetchError;
+
+  /// No description provided for @social_nothingHere.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing here...'**
+  String get social_nothingHere;
+
+  /// No description provided for @social_nothingToSeeHereYet.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing to see here yet. Start by adding some friends!'**
+  String get social_nothingToSeeHereYet;
+
+  /// No description provided for @social_friendRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Friend request'**
+  String get social_friendRequest;
+
+  /// No description provided for @social_friends.
+  ///
+  /// In en, this message translates to:
+  /// **'Friends'**
+  String get social_friends;
+
+  /// No description provided for @social_sentRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent requests'**
+  String get social_sentRequests;
+
+  /// No description provided for @social_rejectedByMe.
+  ///
+  /// In en, this message translates to:
+  /// **'Rejected by me'**
+  String get social_rejectedByMe;
+
+  /// No description provided for @social_rejectedByThem.
+  ///
+  /// In en, this message translates to:
+  /// **'Rejected by them'**
+  String get social_rejectedByThem;
+
+  /// No description provided for @friendsStats_screenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Friend Stats'**
+  String get friendsStats_screenTitle;
+
+  /// No description provided for @friendsStats_future.
+  ///
+  /// In en, this message translates to:
+  /// **'This is where the stats will be displayed.'**
+  String get friendsStats_future;
 }
 
 class _AppLocalizationsDelegate

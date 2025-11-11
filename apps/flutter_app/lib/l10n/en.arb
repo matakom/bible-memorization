@@ -1,6 +1,8 @@
 {
   "@@locale": "en",
 
+  "common_comingSoon": "Coming soon!",
+
   "login_screenTitle": "Login",
   "login_signInButton": "Sign in",
   "login_errorOnSignIn": "Sign-in failed",
@@ -28,6 +30,15 @@
   "social_addFriend": "Add Friend",
   "social_sendRequest": "Send Request",
   "social_yourCode": "Your code",
-  "social_codeFetchError": "Error fetching code"
-
+  "social_codeFetchError": "Error fetching code",
+  "social_nothingHere": "Nothing here...",
+  "social_nothingToSeeHereYet": "Nothing to see here yet. Start by adding some friends!",
+  "social_friendRequest": "Friend request",
+  "social_friends": "Friends",
+  "social_sentRequests": "Sent requests",
+  "social_rejectedByMe": "Rejected by me",
+  "social_rejectedByThem": "Rejected by them",
+  
+  "friendsStats_screenTitle": "Friend Stats",
+  "friendsStats_future": "This is where the stats will be displayed."
 }

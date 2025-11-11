@@ -7,12 +7,12 @@ class Debugger {
   /// Custom printing method
   static void log(String text) {
     if (kDebugMode) {
-      final String padding = '-' * numberOfDashes;
-      debugPrint('$padding|$text|$padding');
-      if(text.length == 1196){
+      if(text.length > 700){
         developer.log(text, name: 'TOKEN');
       }
       else{
+        final String padding = '-' * numberOfDashes;
+        print('$padding|$text|$padding');
         developer.log(text);
       }
     }
