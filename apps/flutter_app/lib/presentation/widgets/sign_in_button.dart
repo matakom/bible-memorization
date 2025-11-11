@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/data/repositories/user_repository.dart';
-import 'package:flutter_app/providers/auth_provider.dart';
+import 'package:flutter_app/providers/auth_notifier_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '/l10n/l10n_extension.dart';
 
@@ -21,7 +21,7 @@ class _SignInButtonState extends ConsumerState<SignInButton> {
     });
 
     try {
-      await ref.read(authRepositoryProvider).signInWithGoogle();
+      await ref.read(authNotifierProvider.notifier).signInWithGoogle();
 
       // Call to server
       final userRepository = await ref.read(userRepositoryProvider.future);

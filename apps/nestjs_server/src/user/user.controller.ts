@@ -41,4 +41,12 @@ export class UserController {
     ) {
         return this.userService.getUserSettings(user.id);
     }
+
+    @Get('code')
+    @UseGuards(AuthGuard('jwt'))
+    getCode(
+        @GetUser() user: User,
+    ) {
+        return { friendCode: user.friendCode };
+    }
 }

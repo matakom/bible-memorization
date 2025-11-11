@@ -45,14 +45,29 @@ class AppLocalizationsCs extends AppLocalizations {
   String get settings_appsLanguage => 'Jazyk aplikace';
 
   @override
-  String get settings_theme_light => 'Světlý';
+  String get settings_themeLight => 'Světlý';
 
   @override
-  String get settings_theme_dark => 'Tmavý';
+  String get settings_themeDark => 'Tmavý';
 
   @override
-  String get settings_theme_system => 'Systém';
+  String get settings_themeSystem => 'Systém';
 
   @override
-  String get settings_token_button => 'Vypiš token';
+  String get settings_tokenButton => 'Vypiš token';
+
+  @override
+  String get social_screenTitle => 'Přátelé';
+
+  @override
+  String get social_addFriend => 'Přidat přítele';
+
+  @override
+  String get social_sendRequest => 'Odeslat žádost';
+
+  @override
+  String get social_yourCode => 'Váš kód';
+
+  @override
+  String get social_codeFetchError => 'Chyba při získávání kódu';
 }

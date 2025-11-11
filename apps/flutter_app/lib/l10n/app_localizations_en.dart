@@ -45,14 +45,29 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_appsLanguage => 'App\'s language';
 
   @override
-  String get settings_theme_light => 'Light';
+  String get settings_themeLight => 'Light';
 
   @override
-  String get settings_theme_dark => 'Dark';
+  String get settings_themeDark => 'Dark';
 
   @override
-  String get settings_theme_system => 'System default';
+  String get settings_themeSystem => 'System default';
 
   @override
-  String get settings_token_button => 'Print token';
+  String get settings_tokenButton => 'Print token';
+
+  @override
+  String get social_screenTitle => 'Friends';
+
+  @override
+  String get social_addFriend => 'Add Friend';
+
+  @override
+  String get social_sendRequest => 'Send Request';
+
+  @override
+  String get social_yourCode => 'Your code';
+
+  @override
+  String get social_codeFetchError => 'Error fetching code';
 }

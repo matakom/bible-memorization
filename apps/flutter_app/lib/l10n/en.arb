@@ -18,10 +18,16 @@
   "settings_signOutButton": "Sign out",
   "settings_errorOnSignOut": "Sign-out failed",
   "settings_appsLanguage": "App's language",
-  "settings_theme_light": "Light",
-  "settings_theme_dark": "Dark",
-  "settings_theme_system": "System default",
+  "settings_themeLight": "Light",
+  "settings_themeDark": "Dark",
+  "settings_themeSystem": "System default",
 
-  "settings_token_button": "Print token"
+  "settings_tokenButton": "Print token",
+
+  "social_screenTitle": "Friends",
+  "social_addFriend": "Add Friend",
+  "social_sendRequest": "Send Request",
+  "social_yourCode": "Your code",
+  "social_codeFetchError": "Error fetching code"
 
 }

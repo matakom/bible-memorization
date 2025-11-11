@@ -8,6 +8,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserModule } from './user/user.module';
 import { User } from './user/user.entity';
 import { AuthModule } from './auth/auth.module';
+import { FriendshipsModule } from './friendships/friendships.module';
+import { Friendship } from './friendships/friendships.entity';
 
 @Module({
   imports: [
@@ -27,7 +29,7 @@ import { AuthModule } from './auth/auth.module';
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_DATABASE'),
 
-        entities: [User],
+        entities: [User, Friendship],
 
         // 'synchronize: true' is for development only.
         synchronize: true,
@@ -35,6 +37,7 @@ import { AuthModule } from './auth/auth.module';
     }),
     UserModule,
     AuthModule,
+    FriendshipsModule
   ],
   controllers: [AppController],
   providers: [AppService],

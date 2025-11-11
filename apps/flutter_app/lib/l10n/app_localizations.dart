@@ -170,29 +170,59 @@ abstract class AppLocalizations {
   /// **'App\'s language'**
   String get settings_appsLanguage;
 
-  /// No description provided for @settings_theme_light.
+  /// No description provided for @settings_themeLight.
   ///
   /// In en, this message translates to:
   /// **'Light'**
-  String get settings_theme_light;
+  String get settings_themeLight;
 
-  /// No description provided for @settings_theme_dark.
+  /// No description provided for @settings_themeDark.
   ///
   /// In en, this message translates to:
   /// **'Dark'**
-  String get settings_theme_dark;
+  String get settings_themeDark;
 
-  /// No description provided for @settings_theme_system.
+  /// No description provided for @settings_themeSystem.
   ///
   /// In en, this message translates to:
   /// **'System default'**
-  String get settings_theme_system;
+  String get settings_themeSystem;
 
-  /// No description provided for @settings_token_button.
+  /// No description provided for @settings_tokenButton.
   ///
   /// In en, this message translates to:
   /// **'Print token'**
-  String get settings_token_button;
+  String get settings_tokenButton;
+
+  /// No description provided for @social_screenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Friends'**
+  String get social_screenTitle;
+
+  /// No description provided for @social_addFriend.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Friend'**
+  String get social_addFriend;
+
+  /// No description provided for @social_sendRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Send Request'**
+  String get social_sendRequest;
+
+  /// No description provided for @social_yourCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Your code'**
+  String get social_yourCode;
+
+  /// No description provided for @social_codeFetchError.
+  ///
+  /// In en, this message translates to:
+  /// **'Error fetching code'**
+  String get social_codeFetchError;
 }
 
 class _AppLocalizationsDelegate

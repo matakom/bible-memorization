@@ -9,6 +9,16 @@ interface FirebasePayload {
     name?: string;
 }
 
+// A helper function for safe characters
+function generateFriendCode(): string {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    let result = '';
+    for (let i = 0; i < 6; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return result;
+}
+
 @Injectable()
 export class UserService {
     constructor(
@@ -30,11 +40,20 @@ export class UserService {
         const nameParts = payload.name?.split(' ') || [];
         const firstName = nameParts[0] || 'New';
         const lastName = nameParts.slice(1).join(' ') || 'User';
+        let newCode = generateFriendCode();
+
+        // Check for same code
+        let existing = await this.userRepository.findOneBy({ friendCode: newCode });
+        while (existing) {
+            newCode = generateFriendCode();
+            existing = await this.userRepository.findOneBy({ friendCode: newCode });
+        }
 
         const newUser = this.userRepository.create({
             email: payload.email,
             firstName: firstName,
             lastName: lastName,
+            friendCode: newCode
         });
 
         return this.userRepository.save(newUser);

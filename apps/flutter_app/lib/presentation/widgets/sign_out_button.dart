@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/providers/auth_provider.dart';
+import 'package:flutter_app/providers/auth_notifier_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '/l10n/l10n_extension.dart';
 
@@ -20,7 +20,7 @@ class _SignOutButtonState extends ConsumerState<SignOutButton> {
     });
 
     try {
-      await ref.read(authRepositoryProvider).signOut();
+      await ref.read(authNotifierProvider.notifier).signOut();
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

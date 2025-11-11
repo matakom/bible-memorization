@@ -18,9 +18,16 @@
   "settings_signOutButton": "Odhlásit se",
   "settings_errorOnSignOut": "Odhlášení se nezdařilo",
   "settings_appsLanguage": "Jazyk aplikace",
-  "settings_theme_light": "Světlý",
-  "settings_theme_dark": "Tmavý",
-  "settings_theme_system": "Systém",
+  "settings_themeLight": "Světlý",
+  "settings_themeDark": "Tmavý",
+  "settings_themeSystem": "Systém",
 
-  "settings_token_button": "Vypiš token"
+  "settings_tokenButton": "Vypiš token",
+
+  "social_screenTitle": "Přátelé",
+  "social_addFriend": "Přidat přítele",
+  "social_sendRequest": "Odeslat žádost",
+  "social_yourCode": "Váš kód",
+  "social_codeFetchError": "Chyba při získávání kódu"
+  
 }

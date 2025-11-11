@@ -8,6 +8,7 @@ import 'package:flutter_app/presentation/screens/splash_screen.dart';
 import 'package:flutter_app/presentation/screens/stats_screen.dart';
 import 'package:flutter_app/presentation/widgets/app_shell.dart';
 import 'package:flutter_app/providers/auth_provider.dart';
+import 'package:flutter_app/providers/settings_loading_provider.dart';
 import 'package:flutter_app/providers/splash_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -36,10 +37,13 @@ final goRouterProvider = Provider<GoRouter>((ref) {
     redirect: (BuildContext context, GoRouterState state) {
       final authState = ref.read(authStreamProvider);
       final splashDone = ref.watch(splashDelayProvider).hasValue;
+
+      final settingsAreLoading = ref.watch(settingsLoadingProvider);
+
       final location = state.matchedLocation;
 
       // Prevents the app from flashing the login screen while it is checking for a cached user
-      if (authState.isLoading || !splashDone) {
+      if (authState.isLoading || !splashDone || settingsAreLoading) {
         return location == '/splash' ? null : '/splash';
       }
 

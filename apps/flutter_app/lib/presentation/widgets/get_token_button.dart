@@ -24,7 +24,7 @@ class _GetTokenButtonState extends ConsumerState<GetTokenButton> {
   Widget build(BuildContext context) {
     return ElevatedButton.icon(
             icon: const Icon(Icons.token),
-            label: Text(context.l10n.settings_token_button),
+            label: Text(context.l10n.settings_tokenButton),
             onPressed: _printToken,
           );
   }
