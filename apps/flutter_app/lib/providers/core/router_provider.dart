@@ -41,6 +41,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
 
       final location = state.matchedLocation;
 
+      if(location == '/'){
+        return '/practice';
+      }
+
       // Prevents the app from flashing the login screen while it is checking for a cached user
       if (authState.isLoading || settingsAreLoading) {
         return location == '/splash' ? null : '/splash';
@@ -115,10 +119,11 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             },
             routes: [
               GoRoute(
-                path: ':userId',
+                path: ':userId/:friendshipId',
                 builder: (context, state) {
                   final userId = state.pathParameters['userId']!;
-                  return FriendStatsScreen(userId: userId);
+                  final friendshipId = state.pathParameters['friendshipId']!;
+                  return FriendStatsScreen(userId: userId, friendshipId: friendshipId,);
                 },
               ),
             ],

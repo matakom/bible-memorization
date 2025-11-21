@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/l10n/l10n_extension.dart';
 
 class User extends StatelessWidget {
   final String firstName;
   final String lastName;
-  final String status; // 'pending', 'accepted', 'rejected'
+  final String status; // 'pending', 'accepted',
   final String direction; // 'sent', 'received'
   final VoidCallback? onTap;
   final VoidCallback? onAccept;
-  final VoidCallback? onReject;
+  final VoidCallback? onDelete;
 
   const User({
     super.key,
@@ -17,7 +18,7 @@ class User extends StatelessWidget {
     required this.direction,
     this.onTap,
     this.onAccept,
-    this.onReject,
+    this.onDelete,
   });
 
   @override
@@ -75,7 +76,7 @@ class User extends StatelessWidget {
           FilledButton.icon(
             onPressed: onAccept,
             icon: const Icon(Icons.check),
-            label: const Text('Accept'),
+            label: Text(context.l10n.social_accept),
             style: FilledButton.styleFrom(
               backgroundColor: colorScheme.primary,
               foregroundColor: colorScheme.onPrimary,
@@ -83,11 +84,10 @@ class User extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 8.0),
-          // Reject Button
+          // Delete Button
           IconButton(
-            onPressed: onReject,
+            onPressed: onDelete,
             icon: Icon(Icons.close, color: colorScheme.error),
-            tooltip: 'Reject',
           ),
         ],
       );
@@ -96,19 +96,8 @@ class User extends StatelessWidget {
     if (status == 'pending' && direction == 'sent') {
       // Sent request: Show 'Pending' status
       return Text(
-        'Pending',
+        context.l10n.social_pending,
         style: TextStyle(fontStyle: FontStyle.italic, color: Colors.grey[600]),
-      );
-    }
-
-    if (status == 'rejected') {
-      // Rejected request: Show 'Rejected' status
-      return Text(
-        'Rejected',
-        style: TextStyle(
-          fontStyle: FontStyle.italic,
-          color: colorScheme.error,
-        ),
       );
     }
 

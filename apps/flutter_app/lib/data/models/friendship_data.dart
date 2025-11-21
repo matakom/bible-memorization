@@ -1,5 +1,5 @@
 class FriendUser {
-  final int id;
+  final String id;
   final String firstName;
   final String lastName;
 
@@ -11,7 +11,7 @@ class FriendUser {
 
   factory FriendUser.fromJson(Map<String, dynamic> json) {
     return FriendUser(
-      id: json['id'] as int,
+      id: json['id'] as String,
       firstName: json['firstName'] as String,
       lastName: json['lastName'] as String,
     );
@@ -19,8 +19,8 @@ class FriendUser {
 }
 
 class FriendshipData {
-  final int id;
-  final String status; // 'pending', 'accepted', 'rejected'
+  final String id;
+  final String status; // 'pending', 'accepted'
   final String direction; // 'sent', 'received'
   final DateTime createdAt;
   final FriendUser user; // The one who SENT the request
@@ -37,7 +37,7 @@ class FriendshipData {
 
   factory FriendshipData.fromJson(Map<String, dynamic> json) {
     return FriendshipData(
-      id: json['id'] as int,
+      id: json['id'] as String,
       status: json['status'] as String,
       direction: json['requestDirection'] as String, // Created on server
       createdAt: DateTime.parse(json['createdAt'] as String),

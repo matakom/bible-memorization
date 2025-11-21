@@ -9,6 +9,7 @@
     "docker:build": "docker compose -f docker-compose.dev.yml build",
     "docker:up": "docker compose -f docker-compose.dev.yml up -d",
     "docker:down": "docker compose -f docker-compose.dev.yml down",
+    "docker:downv": "docker compose -f docker-compose.dev.yml down -v",
     "docker:logs": "docker compose -f docker-compose.dev.yml logs -f",
     "docker:rebuild": "docker compose -f docker-compose.dev.yml down && docker compose -f docker-compose.dev.yml build && docker compose -f docker-compose.dev.yml up -d",
     "docker:build:prod": "docker compose -f docker-compose.prod.yml build",

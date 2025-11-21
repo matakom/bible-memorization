@@ -38,7 +38,7 @@ export class VerseController {
     @Delete(':id')
     @HttpCode(204)
     async deleteSavedVerse(
-        @Param('id', ParseIntPipe) id: number,
+        @Param('id', ParseIntPipe) id: string,
         @GetUser() user: User,
     ): Promise<void> {
         return this.versesService.deleteVerse(id, user);

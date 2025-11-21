@@ -1,5 +1,5 @@
 class AppUser {
-  final int id;
+  final String id;
   final String language;
   final String theme;
   final String friendCode;
@@ -24,7 +24,7 @@ class AppUser {
 
   factory AppUser.fromJson(Map<String, dynamic> json) {
     return AppUser(
-      id: json['id'] as int,
+      id: json['id'] as String,
       language: json['language'] as String,
       theme: json['theme'] as String,
       friendCode: json['friendCode'] as String,

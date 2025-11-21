@@ -8,7 +8,8 @@ import {
     UseGuards,
     Get,
     Patch,
-    Param
+    Param,
+    Delete
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from '../auth/get-user.decorator';
@@ -41,19 +42,19 @@ export class FriendshipsController {
     @Patch(':friendshipId/accept')
     @UseGuards(AuthGuard('jwt'))
     acceptFriendship(
-        @Param('friendshipId') friendshipId: number,
+        @Param('friendshipId') friendshipId: string,
         @GetUser() user: User,
     ) {
         return this.friendshipsService.acceptFriendship(friendshipId, user);
     }
 
-    @Patch(':friendshipId/reject')
+    @Delete(':friendshipId/delete')
     @UseGuards(AuthGuard('jwt'))
-    rejectFriendship(
-        @Param('friendshipId') friendshipId: number,
+    deleteFriendship(
+        @Param('friendshipId') friendshipId: string,
         @GetUser() user: User,
     ) {
-        return this.friendshipsService.rejectFriendship(friendshipId, user);
+        return this.friendshipsService.deleteFriendship(friendshipId, user);
     }
 }
 

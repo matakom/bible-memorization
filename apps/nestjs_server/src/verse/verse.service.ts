@@ -61,7 +61,7 @@ export class VerseService {
     /**
      * Deletes a specific saved verse.
      */
-    async deleteVerse(verseId: number, user: User): Promise<void> {
+    async deleteVerse(verseId: string, user: User): Promise<void> {
         const verse = await this.verseRepository.findOneBy({ id: verseId });
 
         if (!verse) {

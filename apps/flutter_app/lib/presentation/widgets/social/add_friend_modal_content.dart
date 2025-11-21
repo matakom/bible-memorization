@@ -95,7 +95,7 @@ class _AddFriendModalContentState extends ConsumerState<AddFriendModalContent> {
     });
 
     try {
-      await ref.read(friendshipsProvider.notifier).addFriend(friendCode);
+      await ref.read(friendshipsProvider.notifier).addFriendship(friendCode);
 
       if (mounted) Navigator.pop(context);
     } on FriendshipsException catch (e) {

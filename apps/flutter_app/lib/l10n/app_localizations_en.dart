@@ -91,10 +91,23 @@ class AppLocalizationsEn extends AppLocalizations {
   String get social_sentRequests => 'Sent requests';
 
   @override
-  String get social_rejectedByMe => 'Rejected by me';
+  String get social_pending => 'Pending';
 
   @override
-  String get social_rejectedByThem => 'Rejected by them';
+  String get social_accept => 'Accept';
+
+  @override
+  String get social_unfriendTitle => 'Unfriend?';
+
+  @override
+  String get social_unfriendBody =>
+      'Are you sure you want to remove this friend?';
+
+  @override
+  String get social_cancel => 'Cancel';
+
+  @override
+  String get social_remove => 'Remove';
 
   @override
   String get friendsStats_screenTitle => 'Friend Stats';
@@ -102,4 +115,42 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get friendsStats_future =>
       'This is where the stats will be displayed.';
+
+  @override
+  String get reader_screenTitle => 'Bible';
+
+  @override
+  String get reader_loading => 'Loading Scripture...';
+
+  @override
+  String get reader_error => 'Could not load text';
+
+  @override
+  String get reader_bookSelector => 'Book';
+
+  @override
+  String get reader_chapterSelector => 'Chapter';
+
+  @override
+  String reader_saveButton(int count) {
+    return 'Save $count Verses';
+  }
+
+  @override
+  String get reader_saveDialogTitle => 'Save to Memory';
+
+  @override
+  String get reader_saveDialogBody =>
+      'Do you want to add these verses to your daily practice?';
+
+  @override
+  String get reader_cancel => 'Cancel';
+
+  @override
+  String get reader_confirm => 'Save';
+
+  @override
+  String reader_savedVerses(int count) {
+    return 'Saved $count Verses';
+  }
 }

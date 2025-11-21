@@ -14,15 +14,14 @@ import { User } from '../user/user.entity';
 export enum FriendshipStatus {
     PENDING = 'pending',
     ACCEPTED = 'accepted',
-    REJECTED = 'rejected',
 }
 
 @Unique('unique_friendship', ['userId', 'friendId'])
 @Check('no_self_friendship', '"user_id" <> "friend_id"')
 @Entity('friendships')
 export class Friendship {
-    @PrimaryGeneratedColumn()
-    id: number;
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
 
     @Column({
         type: 'varchar',
@@ -34,10 +33,10 @@ export class Friendship {
     status: FriendshipStatus;
 
     @Column({ name: 'user_id' })
-    userId: number;
+    userId: string;
 
     @Column({ name: 'friend_id' })
-    friendId: number;
+    friendId: string;
 
     @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
     createdAt: Date;

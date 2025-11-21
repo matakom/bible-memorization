@@ -91,14 +91,78 @@ class AppLocalizationsCs extends AppLocalizations {
   String get social_sentRequests => 'Odeslané žádosti';
 
   @override
-  String get social_rejectedByMe => 'Odmítnuto mnou';
+  String get social_pending => 'Nevyřízené';
 
   @override
-  String get social_rejectedByThem => 'Odmítnuto jimi';
+  String get social_accept => 'Přijmout';
+
+  @override
+  String get social_unfriendTitle => 'Odebrat přítele?';
+
+  @override
+  String get social_unfriendBody => 'Opravdu chcete odebrat tohoto přítele?';
+
+  @override
+  String get social_cancel => 'Zrušit';
+
+  @override
+  String get social_remove => 'Odebrat';
 
   @override
   String get friendsStats_screenTitle => 'Statistiky přátel';
 
   @override
   String get friendsStats_future => 'Zde se zobrazí statistiky.';
+
+  @override
+  String get reader_screenTitle => 'Bible';
+
+  @override
+  String get reader_loading => 'Načítání Písma...';
+
+  @override
+  String get reader_error => 'Text se nepodařilo načíst';
+
+  @override
+  String get reader_bookSelector => 'Kniha';
+
+  @override
+  String get reader_chapterSelector => 'Kapitola';
+
+  @override
+  String reader_saveButton(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Uložit $count veršů',
+      few: 'Uložit $count verše',
+      one: 'Uložit verš',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get reader_saveDialogTitle => 'Uložit k zapamatování';
+
+  @override
+  String get reader_saveDialogBody =>
+      'Chcete přidat tyto verše do svého denního procvičování?';
+
+  @override
+  String get reader_cancel => 'Zrušit';
+
+  @override
+  String get reader_confirm => 'Uložit';
+
+  @override
+  String reader_savedVerses(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Uloženo $count veršů',
+      few: 'Uloženy $count verše',
+      one: 'Verš uložen',
+    );
+    return '$_temp0';
+  }
 }

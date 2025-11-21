@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable prettier/prettier */
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -60,7 +61,7 @@ export class UserService {
     }
 
     async updateUserSettings(
-        userId: number,
+        userId: string,
         theme?: string,
         language?: string,
     ) {
@@ -87,7 +88,7 @@ export class UserService {
     }
 
     async getUserSettings(
-        userId: number,
+        userId: string,
     ) {
 
         const result = await this.userRepository.findOne({

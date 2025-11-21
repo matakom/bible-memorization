@@ -97,7 +97,7 @@ export class FriendshipsService {
     }
 
     async acceptFriendship(
-        friendshipId: number,
+        friendshipId: string,
         user: User,
     ): Promise<Friendship> {
         const friendship = await this.friendshipRepository.findOneBy({
@@ -119,7 +119,7 @@ export class FriendshipsService {
         // Check request status
         if (friendship.status !== FriendshipStatus.PENDING) {
             throw new BadRequestException(
-                'This request is already accepted or rejected.',
+                'This request is already accepted.',
             );
         }
 
@@ -128,10 +128,11 @@ export class FriendshipsService {
         return this.friendshipRepository.save(friendship);
     }
 
-    async rejectFriendship(
-        friendshipId: number,
+
+    async deleteFriendship(
+        friendshipId: string,
         user: User,
-    ): Promise<Friendship> {
+    ): Promise<void> {
         const friendship = await this.friendshipRepository.findOneBy({
             id: friendshipId,
         });
@@ -141,23 +142,15 @@ export class FriendshipsService {
             throw new NotFoundException('Friendship request not found.');
         }
 
-        // Security Check - Only the receiver can reject
-        if (friendship.friendId !== user.id) {
+        // Security Check - Only the receiver can delete
+        if (friendship.friendId !== user.id && friendship.userId !== user.id) {
             throw new ForbiddenException(
                 'You do not have permission to accept this request.',
             );
         }
 
-        // Check request status
-        if (friendship.status !== FriendshipStatus.PENDING) {
-            throw new BadRequestException(
-                'This request is already accepted or rejected.',
-            );
-        }
-
-        // Update and save
-        friendship.status = FriendshipStatus.REJECTED;
-        return this.friendshipRepository.save(friendship);
+        // Delete
+        await this.friendshipRepository.remove(friendship);
     }
 
 }

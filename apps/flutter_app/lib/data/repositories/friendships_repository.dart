@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class FriendshipsException implements Exception {
   final String message;
   FriendshipsException(this.message);
-
+  
   @override
   String toString() => message;
 }
@@ -16,7 +16,7 @@ class FriendshipsRepository {
 
   FriendshipsRepository({required Dio dio}) : _dio = dio;
 
-  Future<void> sendFriendRequest(String friendCode) async {
+  Future<void> sendFriendshipRequest(String friendCode) async {
     try {
       await _dio.post('/friendships', data: {'friendCode': friendCode});
     } on DioException catch (e) {
@@ -46,7 +46,7 @@ class FriendshipsRepository {
     }
   }
 
-  Future<void> acceptRequest(int friendshipId) async {
+  Future<void> acceptFriendship(String friendshipId) async {
     try {
       await _dio.patch('/friendships/$friendshipId/accept');
     } on DioException catch (e) {
@@ -54,11 +54,11 @@ class FriendshipsRepository {
     }
   }
 
-  Future<void> rejectRequest(int friendshipId) async {
+  Future<void> deleteFriendship(String friendshipId) async{
     try {
-      await _dio.patch('/friendships/$friendshipId/reject');
+      await _dio.delete('/friendships/$friendshipId/delete');
     } on DioException catch (e) {
-      throw FriendshipsException('Failed to reject request: ${e.message}');
+      throw FriendshipsException('Failed to delete friendship: ${e.message}');
     }
   }
 }

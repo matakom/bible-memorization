@@ -14,11 +14,11 @@ import { User } from '../user/user.entity';
 @Check('verse > 0')
 @Check('difficulty BETWEEN 1 AND 5')
 export class Verse {
-    @PrimaryGeneratedColumn()
-    id: number;
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
 
     @Column({ name: 'user_id' })
-    userId: number;
+    userId: string;
 
     @Column({ length: 50 })
     book: string;

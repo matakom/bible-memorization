@@ -11,6 +11,6 @@ final userDataProvider = FutureProvider<AppUser>((ref) async {
 
 /// This provider gives synchronous access to the current user's ID.
 /// It will be null if the user is loading or has an error.
-final currentUserIdProvider = Provider<int?>((ref) {
+final currentUserIdProvider = Provider<String?>((ref) {
   return ref.watch(userDataProvider).value?.id;
 });

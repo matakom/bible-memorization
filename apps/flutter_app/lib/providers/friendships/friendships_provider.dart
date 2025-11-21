@@ -11,25 +11,25 @@ class FriendshipsNotifier extends AsyncNotifier<List<FriendshipData>> {
   }
 
   /// Adds a friend and then automatically refetches the list.
-  Future<void> addFriend(String friendCode) async {
+  Future<void> addFriendship(String friendCode) async {
     final repository = await ref.read(friendshipsRepositoryProvider.future);
-    await repository.sendFriendRequest(friendCode);
+    await repository.sendFriendshipRequest(friendCode);
     
     // If successful, invalidate this provider to refetch the list
     ref.invalidateSelf();
   }
 
   /// Accepts a friend request and then automatically refetches the list.
-  Future<void> acceptFriend(int friendshipId) async {
+  Future<void> acceptFriendship(String friendshipId) async {
     final repository = await ref.read(friendshipsRepositoryProvider.future);
-    await repository.acceptRequest(friendshipId);
+    await repository.acceptFriendship(friendshipId);
     ref.invalidateSelf();
   }
 
-  /// Rejects a friend request and then automatically refetches the list.
-  Future<void> rejectFriend(int friendshipId) async {
+  /// Deletes a friend and then automatically refetches the list.
+  Future<void> deleteFriendship(String friendshipId) async {
     final repository = await ref.read(friendshipsRepositoryProvider.future);
-    await repository.rejectRequest(friendshipId);
+    await repository.deleteFriendship(friendshipId);
     ref.invalidateSelf();
   }
 }

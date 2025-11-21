@@ -260,17 +260,41 @@ abstract class AppLocalizations {
   /// **'Sent requests'**
   String get social_sentRequests;
 
-  /// No description provided for @social_rejectedByMe.
+  /// No description provided for @social_pending.
   ///
   /// In en, this message translates to:
-  /// **'Rejected by me'**
-  String get social_rejectedByMe;
+  /// **'Pending'**
+  String get social_pending;
 
-  /// No description provided for @social_rejectedByThem.
+  /// No description provided for @social_accept.
   ///
   /// In en, this message translates to:
-  /// **'Rejected by them'**
-  String get social_rejectedByThem;
+  /// **'Accept'**
+  String get social_accept;
+
+  /// No description provided for @social_unfriendTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Unfriend?'**
+  String get social_unfriendTitle;
+
+  /// No description provided for @social_unfriendBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to remove this friend?'**
+  String get social_unfriendBody;
+
+  /// No description provided for @social_cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get social_cancel;
+
+  /// No description provided for @social_remove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get social_remove;
 
   /// No description provided for @friendsStats_screenTitle.
   ///
@@ -283,6 +307,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This is where the stats will be displayed.'**
   String get friendsStats_future;
+
+  /// No description provided for @reader_screenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Bible'**
+  String get reader_screenTitle;
+
+  /// No description provided for @reader_loading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading Scripture...'**
+  String get reader_loading;
+
+  /// No description provided for @reader_error.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load text'**
+  String get reader_error;
+
+  /// No description provided for @reader_bookSelector.
+  ///
+  /// In en, this message translates to:
+  /// **'Book'**
+  String get reader_bookSelector;
+
+  /// No description provided for @reader_chapterSelector.
+  ///
+  /// In en, this message translates to:
+  /// **'Chapter'**
+  String get reader_chapterSelector;
+
+  /// No description provided for @reader_saveButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Save {count} Verses'**
+  String reader_saveButton(int count);
+
+  /// No description provided for @reader_saveDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Save to Memory'**
+  String get reader_saveDialogTitle;
+
+  /// No description provided for @reader_saveDialogBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Do you want to add these verses to your daily practice?'**
+  String get reader_saveDialogBody;
+
+  /// No description provided for @reader_cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get reader_cancel;
+
+  /// No description provided for @reader_confirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get reader_confirm;
+
+  /// No description provided for @reader_savedVerses.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved {count} Verses'**
+  String reader_savedVerses(int count);
 }
 
 class _AppLocalizationsDelegate

@@ -36,9 +36,40 @@
   "social_friendRequest": "Friend request",
   "social_friends": "Friends",
   "social_sentRequests": "Sent requests",
-  "social_rejectedByMe": "Rejected by me",
-  "social_rejectedByThem": "Rejected by them",
+  "social_pending": "Pending",
+  "social_accept": "Accept",
+  "social_unfriendTitle": "Unfriend?",
+  "social_unfriendBody": "Are you sure you want to remove this friend?",
+  "social_cancel": "Cancel",
+  "social_remove": "Remove",
   
   "friendsStats_screenTitle": "Friend Stats",
-  "friendsStats_future": "This is where the stats will be displayed."
+  "friendsStats_future": "This is where the stats will be displayed.",
+
+  "reader_screenTitle": "Bible",
+  "reader_loading": "Loading Scripture...",
+  "reader_error": "Could not load text",
+  "reader_bookSelector": "Book",
+  "reader_chapterSelector": "Chapter",
+  "reader_saveButton": "Save {count} Verses",
+  "@reader_saveButton": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "reader_saveDialogTitle": "Save to Memory",
+  "reader_saveDialogBody": "Do you want to add these verses to your daily practice?",
+  "reader_cancel": "Cancel",
+  "reader_confirm": "Save",
+  "reader_savedVerses": "Saved {count} Verses",
+  "@reader_savedVerses": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
+
 }

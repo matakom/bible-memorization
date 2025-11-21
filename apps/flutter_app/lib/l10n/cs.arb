@@ -37,9 +37,43 @@
   "social_friendRequest": "Žádost o přátelství",
   "social_friends": "Přátelé",
   "social_sentRequests": "Odeslané žádosti",
-  "social_rejectedByMe": "Odmítnuto mnou",
-  "social_rejectedByThem": "Odmítnuto jimi",
+  "social_pending": "Nevyřízené",
+  "social_accept": "Přijmout",
+  "social_unfriendTitle": "Odebrat přítele?",
+  "social_unfriendBody": "Opravdu chcete odebrat tohoto přítele?",
+  "social_cancel": "Zrušit",
+  "social_remove": "Odebrat",
   
   "friendsStats_screenTitle": "Statistiky přátel",
-  "friendsStats_future": "Zde se zobrazí statistiky."
+  "friendsStats_future": "Zde se zobrazí statistiky.",
+
+  "reader_screenTitle": "Bible",
+  "reader_loading": "Načítání Písma...",
+  "reader_error": "Text se nepodařilo načíst",
+  "reader_bookSelector": "Kniha",
+  "reader_chapterSelector": "Kapitola",
+  "reader_saveButton": "{count, plural, one{Uložit verš} few{Uložit {count} verše} other{Uložit {count} veršů}}",
+  "@reader_saveButton": {
+    "description": "Tlačítko pro uložení vybraných veršů s českým skloňováním",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "reader_saveDialogTitle": "Uložit k zapamatování",
+  "reader_saveDialogBody": "Chcete přidat tyto verše do svého denního procvičování?",
+  "reader_cancel": "Zrušit",
+  "reader_confirm": "Uložit",
+  "reader_savedVerses": "{count, plural, one{Verš uložen} few{Uloženy {count} verše} other{Uloženo {count} veršů}}",
+  "@reader_savedVerses": {
+    "description": "Hláška po uložení veršů",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  }
 }

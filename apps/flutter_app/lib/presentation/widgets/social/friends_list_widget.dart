@@ -8,7 +8,7 @@ import '../../../data/models/friendship_data.dart';
 
 class FriendsListWidget extends ConsumerStatefulWidget {
   final List<FriendshipData> friendships;
-  final int currentUserId;
+  final String currentUserId;
 
   const FriendsListWidget({
     super.key,
@@ -24,8 +24,6 @@ class _FriendsListWidgetState extends ConsumerState<FriendsListWidget> {
   late List<FriendshipData> receivedRequests;
   late List<FriendshipData> acceptedFriends;
   late List<FriendshipData> sentRequests;
-  late List<FriendshipData> rejectedByThem;
-  late List<FriendshipData> rejectedByMe;
 
   @override
   void initState() {
@@ -46,8 +44,6 @@ class _FriendsListWidgetState extends ConsumerState<FriendsListWidget> {
     receivedRequests = [];
     acceptedFriends = [];
     sentRequests = [];
-    rejectedByThem = [];
-    rejectedByMe = [];
 
     for (var friendship in widget.friendships) {
       if (friendship.status == 'pending' &&
@@ -58,22 +54,16 @@ class _FriendsListWidgetState extends ConsumerState<FriendsListWidget> {
       } else if (friendship.status == 'pending' &&
           friendship.direction == 'sent') {
         sentRequests.add(friendship);
-      } else if (friendship.status == 'rejected' &&
-          friendship.direction == 'received') {
-        rejectedByMe.add(friendship);
-      } else if (friendship.status == 'rejected' &&
-          friendship.direction == 'sent') {
-        rejectedByThem.add(friendship);
       }
     }
   }
 
-  Future<void> _handleAction(int friendshipId, String action) async {
+  Future<void> _handleAction(String friendshipId, String action) async {
     try {
       if (action == 'accept') {
-        await ref.read(friendshipsProvider.notifier).acceptFriend(friendshipId);
-      } else if (action == 'reject') {
-        await ref.read(friendshipsProvider.notifier).rejectFriend(friendshipId);
+        await ref.read(friendshipsProvider.notifier).acceptFriendship(friendshipId);
+      } else if (action == 'delete') {
+        await ref.read(friendshipsProvider.notifier).deleteFriendship(friendshipId);
       }
     } catch (e) {
       if (mounted) {
@@ -132,10 +122,10 @@ class _FriendsListWidgetState extends ConsumerState<FriendsListWidget> {
                 status: item.status,
                 direction: item.direction,
                 onTap: () {
-                  context.go('/social/${friendUser.id}');
+                  context.go('/social/${friendUser.id}/${item.id}');
                 },
                 onAccept: () => _handleAction(item.id, 'accept'),
-                onReject: () => _handleAction(item.id, 'reject'),
+                onDelete: () => _handleAction(item.id, 'delete'),
               );
             },
           ),
@@ -147,9 +137,7 @@ class _FriendsListWidgetState extends ConsumerState<FriendsListWidget> {
   Widget build(BuildContext context) {
     if (receivedRequests.isEmpty
         && acceptedFriends.isEmpty
-        && sentRequests.isEmpty
-        && rejectedByMe.isEmpty
-        && rejectedByThem.isEmpty) {
+        && sentRequests.isEmpty) {
       return Center(child: Text(context.l10n.social_nothingToSeeHereYet));
     }
     return SingleChildScrollView(
@@ -164,11 +152,6 @@ class _FriendsListWidgetState extends ConsumerState<FriendsListWidget> {
           if (sentRequests.isNotEmpty)
             _buildSection(context.l10n.social_sentRequests, sentRequests),
 
-          if (rejectedByMe.isNotEmpty)
-            _buildSection(context.l10n.social_rejectedByMe, rejectedByMe),
-
-          if (rejectedByThem.isNotEmpty)
-            _buildSection(context.l10n.social_rejectedByThem, rejectedByThem),
           const SizedBox(height: 32),
         ],
       ),
