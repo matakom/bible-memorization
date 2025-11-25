@@ -10,13 +10,15 @@ final savedVersesControllerProvider =
 });
 
 class SavedVersesController extends AsyncNotifier<List<SavedVerse>> {
-  late final SavedVersesRepository _repository;
 
   @override
   Future<List<SavedVerse>> build() async {
-    _repository = await ref.watch(savedVersesRepositoryProvider.future);
-    return _repository.getSavedVerses();
+    final repository = await ref.watch(savedVersesRepositoryProvider.future);
+    
+    return repository.getSavedVerses();
   }
+
+  Future<SavedVersesRepository> get _repository => ref.read(savedVersesRepositoryProvider.future);
 
   /// Adds multiple verses to the backend and updates the local state immediately
   Future<void> addVerses(List<VerseCreationPayload> versesToSave) async {
@@ -25,8 +27,8 @@ class SavedVersesController extends AsyncNotifier<List<SavedVerse>> {
     state = const AsyncValue.loading();
 
     state = await AsyncValue.guard(() async {
-      final newVerses = await _repository.saveVerses(versesToSave);
-
+      final repo = await _repository; 
+      final newVerses = await repo.saveVerses(versesToSave);
       return [...?previousState, ...newVerses];
     });
   }
@@ -37,9 +39,8 @@ class SavedVersesController extends AsyncNotifier<List<SavedVerse>> {
     state = const AsyncValue.loading();
 
     state = await AsyncValue.guard(() async {
-      await _repository.deleteVerse(verseId);
-      
-      // Filter out the deleted verse from the local list
+      final repo = await _repository;
+      await repo.deleteVerse(verseId);
       return previousState?.where((v) => v.id != verseId).toList() ?? [];
     });
   }

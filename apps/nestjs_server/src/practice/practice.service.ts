@@ -72,7 +72,7 @@ export class PracticeService {
             // --- FAILURE (Forgot) ---
             repetitionCount = 0;
             // Reset to 1 day
-            nextReviewDate = this.addDays(1);
+            nextReviewDate = this.addDays(0);
         }
 
         // 3. Update Ease Factor (The "Difficulty" Speed)
@@ -97,11 +97,20 @@ export class PracticeService {
         return date;
     }
 
-    private getDaysDiff(d1: Date, d2: Date): number {
-        const t1 = d1.getTime();
-        const t2 = d2.getTime();
-        // If dates are weird, default to 1
+    private getDaysDiff(d1: Date | string, d2: Date | string): number {
+        // Force conversion to Date object
+        const date1 = new Date(d1);
+        const date2 = new Date(d2);
+
+        const t1 = date1.getTime();
+        const t2 = date2.getTime();
+
+        // Safety check: If date parsing failed
+        if (Number.isNaN(t1) || Number.isNaN(t2)) return 1;
+
+        // If dates are weird or negative interval, default to 1
         if (t2 <= t1) return 1;
+
         return Math.ceil((t2 - t1) / (1000 * 3600 * 24));
     }
 }

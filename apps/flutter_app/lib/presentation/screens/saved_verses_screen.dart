@@ -15,7 +15,7 @@ class SavedVersesScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.l10n.reader_savedVersesTitle), // context.l10n.savedVersesTitle
+        title: Text(context.l10n.reader_savedVersesTitle),
       ),
       body: state.when(
         loading: () => const Center(child: CircularProgressIndicator()),
