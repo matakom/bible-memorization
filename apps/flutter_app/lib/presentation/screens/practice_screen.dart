@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/data/repositories/stats_repository.dart';
 import 'package:flutter_app/providers/reader/saved_verses_controller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_app/data/models/saved_verse.dart';
@@ -10,6 +11,7 @@ class PracticeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final versesState = ref.watch(savedVersesControllerProvider);
+    ref.read(myStatsProvider);
 
     return Scaffold(
       appBar: AppBar(

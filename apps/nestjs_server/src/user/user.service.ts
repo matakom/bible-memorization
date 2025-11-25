@@ -40,6 +40,10 @@ export class UserService {
         private friendshipRepository: Repository<Friendship>,
     ) { }
 
+    async saveUser(user: User): Promise<User> {
+        return this.userRepository.save(user);
+    }
+
     async findOrCreateUserFromFirebase(
         payload: FirebasePayload,
     ): Promise<User> {
@@ -117,10 +121,6 @@ export class UserService {
         return { language: result.language, theme: result.theme };
     }
 
-    async getMyStats(userId: string): Promise<UserStatsDto> {
-        return this._calculateStats(userId);
-    }
-
     async getFriendStats(currentUserId: string, targetUserId: string): Promise<UserStatsDto> {
         if (currentUserId === targetUserId) {
             return this._calculateStats(currentUserId);
@@ -136,6 +136,8 @@ export class UserService {
         if (!isFriend) {
             throw new ForbiddenException('You can only view stats of your friends.');
         }
+
+        await this.validateStreak(targetUserId);
 
         return this._calculateStats(targetUserId);
     }
@@ -177,5 +179,57 @@ export class UserService {
             totalReviews,
             averageAccuracy: Math.round(accuracy),
         };
+    }
+
+    async validateStreak(userId: string): Promise<void> {
+        const user = await this.userRepository.findOneBy({ id: userId });
+        if (!user) return;
+
+        // Find the DATE of the very last exercise performed
+        const lastExercise = await this.exerciseRepository.findOne({
+            where: { userId },
+            order: { performedAt: 'DESC' }, // Get newest
+        });
+
+        if (!lastExercise) {
+            if (user.dailyVerseStreak !== 0) {
+                user.dailyVerseStreak = 0;
+                await this.userRepository.save(user);
+            }
+            return;
+        }
+
+        const now = new Date();
+        const lastPracticeDate = new Date(lastExercise.performedAt);
+
+        // Helper: Check if dates are the same calendar day
+        const isSameDay = (d1: Date, d2: Date) => {
+            return d1.toISOString().split('T')[0] === d2.toISOString().split('T')[0];
+        };
+
+        // Helper: Check if d1 is exactly 1 day before d2 (Yesterday)
+        const isYesterday = (d1: Date, d2: Date) => {
+            const yesterday = new Date(d2);
+            yesterday.setDate(yesterday.getDate() - 1);
+            return isSameDay(d1, yesterday);
+        };
+
+
+        if (isSameDay(lastPracticeDate, now) || isYesterday(lastPracticeDate, now)) {
+            // Do nothing, streak is valid.
+            return;
+        }
+
+        // If last practice was older than yesterday
+        if (user.dailyVerseStreak !== 0) {
+            user.dailyVerseStreak = 0;
+            await this.userRepository.save(user);
+        }
+    }
+
+    async getMyStats(userId: string): Promise<UserStatsDto> {
+        await this.validateStreak(userId);
+
+        return this._calculateStats(userId);
     }
 }

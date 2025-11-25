@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/data/repositories/stats_repository.dart';
 import 'package:flutter_app/providers/reader/saved_verses_controller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_app/data/models/saved_verse.dart';
@@ -45,7 +46,8 @@ class _FlashcardPracticeScreenState extends ConsumerState<FlashcardPracticeScree
     }).catchError((e) {
       debugPrint("Error submitting grade: $e");
     });
-
+    ref.invalidate(savedVersesControllerProvider);
+    ref.invalidate(myStatsProvider);
     setState(() {
       _practiceQueue.removeAt(0);
 
@@ -66,8 +68,6 @@ class _FlashcardPracticeScreenState extends ConsumerState<FlashcardPracticeScree
     });
 
     if (_practiceQueue.isEmpty) {
-      ref.invalidate(savedVersesControllerProvider);
-      
       if (mounted) {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(

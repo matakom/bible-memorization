@@ -1,8 +1,11 @@
-import 'package:flutter_app/data/repositories/user_repository.dart'; //
+import 'package:flutter_app/data/repositories/practice_repository.dart';
+import 'package:flutter_app/data/repositories/saved_verses_repository.dart';
+import 'package:flutter_app/data/repositories/stats_repository.dart';
+import 'package:flutter_app/data/repositories/user_repository.dart';
 import 'package:flutter_app/providers/auth_provider.dart';
 import 'package:flutter_app/providers/friendships/friendships_provider.dart';
 import 'package:flutter_app/providers/settings/settings_loading_provider.dart';
-import 'package:flutter_app/providers/user_provider.dart'; // Import our new provider
+import 'package:flutter_app/providers/user_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AuthController extends Notifier<void> {
@@ -19,6 +22,9 @@ class AuthController extends Notifier<void> {
       ref.invalidate(userRepositoryProvider);
       ref.invalidate(userDataProvider);
       ref.invalidate(friendshipsProvider);
+      ref.invalidate(practiceRepositoryProvider);
+      ref.invalidate(savedVersesRepositoryProvider);
+      ref.invalidate(statsRepositoryProvider);
       
       await ref.read(userDataProvider.future);
 

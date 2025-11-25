@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable prefer-const */
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
@@ -6,6 +9,7 @@ import { Repository } from 'typeorm';
 import { Exercise } from './exercise.entity';
 import { SavedVerse } from 'src/saved_verses/saved_verses.entity';
 import { User } from '../user/user.entity';
+import { UserService } from 'src/user/user.service';
 
 // DTO for the input data
 export interface PracticeResultDto {
@@ -22,9 +26,13 @@ export class PracticeService {
         private exerciseRepository: Repository<Exercise>,
         @InjectRepository(SavedVerse)
         private verseRepository: Repository<SavedVerse>,
+        private userService: UserService,
     ) { }
 
     async processSession(user: User, results: PracticeResultDto[]): Promise<void> {
+
+        await this.handleStreakIncrement(user);
+
         // Process all results in parallel or sequence
         for (const result of results) {
             await this.updateVerseStats(user, result);
@@ -89,6 +97,34 @@ export class PracticeService {
         verse.lastReviewDate = new Date();
 
         await this.verseRepository.save(verse);
+    }
+
+    private async handleStreakIncrement(user: User) {
+        // Find last practice
+        const lastExercise = await this.exerciseRepository.findOne({
+            where: { userId: user.id },
+            order: { performedAt: 'DESC' },
+        });
+
+        const now = new Date();
+
+        // If this is the FIRST EVER practice
+        if (!lastExercise) {
+            user.dailyVerseStreak = 1;
+            await this.userService.saveUser(user);
+            return;
+        }
+
+        const lastDate = new Date(lastExercise.performedAt);
+        const isSameDay = lastDate.toISOString().split('T')[0] === now.toISOString().split('T')[0];
+
+        // If already practiced today return
+        if (isSameDay) return;
+
+
+        user.dailyVerseStreak += 1;
+
+        await this.userService.saveUser(user);
     }
 
     private addDays(days: number): Date {
