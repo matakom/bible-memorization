@@ -3,55 +3,57 @@ import {
     Injectable,
     NotFoundException,
     ForbiddenException,
-    ConflictException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../user/user.entity';
-import { Verse } from './verse.entity';
+import { SavedVerse } from './saved_verses.entity';
 import { CreateVerseDto } from './dto/create-verse.dto';
 
 @Injectable()
-export class VerseService {
+export class SavedVersesService {
     constructor(
-        @InjectRepository(Verse)
-        private readonly verseRepository: Repository<Verse>,
+        @InjectRepository(SavedVerse)
+        private readonly verseRepository: Repository<SavedVerse>,
     ) { }
 
-    /**
-     * Creates and saves a new verse for a user.
-     */
     async createVerse(
-        dto: CreateVerseDto,
+        dtos: CreateVerseDto[],
         user: User,
-    ): Promise<Verse> {
-        // Check if this exact verse is already saved
-        const existing = await this.verseRepository.findOneBy({
-            userId: user.id,
-            book: dto.book,
-            chapter: dto.chapter,
-            verse: dto.verse,
-            translation: dto.translation,
-        });
+    ): Promise<SavedVerse[]> {
 
-        if (existing) {
-            throw new ConflictException('You have already saved this verse.');
+        const versesToSave: SavedVerse[] = [];
+
+        await Promise.all(dtos.map(async (dto) => {
+            const existing = await this.verseRepository.findOneBy({
+                userId: user.id,
+                book: dto.book,
+                chapter: dto.chapter,
+                verse: dto.verse,
+                translation: dto.translation,
+            });
+
+            if (!existing) {
+                const newVerse = this.verseRepository.create({
+                    ...dto,
+                    userId: user.id,
+                    nextReviewDate: new Date(Date.now() + 24 * 60 * 60 * 1000),
+                });
+                versesToSave.push(newVerse);
+            }
+        }));
+
+        if (versesToSave.length > 0) {
+            return await this.verseRepository.save(versesToSave);
         }
 
-        const newVerse = this.verseRepository.create({
-            ...dto,
-            userId: user.id,
-            // Set initial review date for tomorrow
-            nextReviewDate: new Date(Date.now() + 24 * 60 * 60 * 1000),
-        });
-
-        return this.verseRepository.save(newVerse);
+        return [];
     }
 
     /**
      * Gets all saved verses for the authenticated user.
      */
-    async getVersesForUser(user: User): Promise<Verse[]> {
+    async getVersesForUser(user: User): Promise<SavedVerse[]> {
         return this.verseRepository.find({
             where: { userId: user.id },
             order: { nextReviewDate: 'ASC', book: 'ASC' },

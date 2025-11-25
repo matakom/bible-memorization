@@ -3,13 +3,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class ReaderState {
   final int bookId;
   final int chapterNum;
+  final String translation;
 
-  const ReaderState({required this.bookId, required this.chapterNum});
+  const ReaderState({required this.bookId, required this.chapterNum, required this.translation});
 
-  ReaderState copyWith({int? bookId, int? chapterNum}) {
+  ReaderState copyWith({int? bookId, int? chapterNum, String? translation}) {
     return ReaderState(
       bookId: bookId ?? this.bookId,
       chapterNum: chapterNum ?? this.chapterNum,
+      translation: translation ?? this.translation,
     );
   }
 }
@@ -17,15 +19,18 @@ class ReaderState {
 class ReaderNotifier extends Notifier<ReaderState> {
   @override
   ReaderState build() {
-    return const ReaderState(bookId: 1, chapterNum: 1);
+    return const ReaderState(bookId: 1, chapterNum: 1, translation: 'B21');
   }
 
   void selectBook(int newBookId) {
-    state = ReaderState(bookId: newBookId, chapterNum: 1);
+    state = state.copyWith(bookId: newBookId, chapterNum: 1);
   }
 
   void selectChapter(int newChapterNum) {
     state = state.copyWith(chapterNum: newChapterNum);
+  }
+  void selectTranslation(String translation){
+    state = state.copyWith(translation: translation);
   }
 }
 

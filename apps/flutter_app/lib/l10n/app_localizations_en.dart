@@ -153,4 +153,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String reader_savedVerses(int count) {
     return 'Saved $count Verses';
   }
+
+  @override
+  String get reader_savedVersesTitle => 'Saved verses';
+
+  @override
+  String get reader_retrySavedVersesFetch => 'Retry';
+
+  @override
+  String get reader_errorLoadingSavedVerses => 'Error loading saved verses: ';
+
+  @override
+  String get reader_noSavedVersesYet =>
+      'No verses saved yet.\nGo to the Bible to add some!';
 }

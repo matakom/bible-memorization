@@ -6,18 +6,15 @@
 4. Zobrazit text bible
 5. Změna překladu bible
 6. Uložení verše k zapamatování
-    1. Skrz Bibli
-    2. Skrz referenci
 7. Procvičení doporučených veršů
-8. Procvičení konkrétního verše
-9. Zobrazení statistik
-10. Přidání přítele
-11. Odebrání přítele
-12. Zobrazení statistik přítele
-13. Zobrazení žebříčku
-14. Změna jazyka aplikace
-15. Změna light/dark mode
-16. Změna velikosti textu
+8. Zobrazení statistik
+9. Přidání přítele
+10. Odebrání přítele
+11. Zobrazení statistik přítele
+12. Zobrazení žebříčku
+13. Změna jazyka aplikace
+14. Změna light/dark mode
+15. Změna velikosti textu
 
 # Nefunkční
 

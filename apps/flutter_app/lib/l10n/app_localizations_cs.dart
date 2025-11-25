@@ -165,4 +165,17 @@ class AppLocalizationsCs extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get reader_savedVersesTitle => 'Uložené verše';
+
+  @override
+  String get reader_retrySavedVersesFetch => 'Zkusit znovu';
+
+  @override
+  String get reader_errorLoadingSavedVerses => 'Nepovedlo se načíst verše: ';
+
+  @override
+  String get reader_noSavedVersesYet =>
+      'Zatím tu nemáš žádné verše!\nBěž do Bible a přidej nějaký!';
 }

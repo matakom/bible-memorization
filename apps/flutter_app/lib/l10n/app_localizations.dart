@@ -373,6 +373,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Saved {count} Verses'**
   String reader_savedVerses(int count);
+
+  /// No description provided for @reader_savedVersesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved verses'**
+  String get reader_savedVersesTitle;
+
+  /// No description provided for @reader_retrySavedVersesFetch.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get reader_retrySavedVersesFetch;
+
+  /// No description provided for @reader_errorLoadingSavedVerses.
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading saved verses: '**
+  String get reader_errorLoadingSavedVerses;
+
+  /// No description provided for @reader_noSavedVersesYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No verses saved yet.\nGo to the Bible to add some!'**
+  String get reader_noSavedVersesYet;
 }
 
 class _AppLocalizationsDelegate

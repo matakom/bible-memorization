@@ -10,18 +10,19 @@ import {
 import { User } from '../user/user.entity';
 
 @Entity('verse')
+@Check('book > 0')
 @Check('chapter > 0')
 @Check('verse > 0')
 @Check('difficulty BETWEEN 1 AND 5')
-export class Verse {
+export class SavedVerse {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
     @Column({ name: 'user_id' })
     userId: string;
 
-    @Column({ length: 50 })
-    book: string;
+    @Column()
+    book: number;
 
     @Column()
     chapter: number;

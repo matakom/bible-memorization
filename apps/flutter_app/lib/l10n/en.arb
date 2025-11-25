@@ -70,6 +70,9 @@
         "type": "int"
       }
     }
-  }
-
+  },
+  "reader_savedVersesTitle": "Saved verses",
+  "reader_retrySavedVersesFetch": "Retry",
+  "reader_errorLoadingSavedVerses": "Error loading saved verses: ",
+  "reader_noSavedVersesYet": "No verses saved yet.\nGo to the Bible to add some!"
 }

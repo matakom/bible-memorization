@@ -34,3 +34,8 @@ final chapterContentProvider = FutureProvider.family<Chapter, ChapterRef>((ref, 
   final repository = ref.watch(bibleRepositoryProvider);
   return repository.getChapter(chapterRef.bookId, chapterRef.chapterNum);
 });
+
+final bookNameProvider = FutureProvider.family<String, int>((ref, bookId) async {
+  final repository = ref.watch(bibleRepositoryProvider); 
+  return repository.getBookName(bookId);
+});

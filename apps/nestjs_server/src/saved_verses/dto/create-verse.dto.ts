@@ -4,7 +4,7 @@ import { IsString, IsInt, IsNotEmpty, Min } from 'class-validator';
 export class CreateVerseDto {
     @IsString()
     @IsNotEmpty()
-    readonly book: string;
+    readonly book: number;
 
     @IsInt()
     @Min(1)

@@ -142,7 +142,7 @@ export class FriendshipsService {
             throw new NotFoundException('Friendship request not found.');
         }
 
-        // Security Check - Only the receiver can delete
+        // Security Check - Only the receiver or sender can delete
         if (friendship.friendId !== user.id && friendship.userId !== user.id) {
             throw new ForbiddenException(
                 'You do not have permission to accept this request.',

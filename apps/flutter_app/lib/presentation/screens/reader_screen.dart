@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/data/models/saved_verse.dart';
 import 'package:flutter_app/l10n/l10n_extension.dart';
+import 'package:flutter_app/presentation/screens/saved_verses_screen.dart';
+import 'package:flutter_app/providers/reader/saved_verses_controller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_app/providers/reader/reader_state_provider.dart';
 import 'package:flutter_app/providers/reader/verse_selection_provider.dart';
 import 'package:flutter_app/presentation/widgets/reader/top_bar.dart';
 import 'package:flutter_app/presentation/widgets/reader/verse_view.dart';
-
-import '../../utils/debugger.dart';
 
 class ReaderScreen extends ConsumerWidget {
   const ReaderScreen({super.key});
@@ -28,6 +29,20 @@ class ReaderScreen extends ConsumerWidget {
         title: const TopBar(),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         surfaceTintColor: Colors.transparent,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.bookmarks_rounded),
+            tooltip: context.l10n.reader_savedVersesTitle,
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const SavedVersesScreen(),
+                ),
+              );
+            },
+          ),
+          const SizedBox(width: 8),
+        ],
       ),
       body: const ReaderContentView(),
       floatingActionButton: AnimatedSwitcher(
@@ -68,18 +83,49 @@ class ReaderScreen extends ConsumerWidget {
             child: Text(context.l10n.reader_cancel),
           ),
           FilledButton(
-            onPressed: () {
-              // TODO: Call your repository to save these verses
-              Debugger.log("Saving verses: $selectedVerses");
+            onPressed: () async {
+              final readerState = ref.read(readerProvider);
 
-              ref.read(verseSelectionProvider.notifier).clear();
+              final sortedVerses = selectedVerses.toList()..sort();
+              
+              final versesToSave = sortedVerses.map((verseNum) {
+                return VerseCreationPayload(
+                  book: readerState.bookId, 
+                  chapter: readerState.chapterNum,
+                  verse: verseNum,
+                  translation: readerState.translation, 
+                );
+              }).toList();
+
               Navigator.pop(ctx);
+              
+              ref.read(verseSelectionProvider.notifier).clear();
 
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(context.l10n.reader_savedVerses(selectedVerses.length)),
-                ),
-              );
+              try {
+                await ref
+                    .read(savedVersesControllerProvider.notifier)
+                    .addVerses(versesToSave);
+
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        context.l10n.reader_savedVerses(versesToSave.length),
+                      ),
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
+                }
+              } catch (e) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text("Error saving verses: ${e.toString()}"),
+                      backgroundColor: Theme.of(context).colorScheme.error,
+                    ),
+                  );
+                }
+              }
             },
             child: Text(context.l10n.reader_confirm),
           ),

@@ -75,5 +75,9 @@
         "example": "3"
       }
     }
-  }
+  },
+  "reader_savedVersesTitle": "Uložené verše",
+  "reader_retrySavedVersesFetch": "Zkusit znovu",
+  "reader_errorLoadingSavedVerses": "Nepovedlo se načíst verše: ",
+  "reader_noSavedVersesYet": "Zatím tu nemáš žádné verše!\nBěž do Bible a přidej nějaký!"
 }
