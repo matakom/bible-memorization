@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/data/models/saved_verse.dart';
 import 'package:flutter_app/l10n/l10n_extension.dart';
 import 'package:flutter_app/presentation/screens/saved_verses_screen.dart';
+import 'package:flutter_app/presentation/widgets/reader/appearance_bottom_sheet.dart';
 import 'package:flutter_app/providers/reader/saved_verses_controller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_app/providers/reader/reader_state_provider.dart';
@@ -38,6 +39,17 @@ class ReaderScreen extends ConsumerWidget {
                 MaterialPageRoute(
                   builder: (context) => const SavedVersesScreen(),
                 ),
+              );
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.text_format_rounded),
+            tooltip: 'Appearance',
+            onPressed: () {
+              showModalBottomSheet(
+                context: context,
+                backgroundColor: Colors.transparent,
+                builder: (_) => const AppearanceBottomSheet(),
               );
             },
           ),
@@ -87,18 +99,17 @@ class ReaderScreen extends ConsumerWidget {
               final readerState = ref.read(readerProvider);
 
               final sortedVerses = selectedVerses.toList()..sort();
-              
               final versesToSave = sortedVerses.map((verseNum) {
                 return VerseCreationPayload(
-                  book: readerState.bookId, 
+                  book: readerState.bookId,
                   chapter: readerState.chapterNum,
                   verse: verseNum,
-                  translation: readerState.translation, 
+                  translation: readerState.translation,
                 );
               }).toList();
 
               Navigator.pop(ctx);
-              
+
               ref.read(verseSelectionProvider.notifier).clear();
 
               try {
