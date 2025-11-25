@@ -18,6 +18,11 @@ export class CreateVerseDto {
     @IsNotEmpty()
     readonly translation: string;
 
+    @IsString()
+    @IsNotEmpty()
+    readonly text: string;
+
+
     // The review dates will be set by the server,
     // so they are not included in the DTO.
 }

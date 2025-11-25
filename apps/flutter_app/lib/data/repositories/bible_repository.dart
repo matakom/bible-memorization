@@ -44,7 +44,7 @@ class BibleRepository {
   /// Fetches a specific verse.
   Future<Verse> getVerse(int bookId, int chapterNumber, int verseNumber) async {
     final chapter = await getChapter(bookId, chapterNumber);
-    return chapter.verses[verseNumber];
+    return chapter.verses[verseNumber - 1];
   }
 
   /// Fetches the name of a book by its ID.

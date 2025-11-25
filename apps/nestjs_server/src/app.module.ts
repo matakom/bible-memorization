@@ -12,6 +12,8 @@ import { FriendshipsModule } from './friendships/friendships.module';
 import { Friendship } from './friendships/friendships.entity';
 import { SavedVerse } from './saved_verses/saved_verses.entity';
 import { SavedVersesModule } from './saved_verses/saved_verses.module';
+import { PracticeModule } from './practice/practice.module';
+import { Exercise } from './practice/exercise.entity';
 
 @Module({
   imports: [
@@ -31,7 +33,7 @@ import { SavedVersesModule } from './saved_verses/saved_verses.module';
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_DATABASE'),
 
-        entities: [User, Friendship, SavedVerse],
+        entities: [User, Friendship, SavedVerse, Exercise],
 
         // 'synchronize: true' is for development only.
         synchronize: true,
@@ -40,7 +42,8 @@ import { SavedVersesModule } from './saved_verses/saved_verses.module';
     UserModule,
     AuthModule,
     FriendshipsModule,
-    SavedVersesModule
+    SavedVersesModule,
+    PracticeModule
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -17,14 +17,19 @@ export class SavedVersesService {
         private readonly verseRepository: Repository<SavedVerse>,
     ) { }
 
-    async createVerse(
-        dtos: CreateVerseDto[],
-        user: User,
-    ): Promise<SavedVerse[]> {
+    // Helper to calculate complexity
+    private calculateComplexity = (text: string): number => {
+        if (!text) return 0;
+        const words = text.split(/\s+/).length;
+        const length = text.length;
+        // TODO - needs to be tuned
+        return parseFloat(((words * 0.1) + (length * 0.01)).toFixed(2));
+    };
 
+    async createVerse(dtos: CreateVerseDto[], user: User): Promise<SavedVerse[]> {
         const versesToSave: SavedVerse[] = [];
 
-        await Promise.all(dtos.map(async (dto) => {
+        for (const dto of dtos) {
             const existing = await this.verseRepository.findOneBy({
                 userId: user.id,
                 book: dto.book,
@@ -34,14 +39,21 @@ export class SavedVersesService {
             });
 
             if (!existing) {
+                const complexity = this.calculateComplexity(dto.text || '');
+
                 const newVerse = this.verseRepository.create({
                     ...dto,
                     userId: user.id,
-                    nextReviewDate: new Date(Date.now() + 24 * 60 * 60 * 1000),
+                    baseComplexity: complexity,
+                    easeFactor: Math.max(1.3, 2.5 - (complexity * 0.2)),
+
+                    // First review is today
+                    nextReviewDate: new Date(Date.now()),
                 });
+
                 versesToSave.push(newVerse);
             }
-        }));
+        }
 
         if (versesToSave.length > 0) {
             return await this.verseRepository.save(versesToSave);

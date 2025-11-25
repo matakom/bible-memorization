@@ -42,12 +42,14 @@ class VerseCreationPayload {
   final int chapter;
   final int verse;
   final String translation;
+  final String text;
 
   VerseCreationPayload({
     required this.book,
     required this.chapter,
     required this.verse,
     required this.translation,
+    required this.text
   });
 
   Map<String, dynamic> toJson() {
@@ -56,6 +58,7 @@ class VerseCreationPayload {
       'chapter': chapter,
       'verse': verse,
       'translation': translation,
+      'text': text
     };
   }
 }
