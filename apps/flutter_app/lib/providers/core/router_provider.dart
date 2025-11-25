@@ -119,11 +119,11 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             },
             routes: [
               GoRoute(
-                path: ':userId/:friendshipId',
+                path: ':friendId/:friendshipId',
                 builder: (context, state) {
-                  final userId = state.pathParameters['userId']!;
+                  final friendId = state.pathParameters['friendId']!;
                   final friendshipId = state.pathParameters['friendshipId']!;
-                  return FriendStatsScreen(userId: userId, friendshipId: friendshipId,);
+                  return FriendStatsScreen(friendId: friendId, friendshipId: friendshipId,);
                 },
               ),
             ],

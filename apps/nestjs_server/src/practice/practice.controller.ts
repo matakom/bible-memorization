@@ -6,7 +6,7 @@ import { User } from '../user/user.entity';
 import { PracticeService, PracticeResultDto } from './practice.service';
 
 @Controller('practice')
-@UseGuards(AuthGuard())
+@UseGuards(AuthGuard('jwt'))
 export class PracticeController {
     constructor(private practiceService: PracticeService) { }
 

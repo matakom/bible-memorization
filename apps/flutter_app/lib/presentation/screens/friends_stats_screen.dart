@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/data/repositories/stats_repository.dart';
+import 'package:flutter_app/presentation/widgets/stats/stats_profile_view.dart';
 import 'package:flutter_app/providers/friendships/friendships_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_app/l10n/l10n_extension.dart';
 
 class FriendStatsScreen extends ConsumerWidget {
-  final String userId;
+  final String friendId;
   final String friendshipId;
 
   const FriendStatsScreen({
     super.key,
-    required this.userId,
+    required this.friendId,
     required this.friendshipId,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final friendStatsAsync = ref.watch(friendStatsProvider(friendId));
     return Scaffold(
       appBar: AppBar(
         title: Text(context.l10n.friendsStats_screenTitle),
@@ -29,25 +32,13 @@ class FriendStatsScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(Icons.bar_chart, size: 80, color: Colors.grey),
-              const SizedBox(height: 24),
-              Text(
-                context.l10n.common_comingSoon,
-                style: Theme.of(context).textTheme.headlineMedium,
-              ),
-              const SizedBox(height: 16),
-              Text(
-                context.l10n.friendsStats_future,
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-            ],
+      body: friendStatsAsync.when(
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (err, _) => Center(child: Text('Error loading stats: $err')),
+        data: (stats) => Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: StatsProfileView(stats: stats),
           ),
         ),
       ),

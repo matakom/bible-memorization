@@ -7,12 +7,14 @@ import {
     ValidationPipe,
     UseGuards,
     Get,
+    Param,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { UserService } from './user.service';
 import { UpdateSettingsDto } from './dto/update-settings.dto';
 import { GetUser } from '../auth/get-user.decorator';
 import { User } from './user.entity';
+import { UserStatsDto } from './dto/user-stats.dto';
 
 @Controller('user')
 export class UserController {
@@ -56,5 +58,18 @@ export class UserController {
         @GetUser() user: User,
     ) {
         return { friendCode: user.friendCode };
+    }
+
+    @Get('stats')
+    @UseGuards(AuthGuard('jwt'))
+    async getMyStats(@GetUser() user: User): Promise<UserStatsDto> {
+        return this.userService.getMyStats(user.id);
+    }
+
+    // Future-proofing for friends
+    @Get(':id/stats')
+    @UseGuards(AuthGuard('jwt'))
+    async getFriendStats(@Param('id') friendId: string, @GetUser() user: User): Promise<UserStatsDto> {
+        return this.userService.getFriendStats(user.id, friendId);
     }
 }
