@@ -29,8 +29,12 @@ export class User {
     @Column({ length: 10, default: 'en' })
     language: string;
 
-    @Column({ length: 20, default: 'light' })
-    theme: string;
+    // Fields for sync
+    @CreateDateColumn({ name: 'updated_at' })
+    updatedAt: Date;
+
+    @CreateDateColumn({ name: 'deleted_at' })
+    deletedAt: Date;
 
     @CreateDateColumn({ name: 'registered_at', type: 'timestamp' })
     registeredAt: Date;

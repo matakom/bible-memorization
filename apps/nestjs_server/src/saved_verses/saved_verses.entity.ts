@@ -56,6 +56,13 @@ export class SavedVerse {
     @Column({ name: 'base_complexity', type: 'float', default: 0 })
     baseComplexity: number;
 
+    // Fields for sync
+    @Column({ name: 'updated_at', type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+    updatedAt: Date;
+
+    @Column({ name: 'deleted_at', type: 'timestamp', nullable: true })
+    deletedAt: Date | null;
+
     // ---
 
     @ManyToOne(() => User, { onDelete: 'CASCADE' })

@@ -37,6 +37,13 @@ export class Exercise {
     @CreateDateColumn({ name: 'performed_at' })
     performedAt: Date;
 
+    // Fields for sync
+    @Column({ name: 'updated_at', type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+    updatedAt: Date;
+
+    @Column({ name: 'deleted_at', type: 'timestamp', nullable: true })
+    deletedAt: Date | null;
+
     // --- RELATIONS ---
 
     @ManyToOne(() => User, { onDelete: 'CASCADE' })
