@@ -40,8 +40,10 @@ export class UserService {
         private friendshipRepository: Repository<Friendship>,
     ) { }
 
-    async saveUser(user: User): Promise<User> {
-        return this.userRepository.save(user);
+    async updateSettings(userId: string, settings: { language?: string }): Promise<void> {
+        await this.userRepository.update(userId, {
+            ...(settings.language && { language: settings.language }),
+        });
     }
 
     async findOrCreateUserFromFirebase(
@@ -77,48 +79,10 @@ export class UserService {
         return this.userRepository.save(newUser);
     }
 
-    async updateUserSettings(
-        userId: string,
-        theme?: string,
-        language?: string,
-    ) {
-        const updateData: Partial<User> = {};
-
-        if (theme) {
-            updateData.theme = theme;
-        }
-        if (language) {
-            updateData.language = language;
-        }
-
-        if (Object.keys(updateData).length === 0) {
-            return;
-        }
-
-        const result = await this.userRepository.update(userId, updateData);
-
-        if (result.affected === 0) {
-            throw new NotFoundException(`User with ID ${userId} not found.`);
-        }
-
-        return { message: 'Settings updated successfully' };
-    }
-
-    async getUserSettings(
-        userId: string,
-    ) {
-
-        const result = await this.userRepository.findOne({
-            select: {
-                language: true,
-                theme: true
-            },
-            where: {
-                id: userId
-            }
-        })
-
-        return { language: result.language, theme: result.theme };
+    async findByFriendCode(code: string): Promise<User | undefined> {
+        return this.userRepository.findOne({
+            where: { friendCode: code }
+        });
     }
 
     async getFriendStats(currentUserId: string, targetUserId: string): Promise<UserStatsDto> {
@@ -136,8 +100,6 @@ export class UserService {
         if (!isFriend) {
             throw new ForbiddenException('You can only view stats of your friends.');
         }
-
-        await this.validateStreak(targetUserId);
 
         return this._calculateStats(targetUserId);
     }
@@ -173,7 +135,6 @@ export class UserService {
             userId: user.id,
             firstName: user.firstName,
             lastName: user.lastName,
-            streak: user.dailyVerseStreak,
             totalVerses,
             masteredVerses,
             totalReviews,
@@ -181,55 +142,4 @@ export class UserService {
         };
     }
 
-    async validateStreak(userId: string): Promise<void> {
-        const user = await this.userRepository.findOneBy({ id: userId });
-        if (!user) return;
-
-        // Find the DATE of the very last exercise performed
-        const lastExercise = await this.exerciseRepository.findOne({
-            where: { userId },
-            order: { performedAt: 'DESC' }, // Get newest
-        });
-
-        if (!lastExercise) {
-            if (user.dailyVerseStreak !== 0) {
-                user.dailyVerseStreak = 0;
-                await this.userRepository.save(user);
-            }
-            return;
-        }
-
-        const now = new Date();
-        const lastPracticeDate = new Date(lastExercise.performedAt);
-
-        // Helper: Check if dates are the same calendar day
-        const isSameDay = (d1: Date, d2: Date) => {
-            return d1.toISOString().split('T')[0] === d2.toISOString().split('T')[0];
-        };
-
-        // Helper: Check if d1 is exactly 1 day before d2 (Yesterday)
-        const isYesterday = (d1: Date, d2: Date) => {
-            const yesterday = new Date(d2);
-            yesterday.setDate(yesterday.getDate() - 1);
-            return isSameDay(d1, yesterday);
-        };
-
-
-        if (isSameDay(lastPracticeDate, now) || isYesterday(lastPracticeDate, now)) {
-            // Do nothing, streak is valid.
-            return;
-        }
-
-        // If last practice was older than yesterday
-        if (user.dailyVerseStreak !== 0) {
-            user.dailyVerseStreak = 0;
-            await this.userRepository.save(user);
-        }
-    }
-
-    async getMyStats(userId: string): Promise<UserStatsDto> {
-        await this.validateStreak(userId);
-
-        return this._calculateStats(userId);
-    }
 }

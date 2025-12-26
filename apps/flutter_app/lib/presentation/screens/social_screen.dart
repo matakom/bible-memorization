@@ -14,42 +14,70 @@ class SocialScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncFriendships = ref.watch(friendshipsProvider);
-    final currentUserId = ref.watch(userDataProvider).value?.id;
-
-    if (currentUserId == null) {
-      return const Scaffold(
-        body: Center(child: Text('Error: User not logged in.')),
-      );
-    }
+    final asyncUser = ref.watch(userDataProvider);
 
     return Scaffold(
       appBar: AppBar(title: Text(context.l10n.social_screenTitle)),
-      body: asyncFriendships.when(
-        data: (friendships) {
-          return Center(
-            child: Column(
-              children: [
-                UserCode(),
-                AddFriendButton(
-                  onPressed: () {
-                    _showAddFriendModal(context);
-                  },
+      body: asyncUser.when(
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (err, stack) => Center(child: Text('Error loading user: $err')),
+        data: (user) {
+          if (user == null) {
+            return const Center(child: Text('Error: User not logged in.'));
+          }
+          
+          if (user.friendCode == 'OFFLINE') {
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(32.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.cloud_off, size: 64, color: Colors.grey),
+                    const SizedBox(height: 16),
+                    Text(
+                      "Social features unavailable offline",
+                      style: Theme.of(context).textTheme.titleLarge,
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      "Please connect to the internet and restart the app to sync your friend code.",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  ],
                 ),
-                FriendsListWidget(
-                  friendships: friendships,
-                  currentUserId: currentUserId,
-                ),
-              ],
+              ),
+            );
+          }
+
+          final currentUserId = user.id;
+
+          return asyncFriendships.when(
+            data: (friendships) {
+              return Column(
+                children: [
+                  const UserCode(),
+                  AddFriendButton(
+                    onPressed: () => _showAddFriendModal(context),
+                  ),
+                  FriendsListWidget(
+                    friendships: friendships,
+                    currentUserId: currentUserId,
+                  ),
+                ],
+              );
+            },
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (err, stack) => Center(
+              child: Text(
+                'Error loading friendships: $err',
+                style: TextStyle(color: Theme.of(context).colorScheme.error),
+              ),
             ),
           );
         },
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (err, stack) => Center(
-          child: Text(
-            'Error loading friendships: $err',
-            style: TextStyle(color: Theme.of(context).colorScheme.error),
-          ),
-        ),
       ),
     );
   }
@@ -59,7 +87,7 @@ class SocialScreen extends ConsumerWidget {
       context: context,
       isScrollControlled: true,
       builder: (BuildContext modalContext) {
-        return AddFriendModalContent();
+        return const AddFriendModalContent();
       },
     );
   }

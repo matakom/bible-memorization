@@ -1,24 +1,20 @@
 class AppUser {
   final String id;
   final String language;
-  final String theme;
   final String friendCode;
   final String email;
   final String firstName;
   final String lastName;
-  final int dailyVerseStreak;
   final DateTime registeredAt;
 
 
   AppUser({
     required this.id,
     required this.language,
-    required this.theme,
     required this.friendCode,
     required this.firstName,
     required this.email,
     required this.lastName,
-    required this.dailyVerseStreak,
     required this.registeredAt,
   });
 
@@ -26,12 +22,10 @@ class AppUser {
     return AppUser(
       id: json['id'] as String,
       language: json['language'] as String,
-      theme: json['theme'] as String,
       friendCode: json['friendCode'] as String,
       email: json['email'] as String,
       firstName: json['firstName'] as String,
       lastName: json['lastName'] as String,
-      dailyVerseStreak: json['dailyVerseStreak'] as int,
       registeredAt: DateTime.parse(json['registeredAt'] as String),
     );
   }

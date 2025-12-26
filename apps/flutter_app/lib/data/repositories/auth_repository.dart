@@ -26,8 +26,7 @@ class AuthRepository {
 
   Future<String?> getAuthToken() async {
     if (_auth.currentUser != null) {
-      // Automatically refreshes the token if it's expired
-      final String? token = await _auth.currentUser!.getIdToken(true);
+      final String? token = await _auth.currentUser!.getIdToken(false);
       return token;
     }
     return null;

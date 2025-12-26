@@ -5,7 +5,8 @@ import {
     Column,
     ManyToOne,
     JoinColumn,
-    CreateDateColumn,
+    UpdateDateColumn,
+    DeleteDateColumn,
 } from 'typeorm';
 import { User } from '../user/user.entity';
 import { SavedVerse } from 'src/saved_verses/saved_verses.entity';
@@ -34,14 +35,14 @@ export class Exercise {
     durationSeconds: number;
 
     // Automatically set when the record is created
-    @CreateDateColumn({ name: 'performed_at' })
+    @Column({ name: 'performed_at' })
     performedAt: Date;
 
     // Fields for sync
-    @Column({ name: 'updated_at', type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+    @UpdateDateColumn({ name: 'updated_at', type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     updatedAt: Date;
 
-    @Column({ name: 'deleted_at', type: 'timestamp', nullable: true })
+    @DeleteDateColumn({ name: 'deleted_at', type: 'timestamp', nullable: true })
     deletedAt: Date | null;
 
     // --- RELATIONS ---

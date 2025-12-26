@@ -8,131 +8,96 @@ import 'package:flutter_app/presentation/screens/social_screen.dart';
 import 'package:flutter_app/presentation/screens/splash_screen.dart';
 import 'package:flutter_app/presentation/screens/stats_screen.dart';
 import 'package:flutter_app/presentation/widgets/app_shell.dart';
+import 'package:flutter_app/providers/auth_controller.dart';
 import 'package:flutter_app/providers/auth_provider.dart';
 import 'package:flutter_app/providers/settings/settings_loading_provider.dart';
+import 'package:flutter_app/providers/user_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flutter_app/utils/debugger.dart';
 
 final goRouterProvider = Provider<GoRouter>((ref) {
-  // Listenable watched by GoRouter
-  final refreshListenable = ValueNotifier<int>(0);
-
-  // Dispose old instance
-  ref.onDispose(() => refreshListenable.dispose());
-
-  // Watching the auth stream and updating the listenable
-  // Triggers the redirect logic to re-run
-  ref.listen(authStreamProvider, (_, __) {
-    refreshListenable.value++;
-  });
-
-  final GlobalKey<NavigatorState> _rootNavigatorKey =
-      GlobalKey<NavigatorState>();
+  final authState = ref.watch(authStreamProvider);
+  final userState = ref.watch(userDataProvider);
+  final isManualLoginLoading = ref.watch(settingsLoadingProvider);
 
   return GoRouter(
     initialLocation: '/splash',
-    refreshListenable: refreshListenable,
-    navigatorKey: _rootNavigatorKey,
     redirect: (BuildContext context, GoRouterState state) {
-      final authState = ref.read(authStreamProvider);
-
-      final settingsAreLoading = ref.watch(settingsLoadingProvider);
-
       final location = state.matchedLocation;
+      
+      if (authState.isLoading) return '/splash';
 
-      if(location == '/'){
-        return '/practice';
+      final isLoggedIn = authState.value != null;
+
+      if (!isLoggedIn) {
+        return (location == '/login') ? null : '/login';
       }
 
-      // Prevents the app from flashing the login screen while it is checking for a cached user
-      if (authState.isLoading || settingsAreLoading) {
-        return location == '/splash' ? null : '/splash';
+      if (userState.isLoading || isManualLoginLoading) {
+        if (location == '/login') return null;
+        return '/splash';
       }
 
-      final isLoggedIn = authState.hasValue && authState.value != null;
-      final isGoingToLogin = location == '/login';
-      final isGoingToSplash = location == '/splash';
+      final hasUserData = userState.hasValue && userState.value != null;
 
-      // Redirect to login page
-      if (!isLoggedIn && !isGoingToLogin) {
-        Debugger.log('not logged in');
-        Debugger.log('redirecting to /login');
+      if (hasUserData) {
+        if (location == '/login' || location == '/splash') {
+          return '/practice';
+        }
+        return null;
+      }
+
+      if (userState.hasError) {
         return '/login';
       }
 
-      // Redirect to practice
-      if (isLoggedIn && (isGoingToLogin || isGoingToSplash)) {
-        Debugger.log('logged in');
-        Debugger.log('redirecting to /practice');
-
-        return '/practice';
-      }
-
-      // Nothing needed
       return null;
     },
 
     routes: <RouteBase>[
-      // Public routes
       GoRoute(
         path: '/login',
-        builder: (BuildContext context, GoRouterState state) {
-          return const LoginScreen();
-        },
+        builder: (context, state) => const LoginScreen(),
       ),
       GoRoute(
         path: '/splash',
-        builder: (BuildContext context, GoRouterState state) {
-          return const SplashScreen();
-        },
+        builder: (context, state) => const SplashScreen(),
       ),
-
-      // Protected routes
       ShellRoute(
-        builder: (context, state, child) {
-          return AppShell(child);
-        },
+        builder: (context, state, child) => AppShell(child),
         routes: [
           GoRoute(
             path: '/reader',
-            builder: (BuildContext context, GoRouterState state) {
-              return const ReaderScreen();
-            },
+            builder: (context, state) => const ReaderScreen(),
           ),
           GoRoute(
             path: '/stats',
-            builder: (BuildContext context, GoRouterState state) {
-              return const StatsScreen();
-            },
+            builder: (context, state) => const StatsScreen(),
           ),
           GoRoute(
             path: '/practice',
-            builder: (BuildContext context, GoRouterState state) {
-              return const PracticeScreen();
-            },
+            builder: (context, state) => const PracticeScreen(),
           ),
           GoRoute(
             path: '/social',
-            builder: (BuildContext context, GoRouterState state) {
-              return const SocialScreen();
-            },
+            builder: (context, state) => const SocialScreen(),
             routes: [
               GoRoute(
                 path: ':friendId/:friendshipId',
                 builder: (context, state) {
                   final friendId = state.pathParameters['friendId']!;
                   final friendshipId = state.pathParameters['friendshipId']!;
-                  return FriendStatsScreen(friendId: friendId, friendshipId: friendshipId,);
+                  return FriendStatsScreen(
+                    friendId: friendId,
+                    friendshipId: friendshipId,
+                  );
                 },
               ),
             ],
           ),
           GoRoute(
             path: '/settings',
-            builder: (BuildContext context, GoRouterState state) {
-              return const SettingsScreen();
-            },
+            builder: (context, state) => const SettingsScreen(),
           ),
         ],
       ),

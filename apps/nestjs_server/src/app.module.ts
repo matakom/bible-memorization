@@ -14,6 +14,7 @@ import { SavedVerse } from './saved_verses/saved_verses.entity';
 import { SavedVersesModule } from './saved_verses/saved_verses.module';
 import { PracticeModule } from './practice/practice.module';
 import { Exercise } from './practice/exercise.entity';
+import { SyncModule } from './sync/sync.module';
 
 @Module({
   imports: [
@@ -43,7 +44,8 @@ import { Exercise } from './practice/exercise.entity';
     AuthModule,
     FriendshipsModule,
     SavedVersesModule,
-    PracticeModule
+    PracticeModule,
+    SyncModule
   ],
   controllers: [AppController],
   providers: [AppService],

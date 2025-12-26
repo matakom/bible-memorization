@@ -9,6 +9,7 @@ environment:
 dependencies:
   dio: ^5.9.0
   drift: ^2.29.0
+  drift_db_viewer: ^2.1.0
   firebase_auth: ^6.1.1
   firebase_core: ^4.2.0
   flutter:
@@ -21,10 +22,15 @@ dependencies:
   go_router: ^16.3.0
   google_sign_in: ^7.2.0
   http: ^1.5.0
+  path: ^1.9.1
+  path_provider: ^2.1.5
   riverpod_annotation: ^3.0.3
   shared_preferences: ^2.5.3
+  sqlite3_flutter_libs: ^0.5.41
+  uuid: ^4.5.2
 
 dev_dependencies:
+  drift_dev: ^2.14.0
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0

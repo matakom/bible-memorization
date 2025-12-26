@@ -1,7 +1,9 @@
-import 'package:dio/dio.dart';
+import 'package:drift/drift.dart';
+import 'package:flutter_app/data/local/app_database.dart' as db;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_app/api/dio_client.dart';
-import 'package:flutter_app/providers/core/security_context_provider.dart';
+import 'package:flutter_app/utils/srs_algorithm.dart';
+import 'package:uuid/uuid.dart';
+import '../../services/sync_service.dart';
 
 class PracticeResult {
   final String verseId;
@@ -15,33 +17,68 @@ class PracticeResult {
     required this.exerciseType,
     required this.durationSeconds,
   });
-
-  Map<String, dynamic> toJson() => {
-        'verseId': verseId,
-        'grade': grade,
-        'exerciseType': exerciseType,
-        'durationSeconds': durationSeconds,
-      };
 }
 
 class PracticeRepository {
-  final Dio _dio;
-  PracticeRepository(this._dio);
+  final db.AppDatabase _db;
+  final Ref _ref;
 
-  Future<void> submitSession(List<PracticeResult> results) async {
-    try {
-      await _dio.post(
-        '/practice/submit',
-        data: results.map((e) => e.toJson()).toList(),
+  PracticeRepository(this._db, this._ref);
+
+  Future<void> savePracticeResult(PracticeResult result) async {
+    final now = DateTime.now();
+    final exerciseId = const Uuid().v4();
+
+    await _db.transaction(() async {
+      await _db.into(_db.exercises).insert(
+        db.ExercisesCompanion.insert(
+          id: exerciseId,
+          verseId: result.verseId,
+          grade: result.grade,
+          exerciseType: result.exerciseType,
+          durationSeconds: result.durationSeconds,
+          performedAt: Value(now),
+          updatedAt: Value(now),
+          needsSync: const Value(true),
+        ),
       );
-    } catch (e) {
-      throw Exception('Failed to submit practice: $e');
+
+      final verseRow = await (_db.select(_db.savedVerses)
+            ..where((t) => t.id.equals(result.verseId)))
+          .getSingleOrNull();
+
+      if (verseRow != null) {
+        final srsResult = SRSAlgorithm.processReview(
+          currentGrade: result.grade,
+          currentEaseFactor: verseRow.easeFactor,
+          currentRepetitionCount: verseRow.repetitionCount,
+          lastReviewDate: verseRow.lastReviewDate ?? now,
+          currentNextReviewDate: verseRow.nextReviewDate,
+        );
+
+        await (_db.update(_db.savedVerses)..where((t) => t.id.equals(result.verseId)))
+            .write(
+          db.SavedVersesCompanion(
+            easeFactor: Value(srsResult.easeFactor),
+            repetitionCount: Value(srsResult.repetitionCount),
+            nextReviewDate: Value(srsResult.nextReviewDate),
+            lastReviewDate: Value(now),
+            updatedAt: Value(now),
+            needsSync: const Value(true),
+          ),
+        );
+      }
+    });
+
+    try {
+      final syncService = await _ref.read(syncServiceProvider.future);
+      syncService.runSync();
+    } catch (_) {
     }
   }
 }
 
-final practiceRepositoryProvider = FutureProvider<PracticeRepository>((ref) async {
-  final securityContext = await ref.watch(securityContextFutureProvider.future);
-  final dio = createDioClient(securityContext, ref);
-  return PracticeRepository(dio);
+final practiceRepositoryProvider = Provider<PracticeRepository>((ref) {
+  final database = ref.watch(db.databaseProvider);
+  return PracticeRepository(database, ref);
 });

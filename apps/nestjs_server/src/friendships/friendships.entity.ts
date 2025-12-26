@@ -3,11 +3,12 @@ import {
     Entity,
     PrimaryGeneratedColumn,
     Column,
-    CreateDateColumn,
     ManyToOne,
     JoinColumn,
     Unique,
     Check,
+    UpdateDateColumn,
+    DeleteDateColumn,
 } from 'typeorm';
 import { User } from '../user/user.entity';
 
@@ -38,14 +39,14 @@ export class Friendship {
     @Column({ name: 'friend_id' })
     friendId: string;
 
-    @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
+    @Column({ name: 'created_at', type: 'timestamp' })
     createdAt: Date;
 
     // Fields for sync
-    @Column({ name: 'updated_at', type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+    @UpdateDateColumn({ name: 'updated_at', type: 'timestamp' })
     updatedAt: Date;
 
-    @Column({ name: 'deleted_at', type: 'timestamp', nullable: true })
+    @DeleteDateColumn({ name: 'deleted_at', type: 'timestamp', nullable: true })
     deletedAt: Date | null;
 
     @ManyToOne(() => User, { onDelete: 'CASCADE' })

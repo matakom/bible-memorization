@@ -6,6 +6,8 @@ import {
     ManyToOne,
     JoinColumn,
     Check,
+    UpdateDateColumn,
+    DeleteDateColumn,
 } from 'typeorm';
 import { User } from '../user/user.entity';
 
@@ -36,7 +38,7 @@ export class SavedVerse {
 
     // SRS fields
 
-    @Column({ name: 'next_review_date', type: 'date', default: () => 'CURRENT_DATE' })
+    @Column({ name: 'next_review_date', type: 'date' })
     nextReviewDate: Date;
 
     @Column({ name: 'last_review_date', type: 'date', nullable: true })
@@ -57,10 +59,10 @@ export class SavedVerse {
     baseComplexity: number;
 
     // Fields for sync
-    @Column({ name: 'updated_at', type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+    @UpdateDateColumn({ name: 'updated_at', type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     updatedAt: Date;
 
-    @Column({ name: 'deleted_at', type: 'timestamp', nullable: true })
+    @DeleteDateColumn({ name: 'deleted_at', type: 'timestamp', nullable: true })
     deletedAt: Date | null;
 
     // ---

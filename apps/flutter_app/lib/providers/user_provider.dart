@@ -4,9 +4,18 @@ import 'package:flutter_app/data/repositories/user_repository.dart';
 
 /// This provider fetches and holds the authenticated user's data.
 /// It will be invalidated on sign-out, and refetched on sign-in.
-final userDataProvider = FutureProvider<AppUser>((ref) async {
-  final repository = await ref.watch(userRepositoryProvider.future);
-  return repository.getUserData();
+final userDataProvider = FutureProvider<AppUser?>((ref) async {
+  final repo = await ref.watch(userRepositoryProvider.future);
+  
+  try {
+    final localUser = await repo.getLocalUser(); 
+    if (localUser != null) {
+      return localUser;
+    }
+  } catch (_) {
+  }
+
+  return repo.getUserData();
 });
 
 /// This provider gives synchronous access to the current user's ID.

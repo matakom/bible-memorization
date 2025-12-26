@@ -1,17 +1,15 @@
 /* eslint-disable prettier/prettier */
 import {
     Controller,
-    Patch,
     Body,
-    UsePipes,
-    ValidationPipe,
     UseGuards,
     Get,
     Param,
+    NotFoundException,
+    Query,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { UserService } from './user.service';
-import { UpdateSettingsDto } from './dto/update-settings.dto';
 import { GetUser } from '../auth/get-user.decorator';
 import { User } from './user.entity';
 import { UserStatsDto } from './dto/user-stats.dto';
@@ -20,20 +18,23 @@ import { UserStatsDto } from './dto/user-stats.dto';
 export class UserController {
     constructor(private readonly userService: UserService) { }
 
-    @Patch('settings')
-    @UseGuards(AuthGuard('jwt'))
-    @UsePipes(new ValidationPipe({ whitelist: true }))
-    async updateUserSettings(
-        @Body() updateSettingsDto: UpdateSettingsDto,
-        @GetUser() user: User,
-    ) {
-        const { theme, locale } = updateSettingsDto;
+    @Get('lookup')
+    async lookupFriend(@Query('friendCode') friendCode: string) {
+        if (!friendCode) {
+            throw new NotFoundException("Friend code is required");
+        }
 
-        return this.userService.updateUserSettings(
-            user.id,
-            theme,
-            locale,
-        );
+        const user = await this.userService.findByFriendCode(friendCode);
+
+        if (!user) {
+            throw new NotFoundException('User not found');
+        }
+
+        return {
+            id: user.id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+        };
     }
 
     @Get()
@@ -44,29 +45,6 @@ export class UserController {
         return user;
     }
 
-    @Get('settings')
-    @UseGuards(AuthGuard('jwt'))
-    async getUserSettings(
-        @GetUser() user: User
-    ) {
-        return this.userService.getUserSettings(user.id);
-    }
-
-    @Get('code')
-    @UseGuards(AuthGuard('jwt'))
-    getCode(
-        @GetUser() user: User,
-    ) {
-        return { friendCode: user.friendCode };
-    }
-
-    @Get('stats')
-    @UseGuards(AuthGuard('jwt'))
-    async getMyStats(@GetUser() user: User): Promise<UserStatsDto> {
-        return this.userService.getMyStats(user.id);
-    }
-
-    // Future-proofing for friends
     @Get(':id/stats')
     @UseGuards(AuthGuard('jwt'))
     async getFriendStats(@Param('id') friendId: string, @GetUser() user: User): Promise<UserStatsDto> {

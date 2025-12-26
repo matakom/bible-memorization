@@ -41,11 +41,12 @@ class _FlashcardPracticeScreenState extends ConsumerState<FlashcardPracticeScree
       durationSeconds: _stopwatch.elapsed.inSeconds,
     );
 
-    ref.read(practiceRepositoryProvider.future).then((repo) {
-      repo.submitSession([result]);
-    }).catchError((e) {
+    try {
+      final repo = ref.read(practiceRepositoryProvider);
+      await repo.savePracticeResult(result); 
+    } catch (e) {
       debugPrint("Error submitting grade: $e");
-    });
+    }
     ref.invalidate(savedVersesControllerProvider);
     ref.invalidate(myStatsProvider);
     setState(() {

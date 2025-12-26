@@ -4,6 +4,8 @@ import {
     PrimaryGeneratedColumn,
     Column,
     CreateDateColumn,
+    UpdateDateColumn,
+    DeleteDateColumn,
 } from 'typeorm';
 
 @Entity('users')
@@ -20,9 +22,6 @@ export class User {
     @Column({ length: 100, unique: true })
     email: string;
 
-    @Column({ name: 'daily_verse_streak', default: 0 })
-    dailyVerseStreak: number;
-
     @Column({ name: 'friend_code', unique: true, length: 6, nullable: false })
     friendCode: string;
 
@@ -30,11 +29,11 @@ export class User {
     language: string;
 
     // Fields for sync
-    @CreateDateColumn({ name: 'updated_at' })
+    @UpdateDateColumn({ name: 'updated_at' })
     updatedAt: Date;
 
-    @CreateDateColumn({ name: 'deleted_at' })
-    deletedAt: Date;
+    @DeleteDateColumn({ name: 'deleted_at', type: 'timestamp', nullable: true })
+    deletedAt: Date | null;
 
     @CreateDateColumn({ name: 'registered_at', type: 'timestamp' })
     registeredAt: Date;

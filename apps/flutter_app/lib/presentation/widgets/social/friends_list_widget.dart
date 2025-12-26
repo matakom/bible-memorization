@@ -4,10 +4,10 @@ import 'package:flutter_app/providers/friendships/friendships_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'user.dart';
-import '../../../data/models/friendship_data.dart';
+import '../../../data/models/friendship.dart';
 
 class FriendsListWidget extends ConsumerStatefulWidget {
-  final List<FriendshipData> friendships;
+  final List<Friendship> friendships;
   final String currentUserId;
 
   const FriendsListWidget({
@@ -21,9 +21,9 @@ class FriendsListWidget extends ConsumerStatefulWidget {
 }
 
 class _FriendsListWidgetState extends ConsumerState<FriendsListWidget> {
-  late List<FriendshipData> receivedRequests;
-  late List<FriendshipData> acceptedFriends;
-  late List<FriendshipData> sentRequests;
+  late List<Friendship> receivedRequests;
+  late List<Friendship> acceptedFriends;
+  late List<Friendship> sentRequests;
 
   @override
   void initState() {
@@ -31,12 +31,20 @@ class _FriendsListWidgetState extends ConsumerState<FriendsListWidget> {
     _sortFriendships();
   }
 
-  // Re-sort if the incoming data changes
   @override
   void didUpdateWidget(covariant FriendsListWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.friendships != oldWidget.friendships) {
       _sortFriendships();
+    }
+  }
+
+  // Helper to calculate direction based on ID
+  String _getDirection(Friendship f) {
+    if (f.userId == widget.currentUserId) {
+      return 'sent';
+    } else {
+      return 'received';
     }
   }
 
@@ -46,14 +54,16 @@ class _FriendsListWidgetState extends ConsumerState<FriendsListWidget> {
     sentRequests = [];
 
     for (var friendship in widget.friendships) {
-      if (friendship.status == 'pending' &&
-          friendship.direction == 'received') {
-        receivedRequests.add(friendship);
+      final direction = _getDirection(friendship);
+
+      if (friendship.status == 'pending') {
+        if (direction == 'received') {
+          receivedRequests.add(friendship);
+        } else {
+          sentRequests.add(friendship);
+        }
       } else if (friendship.status == 'accepted') {
         acceptedFriends.add(friendship);
-      } else if (friendship.status == 'pending' &&
-          friendship.direction == 'sent') {
-        sentRequests.add(friendship);
       }
     }
   }
@@ -67,15 +77,12 @@ class _FriendsListWidgetState extends ConsumerState<FriendsListWidget> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Error: $e')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
       }
     }
   }
 
-  // Helper function to build a list section
-  Widget _buildSection(String title, List<FriendshipData> items) {
+  Widget _buildSection(String title, List<Friendship> items) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -92,13 +99,10 @@ class _FriendsListWidgetState extends ConsumerState<FriendsListWidget> {
         ),
         if (items.isEmpty)
           Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 20.0,
-              vertical: 8.0,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
             child: Text(
               context.l10n.social_nothingHere,
-              style: TextStyle(fontStyle: FontStyle.italic, color: Colors.grey),
+              style: const TextStyle(fontStyle: FontStyle.italic, color: Colors.grey),
             ),
           )
         else
@@ -108,21 +112,18 @@ class _FriendsListWidgetState extends ConsumerState<FriendsListWidget> {
             physics: const NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
               final item = items[index];
+              final direction = _getDirection(item);
 
-              final FriendUser friendUser;
-              if (item.direction == 'sent') {
-                friendUser = item.friend;
-              } else {
-                friendUser = item.user;
-              }
+              // Determine the "Other Person's ID"
+              final otherPersonId = direction == 'sent' ? item.friendId : item.userId;
 
               return User(
-                firstName: friendUser.firstName,
-                lastName: friendUser.lastName,
+                firstName: item.friendFirstName, 
+                lastName: item.friendLastName,
                 status: item.status,
-                direction: item.direction,
+                direction: direction,
                 onTap: () {
-                  context.go('/social/${friendUser.id}/${item.id}');
+                  context.go('/social/$otherPersonId/${item.id}');
                 },
                 onAccept: () => _handleAction(item.id, 'accept'),
                 onDelete: () => _handleAction(item.id, 'delete'),
@@ -135,9 +136,7 @@ class _FriendsListWidgetState extends ConsumerState<FriendsListWidget> {
 
   @override
   Widget build(BuildContext context) {
-    if (receivedRequests.isEmpty
-        && acceptedFriends.isEmpty
-        && sentRequests.isEmpty) {
+    if (receivedRequests.isEmpty && acceptedFriends.isEmpty && sentRequests.isEmpty) {
       return Center(child: Text(context.l10n.social_nothingToSeeHereYet));
     }
     return SingleChildScrollView(
@@ -145,13 +144,10 @@ class _FriendsListWidgetState extends ConsumerState<FriendsListWidget> {
         children: [
           if (receivedRequests.isNotEmpty)
             _buildSection(context.l10n.social_friendRequest, receivedRequests),
-
           if (acceptedFriends.isNotEmpty)
             _buildSection(context.l10n.social_friends, acceptedFriends),
-
           if (sentRequests.isNotEmpty)
             _buildSection(context.l10n.social_sentRequests, sentRequests),
-
           const SizedBox(height: 32),
         ],
       ),

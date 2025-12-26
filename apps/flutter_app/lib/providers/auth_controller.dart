@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'package:dio/dio.dart';
 import 'package:flutter_app/data/repositories/practice_repository.dart';
 import 'package:flutter_app/data/repositories/saved_verses_repository.dart';
 import 'package:flutter_app/data/repositories/stats_repository.dart';
@@ -6,32 +8,55 @@ import 'package:flutter_app/providers/auth_provider.dart';
 import 'package:flutter_app/providers/friendships/friendships_provider.dart';
 import 'package:flutter_app/providers/settings/settings_loading_provider.dart';
 import 'package:flutter_app/providers/user_provider.dart';
+import 'package:flutter_app/services/sync_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_app/data/local/app_database.dart' as db;
 
-class AuthController extends Notifier<void> {
+class AuthController extends AsyncNotifier<void> {
   @override
   void build() {
     return;
   }
 
   Future<void> signInWithGoogle() async {
-    ref.read(settingsLoadingProvider.notifier).state = true;
+    state = const AsyncLoading();
     try {
-      await ref.read(authRepositoryProvider).signInWithGoogle();
-      
-      ref.invalidate(userRepositoryProvider);
-      ref.invalidate(userDataProvider);
-      ref.invalidate(friendshipsProvider);
-      ref.invalidate(practiceRepositoryProvider);
-      ref.invalidate(savedVersesRepositoryProvider);
-      ref.invalidate(statsRepositoryProvider);
-      
-      await ref.read(userDataProvider.future);
+      final token = await ref.read(authRepositoryProvider).signInWithGoogle();
 
-    } catch (e) {
-      // TODO Handle error
+      if (token == null) {
+        state = const AsyncData(null);
+        return;
+      }
+
+      final userRepo = await ref.read(userRepositoryProvider.future);
+      
+      await userRepo.getUserData(manualToken: token).timeout(
+        const Duration(seconds: 5),
+        onTimeout: () => throw TimeoutException('Server unreachable (Timeout)'),
+      );
+
+      ref.read(syncServiceProvider.future).then((service) => service.runSync());
+
+      state = const AsyncData(null);
+
+    } catch (e, stack) {
+      try {
+        await ref.read(authRepositoryProvider).signOut();
+      } catch (_) {}
+
+      String errorMessage = "Login failed";
+      if (e is TimeoutException) {
+        errorMessage = "Server unreachable. Please check your connection.";
+      } else if (e is DioException) {
+        errorMessage = "Connection error. Server might be down.";
+      } else {
+        errorMessage = e.toString().replaceAll('Exception: ', '');
+      }
+
+      state = AsyncError(errorMessage, stack);
     } finally {
-      ref.read(settingsLoadingProvider.notifier).state = false;
+      // ref.read(settingsLoadingProvider.notifier).state = false;
     }
   }
 
@@ -39,23 +64,31 @@ class AuthController extends Notifier<void> {
     ref.read(settingsLoadingProvider.notifier).setLoading(true);
     try {
       await ref.read(authRepositoryProvider).signOut();
+
+      final database = ref.read(db.databaseProvider);
+      await database.clearAllData();
+
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.clear();
       _invalidateUserData();
     } catch (e) {
-      // Rethrow so the UI can catch it
-      rethrow; 
+      rethrow;
     } finally {
       ref.read(settingsLoadingProvider.notifier).setLoading(false);
     }
   }
 
   void _invalidateUserData() {
-    ref.invalidate(userRepositoryProvider);
     ref.invalidate(userDataProvider);
-    ref.invalidate(friendshipsProvider); 
+    ref.invalidate(userRepositoryProvider);
+    ref.invalidate(friendshipsProvider);
+    ref.invalidate(practiceRepositoryProvider);
+    ref.invalidate(savedVersesRepositoryProvider);
+    ref.invalidate(statsRepositoryProvider);
+    ref.invalidate(syncServiceProvider);
   }
-
 }
 
-final authControllerProvider = NotifierProvider<AuthController, void>(() {
+final authControllerProvider = AsyncNotifierProvider<AuthController, void>(() {
   return AuthController();
 });

@@ -1,8 +1,10 @@
-import 'package:dio/dio.dart';
+import 'package:drift/drift.dart';
+import 'package:flutter_app/data/local/app_database.dart' as db;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_app/api/dio_client.dart';
-import 'package:flutter_app/providers/core/security_context_provider.dart';
-import 'package:flutter_app/data/models/saved_verse.dart'; // Import your model
+import 'package:flutter_app/data/models/saved_verse.dart';
+import 'package:flutter_app/utils/srs_algorithm.dart';
+import 'package:uuid/uuid.dart';
+import '../../services/sync_service.dart';
 
 class SavedVersesException implements Exception {
   final String message;
@@ -13,51 +15,118 @@ class SavedVersesException implements Exception {
 }
 
 class SavedVersesRepository {
-  final Dio _dio;
+  final db.AppDatabase _db;
+  final Ref _ref;
 
-  SavedVersesRepository({required Dio dio}) : _dio = dio;
-
-  /// Fetches all saved verses for the current user
+  SavedVersesRepository(this._db, this._ref);
+  /// Fetches all active saved verses from Local DB
   Future<List<SavedVerse>> getSavedVerses() async {
     try {
-      final response = await _dio.get('/saved-verses');
-      final List<dynamic> data = response.data as List<dynamic>;
-      return data.map((json) => SavedVerse.fromJson(json)).toList();
-    } on DioException catch (e) {
-      throw SavedVersesException('Failed to fetch verses: ${e.message}');
+      // 1. Select from DB, filtering out soft-deleted items
+      final query = _db.select(_db.savedVerses)
+        ..where((t) => t.deletedAt.isNull())
+        ..orderBy([
+          // Order by next review date (Priority)
+          (t) => OrderingTerm(expression: t.nextReviewDate, mode: OrderingMode.asc)
+        ]);
+
+      final rows = await query.get();
+
+      return rows.map((row) {
+        return SavedVerse(
+          id: row.id,
+          book: row.book,
+          chapter: row.chapter,
+          verse: row.verse,
+          translation: row.translation,
+          
+          nextReviewDate: row.nextReviewDate,
+          lastReviewDate: row.lastReviewDate,
+          
+          difficulty: row.easeFactor.round(), 
+        );
+      }).toList();
+    } catch (e) {
+      throw SavedVersesException('Failed to load local verses: $e');
     }
   }
 
-  /// Saves a new verse
-  Future<List<SavedVerse>> saveVerses(List<VerseCreationPayload> verses) async {
+  /// Saves new verses to Local DB (Offline First)
+  Future<List<SavedVerse>> saveVerses(List<VerseCreationPayload> payloads) async {
     try {
-      final data = verses.map((v) => v.toJson()).toList();
-      final response = await _dio.post('/saved-verses', data: data);
-      
-      // Parse the response (expecting an array of created verses)
-      final List<dynamic> responseData = response.data as List<dynamic>;
-      return responseData.map((json) => SavedVerse.fromJson(json)).toList();
+      final List<SavedVerse> createdVerses = [];
 
-    } on DioException catch (e) {
-      if (e.response != null && e.response?.data['message'] != null) {
-        throw SavedVersesException(e.response?.data['message']);
-      }
-      throw SavedVersesException('Failed to save verses: ${e.message}');
+      await _db.batch((batch) {
+        for (final payload in payloads) {
+          final uuid = const Uuid().v4();
+          
+          final text = payload.text;
+          final complexity = SRSAlgorithm.calculateComplexity(text);
+          final initialEf = SRSAlgorithm.getInitialEaseFactor(complexity);
+          
+          final initialNextReview = DateTime.now();
+
+          batch.insert(
+            _db.savedVerses,
+            db.SavedVersesCompanion.insert(
+              id: uuid,
+              book: payload.book,
+              chapter: payload.chapter,
+              verse: payload.verse,
+              translation: payload.translation,
+              verseText: text,
+              baseComplexity: Value(complexity),
+              easeFactor: Value(initialEf),
+              repetitionCount: const Value(0),
+              nextReviewDate: initialNextReview,
+              updatedAt: Value(DateTime.now()),
+              needsSync: const Value(true),
+            ),
+          );
+
+          createdVerses.add(SavedVerse(
+            id: uuid,
+            book: payload.book,
+            chapter: payload.chapter,
+            verse: payload.verse,
+            translation: payload.translation,
+            difficulty: initialEf.round(),
+            nextReviewDate: initialNextReview,
+          ));
+        }
+      });
+
+      try {
+      final syncService = await _ref.read(syncServiceProvider.future);
+      syncService.runSync();
+    } catch (_) {}
+      return createdVerses;
+    } catch (e) {
+      throw SavedVersesException('Failed to save verses locally: $e');
     }
+
   }
 
-  /// Deletes a verse by its ID
+  /// Soft Deletes a verse locally
   Future<void> deleteVerse(String id) async {
     try {
-      await _dio.delete('/saved-verses/$id');
-    } on DioException catch (e) {
-      throw SavedVersesException('Failed to delete verse: ${e.message}');
+      await (_db.update(_db.savedVerses)..where((t) => t.id.equals(id)))
+          .write(db.SavedVersesCompanion(
+            deletedAt: Value(DateTime.now()),
+            updatedAt: Value(DateTime.now()),
+            needsSync: const Value(true),
+          ));
+    } catch (e) {
+      throw SavedVersesException('Failed to delete verse locally: $e');
     }
+    try {
+    final syncService = await _ref.read(syncServiceProvider.future);
+    syncService.runSync();
+  } catch (_) {}
   }
 }
 
-final savedVersesRepositoryProvider = FutureProvider<SavedVersesRepository>((ref) async {
-  final securityContext = await ref.watch(securityContextFutureProvider.future);
-  final dio = createDioClient(securityContext, ref);
-  return SavedVersesRepository(dio: dio);
+final savedVersesRepositoryProvider = Provider<SavedVersesRepository>((ref) {
+  final database = ref.watch(db.databaseProvider); 
+  return SavedVersesRepository(database, ref);
 });
