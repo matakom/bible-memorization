@@ -235,6 +235,10 @@ class SyncService {
         }
       }
 
+      print('-----------------------------');
+      print(changes['friendships']);
+      print('-----------------------------');
+
       // 3. FRIENDSHIPS
       if (changes['friendships'] != null) {
         for (final f in changes['friendships']) {
@@ -256,12 +260,7 @@ class SyncService {
       // 4. USER SETTINGS (New)
       if (changes['user'] != null) {
         for (final u in changes['user']) {
-          // We don't delete users via sync, just update settings
-          batch.insert(
-            _db.users,
-            _userFromJson(u),
-            mode: InsertMode.insertOrReplace,
-          );
+          batch.update(_db.users, _userFromJson(u));
         }
       }
     });

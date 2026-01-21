@@ -1,0 +1,49 @@
+# Justfile
+
+# Default: List available commands
+default:
+    @just --list
+
+# --- Code Generation ---
+
+# Watch for changes and rebuild code automatically
+gen-watch:
+    dart run build_runner watch --delete-conflicting-outputs
+
+# One-time build for code generation
+gen-build:
+    dart run build_runner build --delete-conflicting-outputs
+
+# --- App Execution ---
+
+# Run the app. Usage: 'just run' (dev) or 'just run prod'
+run mode='dev':
+    @if [ "{{mode}}" = "prod" ]; then \
+        echo "🚀 Running in PRODUCTION (Release) mode..."; \
+        flutter run --release; \
+    else \
+        echo "🐛 Running in DEV mode..."; \
+        flutter run; \
+    fi
+
+# Install the app to device. Usage: 'just install' or 'just install prod'
+install mode='dev':
+    @if [ "{{mode}}" = "prod" ]; then \
+        flutter install --release; \
+    else \
+        flutter install; \
+    fi
+
+# --- Build Commands ---
+
+# Build Android APK
+build-apk:
+    flutter build apk
+
+# Build Android App Bundle (for Play Store)
+build-aab:
+    flutter build appbundle
+
+# Build iOS IPA
+build-ios:
+    flutter build ipa
