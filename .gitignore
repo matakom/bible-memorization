@@ -7,3 +7,4 @@ build/
 google-services.json
 apps/flutter_app/android/build/
 client_secret*
+/materials

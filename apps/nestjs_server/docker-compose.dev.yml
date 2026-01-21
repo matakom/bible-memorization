@@ -4,7 +4,7 @@ services:
       context: .
       dockerfile: Dockerfile.dev
     volumes:
-      - .:/app
+      - .:/app:Z
       - /app/node_modules
       - /app/dist
     command: npm run start:dev
@@ -24,8 +24,9 @@ services:
       - POSTGRES_USER=${DB_USERNAME} 
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=${DB_DATABASE}
+      - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - db_data:/var/lib/postgresql/data:Z
     restart: on-failure
     ports:
       - "5432:5432"
@@ -35,7 +36,7 @@ services:
     container_name: cf_tunnel
     command: tunnel --config /etc/cloudflare/config.yml run
     volumes:
-      - ./cloudflare:/etc/cloudflare:ro
+      - ./cloudflare:/etc/cloudflare:ro,Z
     depends_on:
       - app
     restart: on-failure

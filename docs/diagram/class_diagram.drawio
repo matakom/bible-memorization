@@ -1,32 +1,32 @@
-<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" version="28.2.4">
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64; rv:146.0) Gecko/20100101 Firefox/146.0" version="29.3.0">
   <diagram name="Page-1" id="BwuLHQazuDzld4jMo5z7">
-    <mxGraphModel dx="815" dy="458" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1641" dy="759" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="-F7HiXjmtPn-gkFCfKS6-1" value="Uživatel&lt;div&gt;- Id&lt;/div&gt;&lt;div&gt;- Jméno&lt;/div&gt;&lt;div&gt;- Příjmení&lt;/div&gt;&lt;div&gt;- e-mail&lt;/div&gt;&lt;div&gt;- Denní řada&lt;/div&gt;&lt;div&gt;- Jazyk prostředí&lt;/div&gt;&lt;div&gt;- Theme aplikace&lt;/div&gt;&lt;div&gt;- Datum registrace&lt;/div&gt;&lt;div&gt;- Poslední přihlášení&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="240" y="395" width="120" height="160" as="geometry" />
+        <mxCell id="-F7HiXjmtPn-gkFCfKS6-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Uživatel&lt;div&gt;- Id&lt;/div&gt;&lt;div&gt;- Jméno&lt;/div&gt;&lt;div&gt;- Příjmení&lt;/div&gt;&lt;div&gt;- e-mail&lt;/div&gt;&lt;div&gt;- Kód přátelství&lt;/div&gt;&lt;div&gt;- Jazyk prostředí&lt;/div&gt;" vertex="1">
+          <mxGeometry height="160" width="120" x="240" y="395" as="geometry" />
         </mxCell>
-        <mxCell id="-F7HiXjmtPn-gkFCfKS6-6" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=diamondThin;endFill=1;" edge="1" parent="1" source="-F7HiXjmtPn-gkFCfKS6-2" target="-F7HiXjmtPn-gkFCfKS6-1">
+        <mxCell id="-F7HiXjmtPn-gkFCfKS6-6" edge="1" parent="1" source="-F7HiXjmtPn-gkFCfKS6-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=diamondThin;endFill=1;" target="-F7HiXjmtPn-gkFCfKS6-1" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="-F7HiXjmtPn-gkFCfKS6-2" value="Uložený verš&lt;div&gt;- Id&lt;/div&gt;&lt;div&gt;- Id uživatele&lt;/div&gt;&lt;div&gt;- Kniha&lt;/div&gt;&lt;div&gt;- Kapitola&lt;/div&gt;&lt;div&gt;&amp;nbsp;- Verš&lt;/div&gt;&lt;div&gt;- Překlad bible&lt;/div&gt;&lt;div&gt;- Datum posledního procvičení&lt;/div&gt;&lt;div&gt;- Datum dalšího procvičení&lt;/div&gt;&lt;div&gt;- Obtížnost verše&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="450" y="380" width="130" height="190" as="geometry" />
+        <mxCell id="-F7HiXjmtPn-gkFCfKS6-2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Uložený verš&lt;div&gt;- Id&lt;/div&gt;&lt;div&gt;- Id uživatele&lt;/div&gt;&lt;div&gt;- Kniha&lt;/div&gt;&lt;div&gt;- Kapitola&lt;/div&gt;&lt;div&gt;&amp;nbsp;- Verš&lt;/div&gt;&lt;div&gt;- Překlad&lt;/div&gt;&lt;div&gt;- Datum posledního procvičení&lt;/div&gt;&lt;div&gt;- Datum dalšího procvičení&lt;/div&gt;&lt;div&gt;- Jednoduchost&lt;/div&gt;&lt;div&gt;- Počet opakování&lt;/div&gt;&lt;div&gt;- Základní složitost&lt;/div&gt;" vertex="1">
+          <mxGeometry height="220" width="130" x="450" y="365" as="geometry" />
         </mxCell>
-        <mxCell id="-F7HiXjmtPn-gkFCfKS6-8" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=diamondThin;endFill=1;" edge="1" parent="1" source="-F7HiXjmtPn-gkFCfKS6-3" target="-F7HiXjmtPn-gkFCfKS6-2">
+        <mxCell id="-F7HiXjmtPn-gkFCfKS6-8" edge="1" parent="1" source="-F7HiXjmtPn-gkFCfKS6-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=diamondThin;endFill=1;" target="-F7HiXjmtPn-gkFCfKS6-2" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="-F7HiXjmtPn-gkFCfKS6-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;endArrow=diamondThin;endFill=1;" edge="1" parent="1" source="-F7HiXjmtPn-gkFCfKS6-3" target="-F7HiXjmtPn-gkFCfKS6-1">
+        <mxCell id="-F7HiXjmtPn-gkFCfKS6-9" edge="1" parent="1" source="-F7HiXjmtPn-gkFCfKS6-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;endArrow=diamondThin;endFill=1;" target="-F7HiXjmtPn-gkFCfKS6-1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="-F7HiXjmtPn-gkFCfKS6-3" value="Procvičení&lt;div&gt;- Id&lt;/div&gt;&lt;div&gt;- Id uživatele&lt;/div&gt;&lt;div&gt;- Id verše&lt;/div&gt;&lt;div&gt;- Čas strávený&lt;/div&gt;&lt;div&gt;- TimeStamp&lt;/div&gt;&lt;div&gt;- Úspěšnost&lt;/div&gt;&lt;div&gt;- Typ cvičení&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="455" y="620" width="120" height="120" as="geometry" />
+        <mxCell id="-F7HiXjmtPn-gkFCfKS6-3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Procvičení&lt;div&gt;- Id&lt;/div&gt;&lt;div&gt;- Id uživatele&lt;/div&gt;&lt;div&gt;- Id verše&lt;/div&gt;&lt;div&gt;- Čas strávený&lt;/div&gt;&lt;div&gt;- Timestamp&lt;/div&gt;&lt;div&gt;- Známka&lt;/div&gt;&lt;div&gt;- Typ cvičení&lt;/div&gt;" vertex="1">
+          <mxGeometry height="150" width="120" x="455" y="620" as="geometry" />
         </mxCell>
-        <mxCell id="-F7HiXjmtPn-gkFCfKS6-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=diamondThin;endFill=1;" edge="1" parent="1" source="-F7HiXjmtPn-gkFCfKS6-4" target="-F7HiXjmtPn-gkFCfKS6-1">
+        <mxCell id="-F7HiXjmtPn-gkFCfKS6-10" edge="1" parent="1" source="-F7HiXjmtPn-gkFCfKS6-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=diamondThin;endFill=1;" target="-F7HiXjmtPn-gkFCfKS6-1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="-F7HiXjmtPn-gkFCfKS6-4" value="Přátelství&lt;div&gt;- Id&lt;/div&gt;&lt;div&gt;- Stav&lt;/div&gt;&lt;div&gt;- Id uživatele&lt;/div&gt;&lt;div&gt;- Id přítele&lt;/div&gt;&lt;div&gt;- Datum vytvoření&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="70" y="425" width="120" height="100" as="geometry" />
+        <mxCell id="-F7HiXjmtPn-gkFCfKS6-4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Přátelství&lt;div&gt;- Id&lt;/div&gt;&lt;div&gt;- Stav&lt;/div&gt;&lt;div&gt;- Id uživatele&lt;/div&gt;&lt;div&gt;- Id přítele&lt;/div&gt;" vertex="1">
+          <mxGeometry height="100" width="120" x="70" y="425" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

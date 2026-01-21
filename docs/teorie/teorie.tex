@@ -1,0 +1,188 @@
+\documentclass[12pt, a4paper, oneside]{article}
+
+% --- BASIC SETUP ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[czech]{babel}
+\usepackage[left=2.5cm, right=2.5cm, top=3cm, bottom=3cm]{geometry}
+\usepackage{setspace}
+\setstretch{1.4} % Line spacing 1.2 - 1.4
+
+% --- PACKAGES ---
+\usepackage{graphicx}  % For images
+\usepackage{pdfpages}  % To insert the scanned Assignment (Zadání)
+\usepackage{hyperref}  % Clickable TOC
+\usepackage{listings}  % For code snippets (optional)
+
+% --- REMOVE PARAGRAPH INDENTATION, ADD SPACE BETWEEN PARAGRAPHS ---
+% (Optional: modern look, easier to read)
+\usepackage{parskip} 
+
+\begin{document}
+	
+	% ===========================================================================
+	% 1. TITULNÍ LIST (Title Page)
+	% ===========================================================================
+	\begin{titlepage}
+		\begin{center}
+			\vspace*{1cm}
+			
+			{\Large \textbf{DELTA – Střední škola informatiky a ekonomie, s.r.o.}} \\
+			\vspace{0.5cm}
+			{\large Ke Kamenci 151, 530 03 Pardubice} % Check address in Moodle if different
+			
+			\vspace{5cm}
+			
+			{\Huge \textbf{Název maturitního projektu}} \\
+			\vspace{1cm}
+			{\Large (Případný podtitul)}
+			
+			\vfill
+			
+			\begin{flushleft}
+				\large
+				\textbf{Autor:} Matěj Komárek \\
+				\textbf{Obor:} Informační technologie \\ % Or your specific field
+				\textbf{Třída:} 4. B \\
+				\textbf{Školní rok:} 2025/2026
+			\end{flushleft}
+			
+		\end{center}
+	\end{titlepage}
+	
+	% ===========================================================================
+	% 2. ZADÁNÍ MATURITNÍ PRÁCE (Assignment)
+	% ===========================================================================
+	% Once you have the scanned assignment PDF (e.g., 'zadani.pdf'), 
+	% uncomment the line below and remove the temporary text.
+	% \includepdf[pages={1}]{zadani.pdf} 
+	
+	\newpage
+	\thispagestyle{empty}
+	\begin{center}
+		\vspace*{5cm}
+		\textit{[Zde bude vložen naskenovaný list se zadáním maturitní práce.]}
+		
+		\textit{(V TeXstudio odkomentujte příkaz \texttt{includepdf} v kódu)}
+	\end{center}
+	
+	% ===========================================================================
+	% 3. ČESTNÉ PROHLÁŠENÍ (Declaration)
+	% ===========================================================================
+	\newpage
+	\thispagestyle{empty}
+	\vspace*{12cm}
+	
+	Prohlašuji, že jsem maturitní projekt vypracoval(a) samostatně, výhradně s použitím uvedené literatury.
+	
+	\vspace{2cm}
+	
+	V Pardubicích dne \today \hfill ......................................
+	\begin{flushright}
+		(vlastnoruční podpis) \hspace{1cm}
+	\end{flushright}
+	
+	% ===========================================================================
+	% 4. PODĚKOVÁNÍ (Acknowledgement) - Optional
+	% ===========================================================================
+	\newpage
+	\thispagestyle{empty}
+	\vspace*{12cm}
+	
+	\textbf{Poděkování}
+	
+	Upřímně děkuji [Jméno Vedoucího] za odborné vedení a cenné rady při zpracování tohoto projektu. Dále děkuji [Další osoby] za [za co děkujete].
+	
+	% ===========================================================================
+	% 5. ABSTRAKT / RESUMÉ (Abstract)
+	% ===========================================================================
+	\newpage
+	\thispagestyle{empty}
+	
+	\section*{Resumé}
+	Zde napište stručný obsah práce v češtině (cca 1 odstavec). O čem to je, jaký je problém a jak jste ho vyřešili.
+	
+	\textbf{Klíčová slova:} slovo1, slovo2, slovo3, slovo4 (max 8 pojmů)
+	
+	\vspace{2cm}
+	
+	\section*{Abstract}
+	Here write the summary in English. Translation of the Czech resumé.
+	
+	\textbf{Keywords:} word1, word2, word3, word4
+	
+	% ===========================================================================
+	% 6. OBSAH (TOC)
+	% ===========================================================================
+	\newpage
+	\thispagestyle{empty} % No page number on TOC usually
+	\tableofcontents
+	
+	% ===========================================================================
+	% 7. VLASTNÍ ODBORNÝ TEXT (Main Body)
+	% ===========================================================================
+	\newpage
+	\setcounter{page}{1} % Starts numbering page 1 here
+	
+	\section{Úvod}
+	Zde vymezte problém. Proč práce vznikla? K čemu slouží? Kdo už na tom pracoval? (Rešerše).
+	
+	\section{Teoretická část}
+	Zmapování současného stavu. Jaké nástroje jste zvolili a proč.
+	\textit{Tip: Pokud dáváte seznam technologií, nesmí být delší než 1 strana.}
+	
+	\section{Metodika a vlastní řešení}
+	Toto je jádro práce.
+	\begin{itemize}
+		\item Jak jste postupovali (harmonogram).
+		\item Architektura systému (komponenty, vrstvy).
+		\item \textbf{UML Diagramy:} Use Case diagramy, Class diagramy (pokud je to OOP).
+		\item \textbf{API Dokumentace:} Pokud máte backend, popište endpointy.
+	\end{itemize}
+	
+	\subsection{Návrh databáze / Tříd}
+	Popis struktury dat.
+	
+	\section{Výsledky}
+	Co bylo vytvořeno. Fakta. Bez omáčky.
+	\begin{itemize}
+		\item Screenshoty aplikace.
+		\item Naměřené hodnoty.
+		\item Splnění bodů zadání.
+	\end{itemize}
+	
+	\section{Diskuse}
+	Zde můžete "kecat". Proč jste to udělali takhle a ne jinak? Co by šlo udělat lépe? Porovnání s jinými řešeními.
+	
+	\section{Závěr}
+	Celkové zhodnocení. Funguje to? Co dál s projektem v budoucnu?
+	
+	% ===========================================================================
+	% 8. LITERATURA (References)
+	% ===========================================================================
+	\newpage
+	\addcontentsline{toc}{section}{Literatura} % Adds to TOC manually
+	
+	\begin{thebibliography}{99}
+		\bibitem{zdroj1} AUTOR, Jméno. \textit{Název knihy}. Město: Vydavatel, Rok. ISBN.
+		\bibitem{zdroj2} WIKIPEDIA. \textit{Téma} [online]. [cit. 2026-01-01]. Dostupné z: www.url.cz
+	\end{thebibliography}
+	
+	% ===========================================================================
+	% 9. SEZNAM OBRÁZKŮ (List of Figures)
+	% ===========================================================================
+	\newpage
+	\listoffigures
+	% \listoftables % Uncomment if you have tables
+	
+	% ===========================================================================
+	% 10. PŘÍLOHY (Attachments)
+	% ===========================================================================
+	\newpage
+	\section*{Seznam příloh}
+	\begin{itemize}
+		\item Příloha A: Uživatelská příručka
+		\item Příloha B: Zdrojový kód (CD/Flash disk)
+	\end{itemize}
+	
+\end{document}
