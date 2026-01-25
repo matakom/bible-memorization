@@ -43,7 +43,8 @@ class SavedVersesRepository {
           nextReviewDate: row.nextReviewDate,
           lastReviewDate: row.lastReviewDate,
           
-          difficulty: row.easeFactor.round(), 
+          verseText: row.verseText,
+          easeFactor: row.easeFactor,
         );
       }).toList();
     } catch (e) {
@@ -90,8 +91,9 @@ class SavedVersesRepository {
             chapter: payload.chapter,
             verse: payload.verse,
             translation: payload.translation,
-            difficulty: initialEf.round(),
             nextReviewDate: initialNextReview,
+            verseText: text,
+            easeFactor: initialEf
           ));
         }
       });

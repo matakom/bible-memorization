@@ -10,6 +10,7 @@ import 'package:flutter_app/providers/reader/reader_state_provider.dart';
 import 'package:flutter_app/providers/reader/verse_selection_provider.dart';
 import 'package:flutter_app/presentation/widgets/reader/top_bar.dart';
 import 'package:flutter_app/presentation/widgets/reader/verse_view.dart';
+import 'package:flutter_app/presentation/widgets/reader/translation_selector.dart'; 
 
 class ReaderScreen extends ConsumerWidget {
   const ReaderScreen({super.key});
@@ -27,11 +28,12 @@ class ReaderScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        titleSpacing: 16,
+        titleSpacing: 0,
         title: const TopBar(),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         surfaceTintColor: Colors.transparent,
         actions: [
+          const BibleTranslationSelector(),
           IconButton(
             icon: const Icon(Icons.bookmarks_rounded),
             tooltip: context.l10n.reader_savedVersesTitle,
@@ -65,7 +67,6 @@ class ReaderScreen extends ConsumerWidget {
         },
         child: selectedVerses.isNotEmpty
             ? FloatingActionButton.extended(
-                // Unique key for animation to work
                 key: const ValueKey('save_fab'),
                 onPressed: () => _showSaveDialog(context, ref, selectedVerses),
                 icon: const Icon(Icons.bookmark_add_rounded),
@@ -98,12 +99,12 @@ class ReaderScreen extends ConsumerWidget {
           FilledButton(
             onPressed: () async {
               final readerState = ref.read(readerProvider);
+              final currentVersion = await ref.read(currentBibleTranslationProvider.future);
               final repository = ref.read(bibleRepositoryProvider); 
               final sortedVerses = selectedVerses.toList()..sort();
 
               final versesToSave = await Future.wait(
                 sortedVerses.map((verseNum) async {
-                  
                   final verseObj = await repository.getVerse(
                     readerState.bookId, 
                     readerState.chapterNum, 
@@ -114,12 +115,13 @@ class ReaderScreen extends ConsumerWidget {
                     book: readerState.bookId,
                     chapter: readerState.chapterNum,
                     verse: verseNum,
-                    translation: readerState.translation,
+                    translation: currentVersion.abbreviation, 
                     text: verseObj.text, 
                   );
                 }),
               );
 
+              if (!ctx.mounted) return;
               Navigator.pop(ctx);
 
               ref.read(verseSelectionProvider.notifier).clear();

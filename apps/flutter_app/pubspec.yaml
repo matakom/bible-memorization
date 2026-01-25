@@ -48,3 +48,5 @@ flutter:
     - .env.prod
     - assets/certs/cf_cert.pem
     - assets/bible/b21.json
+    - assets/bible/ekumena.json
+    - assets/bible/kralicka.json

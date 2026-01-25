@@ -13,6 +13,7 @@ class ReaderContentView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final readerState = ref.watch(readerProvider);
+    final currentTranslation = ref.watch(currentBibleTranslationProvider).value;
 
     final chapterAsync = ref.watch(
       chapterContentProvider(
@@ -27,7 +28,8 @@ class ReaderContentView extends ConsumerWidget {
             ?.where(
               (v) =>
                   v.book == readerState.bookId &&
-                  v.chapter == readerState.chapterNum,
+                  v.chapter == readerState.chapterNum &&
+                  v.translation == currentTranslation?.abbreviation,
             )
             .map((v) => v.verse)
             .toSet() ??
@@ -95,19 +97,11 @@ class _VerseItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    // Determine background color based on priority:
-    // 1. Selected (Active interaction) -> Primary Color
-    // 2. Saved (Passive state) -> Tertiary/Secondary Color
-    // 3. None -> Transparent
     Color? backgroundColor;
     if (isSelected) {
-      backgroundColor = theme.colorScheme.primaryContainer.withValues(
-        alpha: 0.5,
-      );
+      backgroundColor = theme.colorScheme.primaryContainer.withOpacity(0.5);
     } else if (isSaved) {
-      backgroundColor = theme.colorScheme.tertiaryContainer.withValues(
-        alpha: 0.3,
-      );
+      backgroundColor = theme.colorScheme.tertiaryContainer.withOpacity(0.3);
     } else {
       backgroundColor = Colors.transparent;
     }
@@ -122,7 +116,6 @@ class _VerseItem extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Verse Number Column
             SizedBox(
               width: 32 * fontSizeScale,
               child: Padding(
@@ -134,15 +127,11 @@ class _VerseItem extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 11 * fontSizeScale,
                         fontWeight: FontWeight.bold,
-                        // Highlight number color if saved
                         color: isSaved || isSelected
                             ? theme.colorScheme.primary
-                            : theme.colorScheme.onSurfaceVariant.withValues(
-                                alpha: 0.7,
-                              ),
+                            : theme.colorScheme.onSurfaceVariant.withOpacity(0.7),
                       ),
                     ),
-                    // Icon to indicate it is saved
                     if (isSaved && !isSelected)
                       Padding(
                         padding: const EdgeInsets.only(top: 2),
@@ -156,7 +145,6 @@ class _VerseItem extends StatelessWidget {
                 ),
               ),
             ),
-            // Verse Text
             Expanded(
               child: Text(
                 text,

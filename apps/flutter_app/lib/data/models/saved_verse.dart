@@ -4,9 +4,10 @@ class SavedVerse {
   final int chapter;
   final int verse;
   final String translation;
-  final DateTime? nextReviewDate;
+  final String verseText;
+  final double easeFactor;
+  final DateTime nextReviewDate;
   final DateTime? lastReviewDate;
-  final int difficulty;
 
   SavedVerse({
     required this.id,
@@ -14,27 +15,11 @@ class SavedVerse {
     required this.chapter,
     required this.verse,
     required this.translation,
-    this.nextReviewDate,
+    required this.verseText,
+    required this.easeFactor,
+    required this.nextReviewDate,
     this.lastReviewDate,
-    required this.difficulty,
   });
-
-  factory SavedVerse.fromJson(Map<String, dynamic> json) {
-    return SavedVerse(
-      id: json['id'] as String,
-      book: json['book'] as int,
-      chapter: json['chapter'] as int,
-      verse: json['verse'] as int,
-      translation: json['translation'] as String,
-      nextReviewDate: json['nextReviewDate'] != null
-          ? DateTime.parse(json['nextReviewDate'] as String)
-          : null,
-      lastReviewDate: json['lastReviewDate'] != null
-          ? DateTime.parse(json['lastReviewDate'] as String)
-          : null,
-      difficulty: json['difficulty'] as int? ?? 1, 
-    );
-  }
 }
 
 class VerseCreationPayload {
