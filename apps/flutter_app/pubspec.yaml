@@ -7,6 +7,7 @@ environment:
   sdk: ^3.8.1
 
 dependencies:
+  async: ^2.13.0
   dio: ^5.9.0
   drift: ^2.29.0
   drift_db_viewer: ^2.1.0

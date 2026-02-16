@@ -1,14 +1,29 @@
+/// Represents the immutable content of a Bible verse.
 class Verse {
-  final int verseNumber;
+  final int book; 
+  final int chapter;
+  final int verse;
   final String text;
+  final String translation;
+  final int wordCount;
 
-  Verse({required this.verseNumber, required this.text});
+  const Verse({
+    required this.book,
+    required this.chapter,
+    required this.verse,
+    required this.text,
+    required this.translation,
+    required this.wordCount,
+  });
 
-  // Factory constructor to create a Verse object from a JSON map
-  factory Verse.fromJson(Map<String, dynamic> json) {
+  factory Verse.fromMap(Map<String, dynamic> map) {
     return Verse(
-      verseNumber: json['verse_number'] as int,
-      text: json['text'] as String,
+      book: map['book'],
+      chapter: map['chapter'],
+      verse: map['verse'],
+      text: map['textContent'], 
+      translation: map['translation'] ?? 'default', 
+      wordCount: map['wordCount'],
     );
   }
 }

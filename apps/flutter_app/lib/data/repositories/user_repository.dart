@@ -1,75 +1,59 @@
-import 'dart:convert';
-import 'package:dio/dio.dart';
 import 'package:drift/drift.dart';
-import 'package:flutter_app/data/local/app_database.dart' as db;
-import 'package:flutter_app/data/models/user.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_app/api/dio_client.dart';
-import 'package:flutter_app/providers/core/security_context_provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../local/app_database.dart' hide User;
+import '../local/daos/users_dao.dart';
+import '../models/user.dart';
 
 class UserRepository {
-  final Dio _dio;
-  final SharedPreferences _prefs;
-  final db.AppDatabase _db;
-  
-  static const String _kCachedUserKey = 'cached_user_profile';
+  final UsersDao _dao;
 
-  UserRepository(this._dio, this._prefs, this._db);
+  UserRepository(this._dao);
 
-  Future<AppUser> getUserData({String? manualToken}) async {
-    try {
-
-      final options = manualToken != null ? Options(headers: {'Authorization': 'Bearer $manualToken'}) : null;
-
-      // 1. Try Network
-      final response = await _dio.get('/user', options: options);
-      final user = AppUser.fromJson(response.data as Map<String, dynamic>);
-      
-      // 2. Save to Cache
-      await _prefs.setString(_kCachedUserKey, json.encode(response.data));
-
-      // 3. SAVE TO SQLITE
-      await _db.into(_db.users).insert(
-        db.UsersCompanion.insert(
-          id: user.id,
-          email: user.email,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          language: Value(user.language), 
-          needsSync: const Value(false),
-          updatedAt: Value(DateTime.now()), 
-        ),
-        mode: InsertMode.insertOrReplace,
-      );
-
-      return user;
-      
-    } catch (e) {
-      // 4. Offline Fallback
-      // Try SharedPreferences first (Fastest)
-      final cachedString = _prefs.getString(_kCachedUserKey);
-      if (cachedString != null) {
-        return AppUser.fromJson(json.decode(cachedString) as Map<String, dynamic>);
-      }
-
-      // 5. No Data Found
-      throw Exception("Connection required for initial login.");
-    }
+  /// Returns the current user or null if not logged in.
+  Future<User?> getCurrentUser() async {
+    final row = await _dao.getCurrentUser();
+    if (row == null) return null;
+    return _mapToDomain(row);
   }
-  Future<AppUser?> getLocalUser() async {
-    final cachedString = _prefs.getString(_kCachedUserKey);
-    if (cachedString != null) {
-      return AppUser.fromJson(json.decode(cachedString) as Map<String, dynamic>);
-    }
-    return null;
+
+  /// Saves a user
+  Future<void> saveUser(User user) async {
+    final entry = UsersCompanion(
+      id: Value(user.id),
+      email: Value(user.email),
+      firstName: Value(user.firstName),
+      lastName: Value(user.lastName),
+      friendCode: Value(user.friendCode),
+      score: Value(user.score),
+      targetRetention: Value(user.targetRetention),
+      userMemoryFactor: Value(user.userMemoryFactor),
+      language: Value(user.language),
+      updatedAt: Value(DateTime.now()),
+    );
+    await _dao.saveUser(entry);
+  }
+
+  /// Updates local settings.
+  Future<void> updateSettings({required String userId, String? language, double? targetRetention}) async {
+    await _dao.updateSettings(userId, language: language, targetRetention: targetRetention);
+  }
+
+  User _mapToDomain(dynamic row) {
+    return User(
+      id: row.id,
+      firstName: row.firstName,
+      lastName: row.lastName,
+      email: row.email,
+      friendCode: row.friendCode,
+      score: row.score,
+      targetRetention: row.targetRetention,
+      userMemoryFactor: row.userMemoryFactor,
+      language: row.language,
+    );
   }
 }
 
-final userRepositoryProvider = FutureProvider<UserRepository>((ref) async {
-  final securityContext = await ref.watch(securityContextFutureProvider.future);
-  final dio = createDioClient(securityContext, ref);
-  final prefs = await SharedPreferences.getInstance();
-  final database = ref.watch(db.databaseProvider); 
-  return UserRepository(dio, prefs, database);
+final userRepositoryProvider = Provider<UserRepository>((ref) {
+  final db = ref.watch(databaseProvider);
+  return UserRepository(db.usersDao);
 });

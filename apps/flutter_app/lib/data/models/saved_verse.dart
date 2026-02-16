@@ -1,49 +1,32 @@
+import 'verse.dart';
+import 'sm2_stats.dart';
+import 'hlr_stats.dart';
+
+/// Represents immutable verse and additional stats for spaced repetition.
 class SavedVerse {
   final String id;
-  final int book;
-  final int chapter;
-  final int verse;
-  final String translation;
-  final String verseText;
-  final double easeFactor;
+  final Verse verse; // Verse reference
   final DateTime nextReviewDate;
-  final DateTime? lastReviewDate;
+  
+  // Data for spaced repetition
+  final Sm2Stats sm2Stats;
+  final HlrStats? hlrStats;
 
   SavedVerse({
     required this.id,
-    required this.book,
-    required this.chapter,
     required this.verse,
-    required this.translation,
-    required this.verseText,
-    required this.easeFactor,
     required this.nextReviewDate,
-    this.lastReviewDate,
-  });
-}
-
-class VerseCreationPayload {
-  final int book;
-  final int chapter;
-  final int verse;
-  final String translation;
-  final String text;
-
-  VerseCreationPayload({
-    required this.book,
-    required this.chapter,
-    required this.verse,
-    required this.translation,
-    required this.text
+    required this.sm2Stats,
+    this.hlrStats,
   });
 
-  Map<String, dynamic> toJson() {
-    return {
-      'book': book,
-      'chapter': chapter,
-      'verse': verse,
-      'translation': translation,
-      'text': text
-    };
+  factory SavedVerse.fromJoinedMap(Map<String, dynamic> map) {
+    return SavedVerse(
+      id: map['id'],
+      nextReviewDate: DateTime.parse(map['next_review_date']),
+      verse: Verse.fromMap(map),
+      sm2Stats: Sm2Stats.fromMap(map),
+      hlrStats: map.containsKey('calculated_half_life') ? HlrStats.fromMap(map) : null,
+    );
   }
 }

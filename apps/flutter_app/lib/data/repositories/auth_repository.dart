@@ -37,3 +37,5 @@ class AuthRepository {
     await _auth.signOut();
   }
 }
+
+// TODO: CHECK THIS FILE AND TEST THE LOGIN EDGE CASES

@@ -1,91 +1,81 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/l10n/l10n_extension.dart';
 import 'package:go_router/go_router.dart';
 
-class AppShell extends StatelessWidget {
+class AppShell extends StatefulWidget {
   final Widget child;
-  const AppShell(this.child, {super.key});
+  const AppShell({super.key, required this.child});
+
+  @override
+  State<AppShell> createState() => _AppShellState();
+}
+
+class _AppShellState extends State<AppShell> {
+  /// Maps the current route to a Tab Index (0-4)
+  int _calculateSelectedIndex(BuildContext context) {
+    // GoRouterState needs to be accessed carefully inside build
+    final String location = GoRouterState.of(context).uri.toString();
+    
+    if (location.startsWith('/reader')) return 0;
+    if (location.startsWith('/stats')) return 1;
+    if (location.startsWith('/practice')) return 2;
+    if (location.startsWith('/social')) return 3;
+    if (location.startsWith('/settings')) return 4;
+    
+    return 2; // Default: Practice Screen
+  }
+
+  void _onItemTapped(int index, BuildContext context) {
+    switch (index) {
+      case 0:
+        context.go('/reader');
+        break;
+      case 1:
+        context.go('/stats');
+        break;
+      case 2:
+        context.go('/practice');
+        break;
+      case 3:
+        context.go('/social');
+        break;
+      case 4:
+        context.go('/settings');
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final selectedIndex = _calculateSelectedIndex(context);
+
     return Scaffold(
-      body: child,
+      body: widget.child,
       bottomNavigationBar: NavigationBar(
-        selectedIndex: _calculateSelectedIndex(context),
-        onDestinationSelected: (int index) {
-          _onItemTapped(index, context);
-        },
-        destinations: <Widget>[
+        selectedIndex: selectedIndex,
+        onDestinationSelected: (idx) => _onItemTapped(idx, context),
+        destinations: const [
           NavigationDestination(
-            icon: Icon(Icons.book_outlined),
-            selectedIcon: Icon(Icons.book),
-            label: context.l10n.reader_navbar,
+            icon: Icon(Icons.menu_book_rounded),
+            label: 'Bible',
           ),
           NavigationDestination(
-            icon: Icon(Icons.stacked_bar_chart),
-            selectedIcon: Icon(Icons.stacked_bar_chart),
-            label: context.l10n.stats_navbar,
+            icon: Icon(Icons.bar_chart_rounded),
+            label: 'Stats',
           ),
           NavigationDestination(
-            icon: Icon(Icons.fitness_center_outlined),
-            selectedIcon: Icon(Icons.fitness_center),
-            label: context.l10n.practice_navbar,
+            icon: Icon(Icons.play_circle_fill, size: 30), 
+            label: 'Practice',
           ),
           NavigationDestination(
-            icon: Icon(Icons.people_outline),
-            selectedIcon: Icon(Icons.people),
-            label: context.l10n.social_navbar,
+            icon: Icon(Icons.people_rounded),
+            label: 'Social',
           ),
           NavigationDestination(
-            icon: Icon(Icons.settings_outlined),
-            selectedIcon: Icon(Icons.settings),
-            label: context.l10n.settings_navbar,
+            icon: Icon(Icons.settings_rounded),
+            label: 'Settings',
           ),
         ],
       ),
     );
-  }
-
-  // Maps the route path to the tab index
-  static int _calculateSelectedIndex(BuildContext context) {
-    final String location = GoRouterState.of(context).matchedLocation;
-    if (location == '/reader') {
-      return 0;
-    }
-    if (location == '/stats') {
-      return 1;
-    }
-    if (location == '/practice') {
-      return 2;
-    }
-    if (location == '/social') {
-      return 3;
-    }
-    if (location == '/settings') {
-      return 4;
-    }
-    // Default to /practice
-    return 2;
-  }
-
-  // Navigates to the correct route when a tab is tapped
-  void _onItemTapped(int index, BuildContext context) {
-    switch (index) {
-      case 0:
-        GoRouter.of(context).go('/reader');
-        break;
-      case 1:
-        GoRouter.of(context).go('/stats');
-        break;
-      case 2:
-        GoRouter.of(context).go('/practice');
-        break;
-      case 3:
-        GoRouter.of(context).go('/social');
-        break;
-      case 4:
-        GoRouter.of(context).go('/settings');
-        break;
-    }
   }
 }

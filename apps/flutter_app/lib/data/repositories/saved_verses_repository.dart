@@ -1,134 +1,155 @@
 import 'package:drift/drift.dart';
-import 'package:flutter_app/data/local/app_database.dart' as db;
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_app/data/models/saved_verse.dart';
-import 'package:flutter_app/utils/srs_algorithm.dart';
 import 'package:uuid/uuid.dart';
-import '../../services/sync_service.dart';
 
-class SavedVersesException implements Exception {
-  final String message;
-  SavedVersesException(this.message);
-
-  @override
-  String toString() => message;
-}
+import '../local/app_database.dart' hide SavedVerse; 
+import '../local/daos/saved_verses_dao.dart';
+import '../models/saved_verse.dart';
+import '../models/verse.dart';
+import '../models/sm2_stats.dart';
+import '../models/hlr_stats.dart';
+import '../../services/srs/srs_types.dart';
 
 class SavedVersesRepository {
-  final db.AppDatabase _db;
-  final Ref _ref;
+  final SavedVersesDao _dao;
+  final SrsAlgorithm _srsAlgorithm; 
+  final _uuid = const Uuid();
 
-  SavedVersesRepository(this._db, this._ref);
-  /// Fetches all active saved verses from Local DB
-  Future<List<SavedVerse>> getSavedVerses() async {
-    try {
-      // 1. Select from DB, filtering out soft-deleted items
-      final query = _db.select(_db.savedVerses)
-        ..where((t) => t.deletedAt.isNull())
-        ..orderBy([
-          // Order by next review date (Priority)
-          (t) => OrderingTerm(expression: t.nextReviewDate, mode: OrderingMode.asc)
-        ]);
+  SavedVersesRepository(this._dao, this._srsAlgorithm);
 
-      final rows = await query.get();
+  /// --------------------------------------------------------------------------
+  /// READ OPERATIONS
+  /// --------------------------------------------------------------------------
 
-      return rows.map((row) {
-        return SavedVerse(
-          id: row.id,
-          book: row.book,
-          chapter: row.chapter,
-          verse: row.verse,
-          translation: row.translation,
-          
-          nextReviewDate: row.nextReviewDate,
-          lastReviewDate: row.lastReviewDate,
-          
-          verseText: row.verseText,
-          easeFactor: row.easeFactor,
-        );
-      }).toList();
-    } catch (e) {
-      throw SavedVersesException('Failed to load local verses: $e');
-    }
+  Future<List<SavedVerse>> getDueVersesForSession() async {
+    // Returns TypedResult (Join of SavedVerse + LocalBibleVerse)
+    final results = await _dao.getDueVersesWithText();
+    return results.map((row) => _mapTypedResultToDomain(row)).toList();
   }
 
-  /// Saves new verses to Local DB (Offline First)
-  Future<List<SavedVerse>> saveVerses(List<VerseCreationPayload> payloads) async {
-    try {
-      final List<SavedVerse> createdVerses = [];
-
-      await _db.batch((batch) {
-        for (final payload in payloads) {
-          final uuid = const Uuid().v4();
-          
-          final text = payload.text;
-          final complexity = SRSAlgorithm.calculateComplexity(text);
-          final initialEf = SRSAlgorithm.getInitialEaseFactor(complexity);
-          
-          final initialNextReview = DateTime.now();
-
-          batch.insert(
-            _db.savedVerses,
-            db.SavedVersesCompanion.insert(
-              id: uuid,
-              book: payload.book,
-              chapter: payload.chapter,
-              verse: payload.verse,
-              translation: payload.translation,
-              verseText: text,
-              baseComplexity: Value(complexity),
-              easeFactor: Value(initialEf),
-              repetitionCount: const Value(0),
-              nextReviewDate: initialNextReview,
-              updatedAt: Value(DateTime.now()),
-              needsSync: const Value(true),
-            ),
-          );
-
-          createdVerses.add(SavedVerse(
-            id: uuid,
-            book: payload.book,
-            chapter: payload.chapter,
-            verse: payload.verse,
-            translation: payload.translation,
-            nextReviewDate: initialNextReview,
-            verseText: text,
-            easeFactor: initialEf
-          ));
-        }
-      });
-
-      try {
-      final syncService = await _ref.read(syncServiceProvider.future);
-      syncService.runSync();
-    } catch (_) {}
-      return createdVerses;
-    } catch (e) {
-      throw SavedVersesException('Failed to save verses locally: $e');
-    }
-
+  Future<List<SavedVerse>> getAllSavedVerses() async {
+    final results = await _dao.getAllVersesWithText();
+    return results.map((row) => _mapTypedResultToDomain(row)).toList();
   }
 
-  /// Soft Deletes a verse locally
+  Future<SavedVerse?> getVerseById(String id) async {
+    final result = await _dao.getVerseWithTextById(id);
+    if (result == null) return null;
+    return _mapTypedResultToDomain(result);
+  }
+
+  /// --------------------------------------------------------------------------
+  /// WRITE OPERATIONS
+  /// --------------------------------------------------------------------------
+
+  Future<void> addNewVerse(Verse verse) async {
+    final initialSm2 = Sm2Stats.initial();
+    final initialHlr = HlrStats.initial();
+    final newId = _uuid.v4();
+
+    // We only insert into SavedVerses. 
+    // We assume the text already exists in LocalBibleVerses (referenced by book/ch/verse).
+    final entry = SavedVersesCompanion(
+      id: Value(newId),
+      book: Value(verse.book),
+      chapter: Value(verse.chapter),
+      verse: Value(verse.verse),
+      translation: Value(verse.translation),
+      
+      nextReviewDate: Value(DateTime.now()),
+      
+      sm2EaseFactor: Value(initialSm2.easeFactor),
+      sm2IntervalDays: Value(initialSm2.intervalDays),
+      sm2RepetitionCount: Value(initialSm2.repetitionCount),
+      
+      hlrStability: Value(initialHlr.stability),
+      hlrDifficulty: Value(initialHlr.difficulty),
+      hlrCorrectCount: Value(initialHlr.correctCount),
+      hlrIncorrectCount: Value(initialHlr.incorrectCount),
+      
+      needsSync: const Value(true),
+    );
+
+    await _dao.insertSavedVerse(entry);
+  }
+
+  Future<void> updateVerseProgress(SavedVerse verse, int grade) async {
+    final result = _srsAlgorithm.calculateProgress(
+      currentSm2: verse.sm2Stats,
+      currentHlr: verse.hlrStats,
+      grade: grade,
+    );
+
+    final updatedStats = SavedVersesCompanion(
+      id: Value(verse.id),
+      nextReviewDate: Value(result.nextReviewDate),
+      
+      sm2EaseFactor: Value(result.sm2Stats.easeFactor),
+      sm2IntervalDays: Value(result.sm2Stats.intervalDays),
+      sm2RepetitionCount: Value(result.sm2Stats.repetitionCount),
+      
+      hlrStability: Value(result.hlrStats?.stability),
+      hlrDifficulty: Value(result.hlrStats?.difficulty),
+      hlrCorrectCount: Value(result.hlrStats?.correctCount ?? 0),
+      hlrIncorrectCount: Value(result.hlrStats?.incorrectCount ?? 0),
+
+      needsSync: const Value(true),
+    );
+    
+    await _dao.updateSavedVerse(updatedStats);
+  }
+
   Future<void> deleteVerse(String id) async {
-    try {
-      await (_db.update(_db.savedVerses)..where((t) => t.id.equals(id)))
-          .write(db.SavedVersesCompanion(
-            deletedAt: Value(DateTime.now()),
-            updatedAt: Value(DateTime.now()),
-            needsSync: const Value(true),
-          ));
-    } catch (e) {
-      throw SavedVersesException('Failed to delete verse locally: $e');
+    await _dao.deleteVerse(id);
+  }
+
+  /// --------------------------------------------------------------------------
+  /// HELPER: MAPPER (TypedResult -> Domain Model)
+  /// --------------------------------------------------------------------------
+  
+  SavedVerse _mapTypedResultToDomain(TypedResult result) {
+    // 1. Extract the specific table data from the Join result
+    // Note: 'savedVerses' and 'localBibleVerses' are the getters generated by Drift 
+    // inside the DAO's mixin or the Database class. 
+    // Using readTable helps resolve them safely.
+    
+    final savedRow = result.readTable(_dao.savedVerses);
+    final bibleRow = result.readTable(_dao.localBibleVerses);
+
+    // 2. Reconstruct Verse Object (Text comes from bibleRow)
+    final verseRef = Verse(
+      book: savedRow.book,
+      chapter: savedRow.chapter,
+      verse: savedRow.verse,
+      translation: savedRow.translation,
+      text: bibleRow.textContent,
+      wordCount: bibleRow.textContent.split(' ').length
+    );
+
+    // 3. Reconstruct SM2 Stats
+    final sm2 = Sm2Stats(
+      easeFactor: savedRow.sm2EaseFactor,
+      intervalDays: savedRow.sm2IntervalDays,
+      repetitionCount: savedRow.sm2RepetitionCount,
+    );
+
+    // 4. Reconstruct HLR Stats
+    HlrStats? hlr;
+    if (savedRow.hlrStability != null) {
+      hlr = HlrStats(
+        stability: savedRow.hlrStability!,
+        difficulty: savedRow.hlrDifficulty ?? 0.0,
+        correctCount: savedRow.hlrCorrectCount,
+        incorrectCount: savedRow.hlrIncorrectCount,
+      );
     }
-    try {
-    final syncService = await _ref.read(syncServiceProvider.future);
-    syncService.runSync();
-  } catch (_) {}
+
+    // 5. Return Domain Model
+    return SavedVerse(
+      id: savedRow.id,
+      verse: verseRef,
+      nextReviewDate: savedRow.nextReviewDate,
+      sm2Stats: sm2,
+      hlrStats: hlr,
+    );
   }
 }
-
-final savedVersesRepositoryProvider = Provider<SavedVersesRepository>((ref) {
-  final database = ref.watch(db.databaseProvider); 
-  return SavedVersesRepository(database, ref);
-});

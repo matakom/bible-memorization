@@ -1,8 +1,9 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_app/providers/auth_provider.dart'; 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import '../providers/core/repository_providers.dart';
+
 
 Dio createDioClient(SecurityContext securityContext, Ref ref) {
   final baseUrl = dotenv.env['BASE_URL']; 

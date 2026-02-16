@@ -1,60 +1,55 @@
-import 'dart:convert';
-import 'package:flutter/services.dart';
-import 'package:flutter_app/data/models/book.dart';
-import 'package:flutter_app/data/models/chapter.dart';
-import 'package:flutter_app/data/models/verse.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../local/app_database.dart';
+import '../local/daos/bible_dao.dart';
+import '../models/book.dart';
+import '../models/verse.dart';
 
+/// Repository for getting bible text
 class BibleRepository {
-  final String assetPath;
-  
-  // In-memory cache to avoid re-parsing JSON every time
-  List<Book>? _cachedBooks;
+  final BibleDao _dao;
 
-  BibleRepository({required this.assetPath});
+  BibleRepository(this._dao);
 
-  /// Loads and parses the Bible data. 
-  Future<List<Book>> getAllBooks() async {
-    if (_cachedBooks != null) return _cachedBooks!;
-
-    try {
-      final String response = await rootBundle.loadString(assetPath);
-      final List<dynamic> data = json.decode(response);
-      _cachedBooks = data.map((json) => Book.fromJson(json)).toList();
-      return _cachedBooks!;
-    } catch (e) {
-      throw Exception('Failed to load Bible data: $e');
-    }
+  Future<Verse?> getVerse({
+    required int book,
+    required int chapter,
+    required int verse,
+    required String translation
+  }) async {
+    final row = await _dao.getVerse(book, chapter, verse, translation);
+    if (row == null) return null;
+    return _mapToDomain(row);
   }
 
-  /// Fetches a specific chapter.
-  Future<Chapter> getChapter(int bookId, int chapterNumber) async {
-    final books = await getAllBooks();
+  Future<List<Verse>> getChapter(int book, int chapter, String translation) async {
+    final rows = await _dao.getChapter(book, chapter, translation);
+    return rows.map(_mapToDomain).toList();
+  }
+
+  Future<List<Book>> getBooks(String translation) async {
+    // 1. Get raw rows from DAO
+    final rows = await _dao.getBooks(translation);
     
-    final book = books.firstWhere(
-      (b) => b.bookId == bookId,
-      orElse: () => throw Exception('Book ID $bookId not found'),
-    );
-
-    return book.chapters.firstWhere(
-      (c) => c.chapterNumber == chapterNumber,
-      orElse: () => throw Exception('Chapter $chapterNumber not found in ${book.bookName}'),
-    );
+    // 2. Map Drift class (BibleBook) to Domain class (Book)
+    return rows.map((row) => Book(
+      id: row.id,
+      name: row.name,
+    )).toList();
   }
 
-  /// Fetches a specific verse.
-  Future<Verse> getVerse(int bookId, int chapterNumber, int verseNumber) async {
-    final chapter = await getChapter(bookId, chapterNumber);
-    return chapter.verses[verseNumber - 1];
-  }
-
-  /// Fetches the name of a book by its ID.
-  Future<String> getBookName(int bookId) async {
-    final books = await getAllBooks();
-    
-    final book = books.firstWhere(
-      (b) => b.bookId == bookId,
-      orElse: () => throw Exception('Book ID $bookId not found'),
+  Verse _mapToDomain(LocalBibleVerse row) {
+    return Verse(
+      book: row.book,
+      chapter: row.chapter,
+      verse: row.verse,
+      text: row.textContent,
+      translation: row.translation,
+      wordCount: row.wordCount,
     );
-    return book.bookName;
   }
 }
+
+final bibleRepositoryProvider = Provider<BibleRepository>((ref) {
+  final db = ref.watch(databaseProvider);
+  return BibleRepository(db.bibleDao);
+});

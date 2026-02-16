@@ -1,64 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/l10n/app_localizations.dart';
-import 'package:flutter_app/providers/settings/language_provider.dart';
+import 'package:flutter_app/presentation/themes/app_theme.dart';
+import 'package:flutter_app/providers/app_settings_provider.dart';
 import 'package:flutter_app/providers/core/router_provider.dart';
-import 'package:flutter_app/providers/settings/theme_provider.dart';
-import 'package:flutter_app/services/sync_service.dart';
-import 'package:flutter_app/themes/amber_dark.dart';
-import 'package:flutter_app/themes/amber_light.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'utils/debugger.dart';
 
 const String environment = String.fromEnvironment('ENV', defaultValue: 'dev');
 
 Future<void> main() async {
+  // 1. Basic Flutter/Firebase setup (Fast)
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env.$environment");
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
+  
+  // 2. Run App immediately. 
+  // We do NOT initialize the DB here. The providers will handle it lazily.
   runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends ConsumerStatefulWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  ConsumerState<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends ConsumerState<MyApp> {
-  @override
-  void initState() {
-    super.initState();
-    _initialSync();
-  }
-
-  Future<void> _initialSync() async {
-    await Future.delayed(Duration.zero);
-
-    try {
-      final syncService = await ref.read(syncServiceProvider.future);
-
-      syncService.runSync();
-    } catch (e) {
-      Debugger.log("Initial sync skipped: $e");
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Watch providers for theme/locale/routing
     final router = ref.watch(goRouterProvider);
     final Locale currentLocale = ref.watch(languageProvider);
     final ThemeMode currentThemeMode = ref.watch(themeProvider);
 
     return MaterialApp.router(
       routerConfig: router,
-      theme: lightTheme,
-      darkTheme: darkTheme,
+      theme: AppTheme.light,
+      darkTheme: AppTheme.dark,
       themeMode: currentThemeMode,
       locale: currentLocale,
       supportedLocales: AppLocalizations.supportedLocales,

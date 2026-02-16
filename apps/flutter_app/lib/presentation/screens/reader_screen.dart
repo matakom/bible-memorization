@@ -1,160 +1,97 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/data/models/saved_verse.dart';
-import 'package:flutter_app/l10n/l10n_extension.dart';
-import 'package:flutter_app/presentation/screens/saved_verses_screen.dart';
-import 'package:flutter_app/presentation/widgets/reader/appearance_bottom_sheet.dart';
-import 'package:flutter_app/providers/reader/bible_provider.dart';
-import 'package:flutter_app/providers/reader/saved_verses_controller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_app/providers/reader/reader_state_provider.dart';
-import 'package:flutter_app/providers/reader/verse_selection_provider.dart';
-import 'package:flutter_app/presentation/widgets/reader/top_bar.dart';
-import 'package:flutter_app/presentation/widgets/reader/verse_view.dart';
-import 'package:flutter_app/presentation/widgets/reader/translation_selector.dart'; 
+import '../../providers/current_translation_provider.dart';
+import '../../providers/reader_provider.dart'; // For controller
+import '../design_system/app_dimens.dart';
+import '../widgets/reader/bible_nav_header.dart';
+import '../widgets/reader/verse_item.dart';
 
-class ReaderScreen extends ConsumerWidget {
+class ReaderScreen extends ConsumerStatefulWidget {
   const ReaderScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final selectedVerses = ref.watch(verseSelectionProvider);
+  ConsumerState<ReaderScreen> createState() => _ReaderScreenState();
+}
 
-    // Clear selection if the user navigates to a different book/chapter
-    ref.listen(readerProvider, (prev, next) {
-      if (prev?.bookId != next.bookId || prev?.chapterNum != next.chapterNum) {
-        ref.read(verseSelectionProvider.notifier).clear();
-      }
-    });
+class _ReaderScreenState extends ConsumerState<ReaderScreen> {
+  // State is owned here
+  int _selectedBookId = 1; // Default: Genesis
+  int _selectedChapter = 1;
+
+  @override
+  Widget build(BuildContext context) {
+    // 1. Watch Data
+    final currentTranslation = ref.watch(currentTranslationProvider);
+    final booksAsync = ref.watch(bibleBooksProvider);
+    
+    // 2. Fetch Verses (This auto-updates when Book/Chapter/Translation changes)
+    final versesAsync = ref.watch(bibleChapterProvider(
+      (bookId: _selectedBookId, chapter: _selectedChapter)
+    ));
+
+    // 3. Calculate Dynamic Max Chapters
+    final int maxChapters = K_BIBLE_CHAPTER_COUNTS[_selectedBookId] ?? 150;
 
     return Scaffold(
       appBar: AppBar(
-        titleSpacing: 0,
-        title: const TopBar(),
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        surfaceTintColor: Colors.transparent,
-        actions: [
-          const BibleTranslationSelector(),
-          IconButton(
-            icon: const Icon(Icons.bookmarks_rounded),
-            tooltip: context.l10n.reader_savedVersesTitle,
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => const SavedVersesScreen(),
-                ),
-              );
+        title: const Text('Scripture Reader'),
+        // We use a slightly taller app bar bottom to accommodate the controls comfortably
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(70),
+          child: BibleNavHeader(
+            // Translation Control
+            selectedTranslationId: currentTranslation,
+            onTranslationChanged: (newId) {
+              ref.read(currentTranslationProvider.notifier).state = newId;
+            },
+            
+            // Book Control
+            selectedBookId: _selectedBookId,
+            booksAsync: booksAsync,
+            onBookChanged: (newBookId) {
+              setState(() {
+                _selectedBookId = newBookId;
+                // RESET chapter to 1 when changing books to avoid "Chapter 50 of Jude" error
+                _selectedChapter = 1; 
+              });
+            },
+            
+            // Chapter Control
+            selectedChapter: _selectedChapter,
+            maxChapters: maxChapters, // <--- Dynamic max
+            onChapterChanged: (newChapter) {
+              setState(() => _selectedChapter = newChapter);
             },
           ),
-          IconButton(
-            icon: const Icon(Icons.text_format_rounded),
-            tooltip: 'Appearance',
-            onPressed: () {
-              showModalBottomSheet(
-                context: context,
-                backgroundColor: Colors.transparent,
-                builder: (_) => const AppearanceBottomSheet(),
-              );
-            },
-          ),
-          const SizedBox(width: 8),
-        ],
+        ),
       ),
-      body: const ReaderContentView(),
-      floatingActionButton: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 300),
-        transitionBuilder: (Widget child, Animation<double> animation) {
-          return ScaleTransition(scale: animation, child: child);
+      body: versesAsync.when(
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (err, stack) => Center(child: Text('Error loading text: $err')),
+        data: (verses) {
+          if (verses.isEmpty) {
+            return const Center(
+              child: Padding(
+                padding: EdgeInsets.all(AppSpacings.l),
+                child: Text('Select a translation, book, and chapter to begin.'),
+              ),
+            );
+          }
+          return ListView.separated(
+            padding: const EdgeInsets.all(AppSpacings.m),
+            itemCount: verses.length,
+            separatorBuilder: (_, __) => const SizedBox(height: AppSpacings.s),
+            itemBuilder: (context, index) {
+              final verse = verses[index];
+              return VerseItem(
+                state: verse,
+                onTap: () {
+                  ref.read(readerControllerProvider).toggleVerse(verse);
+                },
+              );
+            },
+          );
         },
-        child: selectedVerses.isNotEmpty
-            ? FloatingActionButton.extended(
-                key: const ValueKey('save_fab'),
-                onPressed: () => _showSaveDialog(context, ref, selectedVerses),
-                icon: const Icon(Icons.bookmark_add_rounded),
-                label: Text(
-                  context.l10n.reader_saveButton(selectedVerses.length),
-                ),
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                foregroundColor: Theme.of(context).colorScheme.onPrimary,
-              )
-            : const SizedBox.shrink(),
-      ),
-    );
-  }
-
-  void _showSaveDialog(
-    BuildContext context,
-    WidgetRef ref,
-    Set<int> selectedVerses,
-  ) {
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(context.l10n.reader_saveDialogTitle),
-        content: Text(context.l10n.reader_saveDialogBody),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: Text(context.l10n.reader_cancel),
-          ),
-          FilledButton(
-            onPressed: () async {
-              final readerState = ref.read(readerProvider);
-              final currentVersion = await ref.read(currentBibleTranslationProvider.future);
-              final repository = ref.read(bibleRepositoryProvider); 
-              final sortedVerses = selectedVerses.toList()..sort();
-
-              final versesToSave = await Future.wait(
-                sortedVerses.map((verseNum) async {
-                  final verseObj = await repository.getVerse(
-                    readerState.bookId, 
-                    readerState.chapterNum, 
-                    verseNum
-                  );
-
-                  return VerseCreationPayload(
-                    book: readerState.bookId,
-                    chapter: readerState.chapterNum,
-                    verse: verseNum,
-                    translation: currentVersion.abbreviation, 
-                    text: verseObj.text, 
-                  );
-                }),
-              );
-
-              if (!ctx.mounted) return;
-              Navigator.pop(ctx);
-
-              ref.read(verseSelectionProvider.notifier).clear();
-
-              try {
-                await ref
-                    .read(savedVersesControllerProvider.notifier)
-                    .addVerses(versesToSave);
-
-                if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        context.l10n.reader_savedVerses(versesToSave.length),
-                      ),
-                      behavior: SnackBarBehavior.floating,
-                    ),
-                  );
-                }
-              } catch (e) {
-                if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text("Error saving verses: ${e.toString()}"),
-                      backgroundColor: Theme.of(context).colorScheme.error,
-                    ),
-                  );
-                }
-              }
-            },
-            child: Text(context.l10n.reader_confirm),
-          ),
-        ],
       ),
     );
   }

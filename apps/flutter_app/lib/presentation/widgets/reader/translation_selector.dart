@@ -1,55 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_app/config/bible_translations.dart';
-import 'package:flutter_app/providers/reader/bible_provider.dart';
+import 'package:flutter_app/providers/current_translation_provider.dart';
+// Import where you defined the class and list
 
-class BibleTranslationSelector extends ConsumerWidget {
-  const BibleTranslationSelector({super.key});
+import '../../../config/bible_translations.dart'; 
+
+class TranslationSelector extends ConsumerWidget {
+  const TranslationSelector({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentVersionAsync = ref.watch(currentBibleTranslationProvider);
+    // 1. Watch current selection
+    final currentId = ref.watch(currentTranslationProvider);
+    
+    // 2. Ensure current selection is valid (fallback to first if not found)
+    // This prevents crashes if 'WEB' was stored but now you only have 'b21'
+    final validSelection = AvailableBibleTranslations.any((t) => t.id == currentId)
+        ? currentId
+        : AvailableBibleTranslations.first.id;
 
-    return currentVersionAsync.when(
-      loading: () => const SizedBox.shrink(),
-      error: (_, __) => const SizedBox.shrink(),
-      data: (currentVersion) {
-        return PopupMenuButton<BibleTranslation>(
-          initialValue: currentVersion,
-          tooltip: 'Select Translation',
-          icon: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            decoration: BoxDecoration(
-              border: Border.all(color: Theme.of(context).colorScheme.outline),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Text(
-              currentVersion.abbreviation,
-              style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-            ),
-          ),
-          onSelected: (version) {
-            ref.read(currentBibleTranslationProvider.notifier).setVersion(version);
-          },
-          itemBuilder: (context) {
-            return AvailableBibleTranslations.map((version) {
-              return PopupMenuItem(
-                value: version,
-                child: Row(
-                  children: [
-                    Text(version.abbreviation, style: const TextStyle(fontWeight: FontWeight.bold)),
-                    const SizedBox(width: 12),
-                    Expanded(child: Text(version.name)),
-                    if (version.id == currentVersion.id)
-                      Icon(Icons.check, color: Theme.of(context).primaryColor, size: 18),
-                  ],
-                ),
-              );
-            }).toList();
-          },
+    return DropdownButton<String>(
+      value: validSelection,
+      // 3. Map your constant list to DropdownItems
+      items: AvailableBibleTranslations.map((translation) {
+        return DropdownMenuItem<String>(
+          value: translation.id,
+          child: Text(translation.name),
         );
+      }).toList(),
+      onChanged: (newValue) {
+        if (newValue != null) {
+          ref.read(currentTranslationProvider.notifier).state = newValue;
+        }
       },
     );
   }

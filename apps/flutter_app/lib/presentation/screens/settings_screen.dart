@@ -19,9 +19,9 @@ class SettingsScreen extends ConsumerWidget {
       body: Center(
         child: Column(
           children: [
-            SignOutButton(),
-            LocaleSelect(),
-            ThemeSelect(),
+            // SignOutButton(),
+            // LocaleSelect(),
+            // ThemeSelect(),
             const Divider(),
             const Padding(
               padding: EdgeInsets.all(8.0),
@@ -30,7 +30,7 @@ class SettingsScreen extends ConsumerWidget {
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
-            GetTokenButton(),
+            // GetTokenButton(),
             ElevatedButton(
               child: const Text("Debug DB"),
               onPressed: () {
@@ -53,10 +53,10 @@ class SettingsScreen extends ConsumerWidget {
                     context,
                   ).showSnackBar(const SnackBar(content: Text("Syncing...")));
 
-                  final syncService = await ref.read(
-                    syncServiceProvider.future,
-                  );
-                  await syncService.runSync();
+                  // final syncService = await ref.read(
+                  //   syncServiceProvider.future,
+                  // );
+                  // await syncService.runSync();
 
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
