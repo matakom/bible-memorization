@@ -22,6 +22,7 @@ class AuthController extends AsyncNotifier<void> {
   Future<void> signInWithGoogle() async {
     state = const AsyncLoading();
     try {
+      // 1. Authenticate with Google/Firebase
       final token = await ref.read(authRepositoryProvider).signInWithGoogle();
 
       if (token == null) {
@@ -29,34 +30,33 @@ class AuthController extends AsyncNotifier<void> {
         return;
       }
 
-      final userRepo = await ref.read(userRepositoryProvider.future);
-      
-      await userRepo.getUserData(manualToken: token).timeout(
-        const Duration(seconds: 5),
-        onTimeout: () => throw TimeoutException('Server unreachable (Timeout)'),
-      );
+      // 2. Try to reach the server, but DO NOT fail the login if it's down!
+      try {
+        final userRepo = await ref.read(userRepositoryProvider.future);
+        
+        await userRepo.getUserData(manualToken: token).timeout(
+          const Duration(seconds: 5),
+        );
 
-      ref.read(syncServiceProvider.future).then((service) => service.runSync());
+        ref.read(syncServiceProvider.future).then((service) => service.runSync());
+      } catch (serverError) {
+        // SERVER IS DOWN: We catch this here so it doesn't trigger the rollback.
+        // We are still successfully logged in to Firebase locally!
+        print("Offline Login: Server unreachable. Will sync later.");
+      }
 
       state = const AsyncData(null);
 
     } catch (e, stack) {
+      // THIS catch block only runs if Google/Firebase login actually fails.
       try {
         await ref.read(authRepositoryProvider).signOut();
       } catch (_) {}
 
-      String errorMessage = "Login failed";
-      if (e is TimeoutException) {
-        errorMessage = "Server unreachable. Please check your connection.";
-      } else if (e is DioException) {
-        errorMessage = "Connection error. Server might be down.";
-      } else {
-        errorMessage = e.toString().replaceAll('Exception: ', '');
-      }
-
-      state = AsyncError(errorMessage, stack);
+      state = AsyncError(e.toString(), stack);
+      throw Exception("Authentication failed. Please check your internet connection.");
     } finally {
-      // ref.read(settingsLoadingProvider.notifier).state = false;
+      ref.read(settingsLoadingProvider.notifier).setLoading(false);
     }
   }
 

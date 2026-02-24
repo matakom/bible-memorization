@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/providers/auth_controller.dart';
-import 'package:flutter_app/providers/settings/settings_loading_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '/l10n/l10n_extension.dart';
 
@@ -9,23 +8,29 @@ class SignInButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final bool isLoading = ref.watch(settingsLoadingProvider);
+    // FIX: Watch the AuthController directly for its loading state!
+    final authState = ref.watch(authControllerProvider);
+    final isLoading = authState.isLoading;
 
     return isLoading
-        ? const CircularProgressIndicator()
+        ? const SizedBox(
+            height: 24, 
+            width: 24, 
+            child: CircularProgressIndicator(strokeWidth: 2)
+          )
         : ElevatedButton.icon(
             icon: const Icon(Icons.login),
             label: Text(context.l10n.login_signInButton),
             onPressed: () async {
               try {
-                await ref
-                    .read(authControllerProvider.notifier)
-                    .signInWithGoogle();
+                await ref.read(authControllerProvider.notifier).signInWithGoogle();
               } catch (e) {
+                // NOW THIS WILL ACTUALLY FIRE!
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text('${context.l10n.login_errorOnSignIn} $e'),
+                      content: Text(e.toString().replaceAll('Exception: ', '')),
+                      backgroundColor: Colors.red,
                     ),
                   );
                 }
