@@ -69,18 +69,6 @@ class $SavedVersesTable extends SavedVerses
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _easeFactorMeta = const VerificationMeta(
-    'easeFactor',
-  );
-  @override
-  late final GeneratedColumn<double> easeFactor = GeneratedColumn<double>(
-    'ease_factor',
-    aliasedName,
-    false,
-    type: DriftSqlType.double,
-    requiredDuringInsert: false,
-    defaultValue: const Constant(2.5),
-  );
   static const VerificationMeta _repetitionCountMeta = const VerificationMeta(
     'repetitionCount',
   );
@@ -117,12 +105,72 @@ class $SavedVersesTable extends SavedVerses
         type: DriftSqlType.dateTime,
         requiredDuringInsert: false,
       );
+  static const VerificationMeta _easeFactorMeta = const VerificationMeta(
+    'easeFactor',
+  );
+  @override
+  late final GeneratedColumn<double> easeFactor = GeneratedColumn<double>(
+    'ease_factor',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(2.5),
+  );
   static const VerificationMeta _baseComplexityMeta = const VerificationMeta(
     'baseComplexity',
   );
   @override
   late final GeneratedColumn<double> baseComplexity = GeneratedColumn<double>(
     'base_complexity',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0.0),
+  );
+  static const VerificationMeta _correctCountMeta = const VerificationMeta(
+    'correctCount',
+  );
+  @override
+  late final GeneratedColumn<int> correctCount = GeneratedColumn<int>(
+    'correct_count',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _incorrectCountMeta = const VerificationMeta(
+    'incorrectCount',
+  );
+  @override
+  late final GeneratedColumn<int> incorrectCount = GeneratedColumn<int>(
+    'incorrect_count',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _stabilityMeta = const VerificationMeta(
+    'stability',
+  );
+  @override
+  late final GeneratedColumn<double> stability = GeneratedColumn<double>(
+    'stability',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0.0),
+  );
+  static const VerificationMeta _difficultyMeta = const VerificationMeta(
+    'difficulty',
+  );
+  @override
+  late final GeneratedColumn<double> difficulty = GeneratedColumn<double>(
+    'difficulty',
     aliasedName,
     false,
     type: DriftSqlType.double,
@@ -175,11 +223,15 @@ class $SavedVersesTable extends SavedVerses
     verse,
     translation,
     verseText,
-    easeFactor,
     repetitionCount,
     nextReviewDate,
     lastReviewDate,
+    easeFactor,
     baseComplexity,
+    correctCount,
+    incorrectCount,
+    stability,
+    difficulty,
     updatedAt,
     deletedAt,
     needsSync,
@@ -244,12 +296,6 @@ class $SavedVersesTable extends SavedVerses
     } else if (isInserting) {
       context.missing(_verseTextMeta);
     }
-    if (data.containsKey('ease_factor')) {
-      context.handle(
-        _easeFactorMeta,
-        easeFactor.isAcceptableOrUnknown(data['ease_factor']!, _easeFactorMeta),
-      );
-    }
     if (data.containsKey('repetition_count')) {
       context.handle(
         _repetitionCountMeta,
@@ -279,6 +325,12 @@ class $SavedVersesTable extends SavedVerses
         ),
       );
     }
+    if (data.containsKey('ease_factor')) {
+      context.handle(
+        _easeFactorMeta,
+        easeFactor.isAcceptableOrUnknown(data['ease_factor']!, _easeFactorMeta),
+      );
+    }
     if (data.containsKey('base_complexity')) {
       context.handle(
         _baseComplexityMeta,
@@ -286,6 +338,36 @@ class $SavedVersesTable extends SavedVerses
           data['base_complexity']!,
           _baseComplexityMeta,
         ),
+      );
+    }
+    if (data.containsKey('correct_count')) {
+      context.handle(
+        _correctCountMeta,
+        correctCount.isAcceptableOrUnknown(
+          data['correct_count']!,
+          _correctCountMeta,
+        ),
+      );
+    }
+    if (data.containsKey('incorrect_count')) {
+      context.handle(
+        _incorrectCountMeta,
+        incorrectCount.isAcceptableOrUnknown(
+          data['incorrect_count']!,
+          _incorrectCountMeta,
+        ),
+      );
+    }
+    if (data.containsKey('stability')) {
+      context.handle(
+        _stabilityMeta,
+        stability.isAcceptableOrUnknown(data['stability']!, _stabilityMeta),
+      );
+    }
+    if (data.containsKey('difficulty')) {
+      context.handle(
+        _difficultyMeta,
+        difficulty.isAcceptableOrUnknown(data['difficulty']!, _difficultyMeta),
       );
     }
     if (data.containsKey('updated_at')) {
@@ -339,10 +421,6 @@ class $SavedVersesTable extends SavedVerses
         DriftSqlType.string,
         data['${effectivePrefix}text'],
       )!,
-      easeFactor: attachedDatabase.typeMapping.read(
-        DriftSqlType.double,
-        data['${effectivePrefix}ease_factor'],
-      )!,
       repetitionCount: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}repetition_count'],
@@ -355,9 +433,29 @@ class $SavedVersesTable extends SavedVerses
         DriftSqlType.dateTime,
         data['${effectivePrefix}last_review_date'],
       ),
+      easeFactor: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}ease_factor'],
+      )!,
       baseComplexity: attachedDatabase.typeMapping.read(
         DriftSqlType.double,
         data['${effectivePrefix}base_complexity'],
+      )!,
+      correctCount: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}correct_count'],
+      )!,
+      incorrectCount: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}incorrect_count'],
+      )!,
+      stability: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}stability'],
+      )!,
+      difficulty: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}difficulty'],
       )!,
       updatedAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
@@ -387,11 +485,15 @@ class SavedVerse extends DataClass implements Insertable<SavedVerse> {
   final int verse;
   final String translation;
   final String verseText;
-  final double easeFactor;
   final int repetitionCount;
   final DateTime nextReviewDate;
   final DateTime? lastReviewDate;
+  final double easeFactor;
   final double baseComplexity;
+  final int correctCount;
+  final int incorrectCount;
+  final double stability;
+  final double difficulty;
   final DateTime updatedAt;
   final DateTime? deletedAt;
   final bool needsSync;
@@ -402,11 +504,15 @@ class SavedVerse extends DataClass implements Insertable<SavedVerse> {
     required this.verse,
     required this.translation,
     required this.verseText,
-    required this.easeFactor,
     required this.repetitionCount,
     required this.nextReviewDate,
     this.lastReviewDate,
+    required this.easeFactor,
     required this.baseComplexity,
+    required this.correctCount,
+    required this.incorrectCount,
+    required this.stability,
+    required this.difficulty,
     required this.updatedAt,
     this.deletedAt,
     required this.needsSync,
@@ -420,13 +526,17 @@ class SavedVerse extends DataClass implements Insertable<SavedVerse> {
     map['verse'] = Variable<int>(verse);
     map['translation'] = Variable<String>(translation);
     map['text'] = Variable<String>(verseText);
-    map['ease_factor'] = Variable<double>(easeFactor);
     map['repetition_count'] = Variable<int>(repetitionCount);
     map['next_review_date'] = Variable<DateTime>(nextReviewDate);
     if (!nullToAbsent || lastReviewDate != null) {
       map['last_review_date'] = Variable<DateTime>(lastReviewDate);
     }
+    map['ease_factor'] = Variable<double>(easeFactor);
     map['base_complexity'] = Variable<double>(baseComplexity);
+    map['correct_count'] = Variable<int>(correctCount);
+    map['incorrect_count'] = Variable<int>(incorrectCount);
+    map['stability'] = Variable<double>(stability);
+    map['difficulty'] = Variable<double>(difficulty);
     map['updated_at'] = Variable<DateTime>(updatedAt);
     if (!nullToAbsent || deletedAt != null) {
       map['deleted_at'] = Variable<DateTime>(deletedAt);
@@ -443,13 +553,17 @@ class SavedVerse extends DataClass implements Insertable<SavedVerse> {
       verse: Value(verse),
       translation: Value(translation),
       verseText: Value(verseText),
-      easeFactor: Value(easeFactor),
       repetitionCount: Value(repetitionCount),
       nextReviewDate: Value(nextReviewDate),
       lastReviewDate: lastReviewDate == null && nullToAbsent
           ? const Value.absent()
           : Value(lastReviewDate),
+      easeFactor: Value(easeFactor),
       baseComplexity: Value(baseComplexity),
+      correctCount: Value(correctCount),
+      incorrectCount: Value(incorrectCount),
+      stability: Value(stability),
+      difficulty: Value(difficulty),
       updatedAt: Value(updatedAt),
       deletedAt: deletedAt == null && nullToAbsent
           ? const Value.absent()
@@ -470,11 +584,15 @@ class SavedVerse extends DataClass implements Insertable<SavedVerse> {
       verse: serializer.fromJson<int>(json['verse']),
       translation: serializer.fromJson<String>(json['translation']),
       verseText: serializer.fromJson<String>(json['verseText']),
-      easeFactor: serializer.fromJson<double>(json['easeFactor']),
       repetitionCount: serializer.fromJson<int>(json['repetitionCount']),
       nextReviewDate: serializer.fromJson<DateTime>(json['nextReviewDate']),
       lastReviewDate: serializer.fromJson<DateTime?>(json['lastReviewDate']),
+      easeFactor: serializer.fromJson<double>(json['easeFactor']),
       baseComplexity: serializer.fromJson<double>(json['baseComplexity']),
+      correctCount: serializer.fromJson<int>(json['correctCount']),
+      incorrectCount: serializer.fromJson<int>(json['incorrectCount']),
+      stability: serializer.fromJson<double>(json['stability']),
+      difficulty: serializer.fromJson<double>(json['difficulty']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
       deletedAt: serializer.fromJson<DateTime?>(json['deletedAt']),
       needsSync: serializer.fromJson<bool>(json['needsSync']),
@@ -490,11 +608,15 @@ class SavedVerse extends DataClass implements Insertable<SavedVerse> {
       'verse': serializer.toJson<int>(verse),
       'translation': serializer.toJson<String>(translation),
       'verseText': serializer.toJson<String>(verseText),
-      'easeFactor': serializer.toJson<double>(easeFactor),
       'repetitionCount': serializer.toJson<int>(repetitionCount),
       'nextReviewDate': serializer.toJson<DateTime>(nextReviewDate),
       'lastReviewDate': serializer.toJson<DateTime?>(lastReviewDate),
+      'easeFactor': serializer.toJson<double>(easeFactor),
       'baseComplexity': serializer.toJson<double>(baseComplexity),
+      'correctCount': serializer.toJson<int>(correctCount),
+      'incorrectCount': serializer.toJson<int>(incorrectCount),
+      'stability': serializer.toJson<double>(stability),
+      'difficulty': serializer.toJson<double>(difficulty),
       'updatedAt': serializer.toJson<DateTime>(updatedAt),
       'deletedAt': serializer.toJson<DateTime?>(deletedAt),
       'needsSync': serializer.toJson<bool>(needsSync),
@@ -508,11 +630,15 @@ class SavedVerse extends DataClass implements Insertable<SavedVerse> {
     int? verse,
     String? translation,
     String? verseText,
-    double? easeFactor,
     int? repetitionCount,
     DateTime? nextReviewDate,
     Value<DateTime?> lastReviewDate = const Value.absent(),
+    double? easeFactor,
     double? baseComplexity,
+    int? correctCount,
+    int? incorrectCount,
+    double? stability,
+    double? difficulty,
     DateTime? updatedAt,
     Value<DateTime?> deletedAt = const Value.absent(),
     bool? needsSync,
@@ -523,13 +649,17 @@ class SavedVerse extends DataClass implements Insertable<SavedVerse> {
     verse: verse ?? this.verse,
     translation: translation ?? this.translation,
     verseText: verseText ?? this.verseText,
-    easeFactor: easeFactor ?? this.easeFactor,
     repetitionCount: repetitionCount ?? this.repetitionCount,
     nextReviewDate: nextReviewDate ?? this.nextReviewDate,
     lastReviewDate: lastReviewDate.present
         ? lastReviewDate.value
         : this.lastReviewDate,
+    easeFactor: easeFactor ?? this.easeFactor,
     baseComplexity: baseComplexity ?? this.baseComplexity,
+    correctCount: correctCount ?? this.correctCount,
+    incorrectCount: incorrectCount ?? this.incorrectCount,
+    stability: stability ?? this.stability,
+    difficulty: difficulty ?? this.difficulty,
     updatedAt: updatedAt ?? this.updatedAt,
     deletedAt: deletedAt.present ? deletedAt.value : this.deletedAt,
     needsSync: needsSync ?? this.needsSync,
@@ -544,9 +674,6 @@ class SavedVerse extends DataClass implements Insertable<SavedVerse> {
           ? data.translation.value
           : this.translation,
       verseText: data.verseText.present ? data.verseText.value : this.verseText,
-      easeFactor: data.easeFactor.present
-          ? data.easeFactor.value
-          : this.easeFactor,
       repetitionCount: data.repetitionCount.present
           ? data.repetitionCount.value
           : this.repetitionCount,
@@ -556,9 +683,22 @@ class SavedVerse extends DataClass implements Insertable<SavedVerse> {
       lastReviewDate: data.lastReviewDate.present
           ? data.lastReviewDate.value
           : this.lastReviewDate,
+      easeFactor: data.easeFactor.present
+          ? data.easeFactor.value
+          : this.easeFactor,
       baseComplexity: data.baseComplexity.present
           ? data.baseComplexity.value
           : this.baseComplexity,
+      correctCount: data.correctCount.present
+          ? data.correctCount.value
+          : this.correctCount,
+      incorrectCount: data.incorrectCount.present
+          ? data.incorrectCount.value
+          : this.incorrectCount,
+      stability: data.stability.present ? data.stability.value : this.stability,
+      difficulty: data.difficulty.present
+          ? data.difficulty.value
+          : this.difficulty,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
       deletedAt: data.deletedAt.present ? data.deletedAt.value : this.deletedAt,
       needsSync: data.needsSync.present ? data.needsSync.value : this.needsSync,
@@ -574,11 +714,15 @@ class SavedVerse extends DataClass implements Insertable<SavedVerse> {
           ..write('verse: $verse, ')
           ..write('translation: $translation, ')
           ..write('verseText: $verseText, ')
-          ..write('easeFactor: $easeFactor, ')
           ..write('repetitionCount: $repetitionCount, ')
           ..write('nextReviewDate: $nextReviewDate, ')
           ..write('lastReviewDate: $lastReviewDate, ')
+          ..write('easeFactor: $easeFactor, ')
           ..write('baseComplexity: $baseComplexity, ')
+          ..write('correctCount: $correctCount, ')
+          ..write('incorrectCount: $incorrectCount, ')
+          ..write('stability: $stability, ')
+          ..write('difficulty: $difficulty, ')
           ..write('updatedAt: $updatedAt, ')
           ..write('deletedAt: $deletedAt, ')
           ..write('needsSync: $needsSync')
@@ -594,11 +738,15 @@ class SavedVerse extends DataClass implements Insertable<SavedVerse> {
     verse,
     translation,
     verseText,
-    easeFactor,
     repetitionCount,
     nextReviewDate,
     lastReviewDate,
+    easeFactor,
     baseComplexity,
+    correctCount,
+    incorrectCount,
+    stability,
+    difficulty,
     updatedAt,
     deletedAt,
     needsSync,
@@ -613,11 +761,15 @@ class SavedVerse extends DataClass implements Insertable<SavedVerse> {
           other.verse == this.verse &&
           other.translation == this.translation &&
           other.verseText == this.verseText &&
-          other.easeFactor == this.easeFactor &&
           other.repetitionCount == this.repetitionCount &&
           other.nextReviewDate == this.nextReviewDate &&
           other.lastReviewDate == this.lastReviewDate &&
+          other.easeFactor == this.easeFactor &&
           other.baseComplexity == this.baseComplexity &&
+          other.correctCount == this.correctCount &&
+          other.incorrectCount == this.incorrectCount &&
+          other.stability == this.stability &&
+          other.difficulty == this.difficulty &&
           other.updatedAt == this.updatedAt &&
           other.deletedAt == this.deletedAt &&
           other.needsSync == this.needsSync);
@@ -630,11 +782,15 @@ class SavedVersesCompanion extends UpdateCompanion<SavedVerse> {
   final Value<int> verse;
   final Value<String> translation;
   final Value<String> verseText;
-  final Value<double> easeFactor;
   final Value<int> repetitionCount;
   final Value<DateTime> nextReviewDate;
   final Value<DateTime?> lastReviewDate;
+  final Value<double> easeFactor;
   final Value<double> baseComplexity;
+  final Value<int> correctCount;
+  final Value<int> incorrectCount;
+  final Value<double> stability;
+  final Value<double> difficulty;
   final Value<DateTime> updatedAt;
   final Value<DateTime?> deletedAt;
   final Value<bool> needsSync;
@@ -646,11 +802,15 @@ class SavedVersesCompanion extends UpdateCompanion<SavedVerse> {
     this.verse = const Value.absent(),
     this.translation = const Value.absent(),
     this.verseText = const Value.absent(),
-    this.easeFactor = const Value.absent(),
     this.repetitionCount = const Value.absent(),
     this.nextReviewDate = const Value.absent(),
     this.lastReviewDate = const Value.absent(),
+    this.easeFactor = const Value.absent(),
     this.baseComplexity = const Value.absent(),
+    this.correctCount = const Value.absent(),
+    this.incorrectCount = const Value.absent(),
+    this.stability = const Value.absent(),
+    this.difficulty = const Value.absent(),
     this.updatedAt = const Value.absent(),
     this.deletedAt = const Value.absent(),
     this.needsSync = const Value.absent(),
@@ -663,11 +823,15 @@ class SavedVersesCompanion extends UpdateCompanion<SavedVerse> {
     required int verse,
     required String translation,
     required String verseText,
-    this.easeFactor = const Value.absent(),
     this.repetitionCount = const Value.absent(),
     required DateTime nextReviewDate,
     this.lastReviewDate = const Value.absent(),
+    this.easeFactor = const Value.absent(),
     this.baseComplexity = const Value.absent(),
+    this.correctCount = const Value.absent(),
+    this.incorrectCount = const Value.absent(),
+    this.stability = const Value.absent(),
+    this.difficulty = const Value.absent(),
     this.updatedAt = const Value.absent(),
     this.deletedAt = const Value.absent(),
     this.needsSync = const Value.absent(),
@@ -686,11 +850,15 @@ class SavedVersesCompanion extends UpdateCompanion<SavedVerse> {
     Expression<int>? verse,
     Expression<String>? translation,
     Expression<String>? verseText,
-    Expression<double>? easeFactor,
     Expression<int>? repetitionCount,
     Expression<DateTime>? nextReviewDate,
     Expression<DateTime>? lastReviewDate,
+    Expression<double>? easeFactor,
     Expression<double>? baseComplexity,
+    Expression<int>? correctCount,
+    Expression<int>? incorrectCount,
+    Expression<double>? stability,
+    Expression<double>? difficulty,
     Expression<DateTime>? updatedAt,
     Expression<DateTime>? deletedAt,
     Expression<bool>? needsSync,
@@ -703,11 +871,15 @@ class SavedVersesCompanion extends UpdateCompanion<SavedVerse> {
       if (verse != null) 'verse': verse,
       if (translation != null) 'translation': translation,
       if (verseText != null) 'text': verseText,
-      if (easeFactor != null) 'ease_factor': easeFactor,
       if (repetitionCount != null) 'repetition_count': repetitionCount,
       if (nextReviewDate != null) 'next_review_date': nextReviewDate,
       if (lastReviewDate != null) 'last_review_date': lastReviewDate,
+      if (easeFactor != null) 'ease_factor': easeFactor,
       if (baseComplexity != null) 'base_complexity': baseComplexity,
+      if (correctCount != null) 'correct_count': correctCount,
+      if (incorrectCount != null) 'incorrect_count': incorrectCount,
+      if (stability != null) 'stability': stability,
+      if (difficulty != null) 'difficulty': difficulty,
       if (updatedAt != null) 'updated_at': updatedAt,
       if (deletedAt != null) 'deleted_at': deletedAt,
       if (needsSync != null) 'needs_sync': needsSync,
@@ -722,11 +894,15 @@ class SavedVersesCompanion extends UpdateCompanion<SavedVerse> {
     Value<int>? verse,
     Value<String>? translation,
     Value<String>? verseText,
-    Value<double>? easeFactor,
     Value<int>? repetitionCount,
     Value<DateTime>? nextReviewDate,
     Value<DateTime?>? lastReviewDate,
+    Value<double>? easeFactor,
     Value<double>? baseComplexity,
+    Value<int>? correctCount,
+    Value<int>? incorrectCount,
+    Value<double>? stability,
+    Value<double>? difficulty,
     Value<DateTime>? updatedAt,
     Value<DateTime?>? deletedAt,
     Value<bool>? needsSync,
@@ -739,11 +915,15 @@ class SavedVersesCompanion extends UpdateCompanion<SavedVerse> {
       verse: verse ?? this.verse,
       translation: translation ?? this.translation,
       verseText: verseText ?? this.verseText,
-      easeFactor: easeFactor ?? this.easeFactor,
       repetitionCount: repetitionCount ?? this.repetitionCount,
       nextReviewDate: nextReviewDate ?? this.nextReviewDate,
       lastReviewDate: lastReviewDate ?? this.lastReviewDate,
+      easeFactor: easeFactor ?? this.easeFactor,
       baseComplexity: baseComplexity ?? this.baseComplexity,
+      correctCount: correctCount ?? this.correctCount,
+      incorrectCount: incorrectCount ?? this.incorrectCount,
+      stability: stability ?? this.stability,
+      difficulty: difficulty ?? this.difficulty,
       updatedAt: updatedAt ?? this.updatedAt,
       deletedAt: deletedAt ?? this.deletedAt,
       needsSync: needsSync ?? this.needsSync,
@@ -772,9 +952,6 @@ class SavedVersesCompanion extends UpdateCompanion<SavedVerse> {
     if (verseText.present) {
       map['text'] = Variable<String>(verseText.value);
     }
-    if (easeFactor.present) {
-      map['ease_factor'] = Variable<double>(easeFactor.value);
-    }
     if (repetitionCount.present) {
       map['repetition_count'] = Variable<int>(repetitionCount.value);
     }
@@ -784,8 +961,23 @@ class SavedVersesCompanion extends UpdateCompanion<SavedVerse> {
     if (lastReviewDate.present) {
       map['last_review_date'] = Variable<DateTime>(lastReviewDate.value);
     }
+    if (easeFactor.present) {
+      map['ease_factor'] = Variable<double>(easeFactor.value);
+    }
     if (baseComplexity.present) {
       map['base_complexity'] = Variable<double>(baseComplexity.value);
+    }
+    if (correctCount.present) {
+      map['correct_count'] = Variable<int>(correctCount.value);
+    }
+    if (incorrectCount.present) {
+      map['incorrect_count'] = Variable<int>(incorrectCount.value);
+    }
+    if (stability.present) {
+      map['stability'] = Variable<double>(stability.value);
+    }
+    if (difficulty.present) {
+      map['difficulty'] = Variable<double>(difficulty.value);
     }
     if (updatedAt.present) {
       map['updated_at'] = Variable<DateTime>(updatedAt.value);
@@ -811,11 +1003,15 @@ class SavedVersesCompanion extends UpdateCompanion<SavedVerse> {
           ..write('verse: $verse, ')
           ..write('translation: $translation, ')
           ..write('verseText: $verseText, ')
-          ..write('easeFactor: $easeFactor, ')
           ..write('repetitionCount: $repetitionCount, ')
           ..write('nextReviewDate: $nextReviewDate, ')
           ..write('lastReviewDate: $lastReviewDate, ')
+          ..write('easeFactor: $easeFactor, ')
           ..write('baseComplexity: $baseComplexity, ')
+          ..write('correctCount: $correctCount, ')
+          ..write('incorrectCount: $incorrectCount, ')
+          ..write('stability: $stability, ')
+          ..write('difficulty: $difficulty, ')
           ..write('updatedAt: $updatedAt, ')
           ..write('deletedAt: $deletedAt, ')
           ..write('needsSync: $needsSync, ')
@@ -863,17 +1059,15 @@ class $ExercisesTable extends Exercises
     type: DriftSqlType.int,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _exerciseTypeMeta = const VerificationMeta(
-    'exerciseType',
-  );
   @override
-  late final GeneratedColumn<String> exerciseType = GeneratedColumn<String>(
-    'exercise_type',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
+  late final GeneratedColumnWithTypeConverter<GameType, String> exerciseType =
+      GeneratedColumn<String>(
+        'exercise_type',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: true,
+      ).withConverter<GameType>($ExercisesTable.$converterexerciseType);
   static const VerificationMeta _durationSecondsMeta = const VerificationMeta(
     'durationSeconds',
   );
@@ -980,17 +1174,6 @@ class $ExercisesTable extends Exercises
     } else if (isInserting) {
       context.missing(_gradeMeta);
     }
-    if (data.containsKey('exercise_type')) {
-      context.handle(
-        _exerciseTypeMeta,
-        exerciseType.isAcceptableOrUnknown(
-          data['exercise_type']!,
-          _exerciseTypeMeta,
-        ),
-      );
-    } else if (isInserting) {
-      context.missing(_exerciseTypeMeta);
-    }
     if (data.containsKey('duration_seconds')) {
       context.handle(
         _durationSecondsMeta,
@@ -1050,10 +1233,12 @@ class $ExercisesTable extends Exercises
         DriftSqlType.int,
         data['${effectivePrefix}grade'],
       )!,
-      exerciseType: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}exercise_type'],
-      )!,
+      exerciseType: $ExercisesTable.$converterexerciseType.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}exercise_type'],
+        )!,
+      ),
       durationSeconds: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}duration_seconds'],
@@ -1081,13 +1266,16 @@ class $ExercisesTable extends Exercises
   $ExercisesTable createAlias(String alias) {
     return $ExercisesTable(attachedDatabase, alias);
   }
+
+  static JsonTypeConverter2<GameType, String, String> $converterexerciseType =
+      const EnumNameConverter<GameType>(GameType.values);
 }
 
 class Exercise extends DataClass implements Insertable<Exercise> {
   final String id;
   final String verseId;
   final int grade;
-  final String exerciseType;
+  final GameType exerciseType;
   final int durationSeconds;
   final DateTime performedAt;
   final DateTime updatedAt;
@@ -1110,7 +1298,11 @@ class Exercise extends DataClass implements Insertable<Exercise> {
     map['id'] = Variable<String>(id);
     map['verse_id'] = Variable<String>(verseId);
     map['grade'] = Variable<int>(grade);
-    map['exercise_type'] = Variable<String>(exerciseType);
+    {
+      map['exercise_type'] = Variable<String>(
+        $ExercisesTable.$converterexerciseType.toSql(exerciseType),
+      );
+    }
     map['duration_seconds'] = Variable<int>(durationSeconds);
     map['performed_at'] = Variable<DateTime>(performedAt);
     map['updated_at'] = Variable<DateTime>(updatedAt);
@@ -1146,7 +1338,9 @@ class Exercise extends DataClass implements Insertable<Exercise> {
       id: serializer.fromJson<String>(json['id']),
       verseId: serializer.fromJson<String>(json['verseId']),
       grade: serializer.fromJson<int>(json['grade']),
-      exerciseType: serializer.fromJson<String>(json['exerciseType']),
+      exerciseType: $ExercisesTable.$converterexerciseType.fromJson(
+        serializer.fromJson<String>(json['exerciseType']),
+      ),
       durationSeconds: serializer.fromJson<int>(json['durationSeconds']),
       performedAt: serializer.fromJson<DateTime>(json['performedAt']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
@@ -1161,7 +1355,9 @@ class Exercise extends DataClass implements Insertable<Exercise> {
       'id': serializer.toJson<String>(id),
       'verseId': serializer.toJson<String>(verseId),
       'grade': serializer.toJson<int>(grade),
-      'exerciseType': serializer.toJson<String>(exerciseType),
+      'exerciseType': serializer.toJson<String>(
+        $ExercisesTable.$converterexerciseType.toJson(exerciseType),
+      ),
       'durationSeconds': serializer.toJson<int>(durationSeconds),
       'performedAt': serializer.toJson<DateTime>(performedAt),
       'updatedAt': serializer.toJson<DateTime>(updatedAt),
@@ -1174,7 +1370,7 @@ class Exercise extends DataClass implements Insertable<Exercise> {
     String? id,
     String? verseId,
     int? grade,
-    String? exerciseType,
+    GameType? exerciseType,
     int? durationSeconds,
     DateTime? performedAt,
     DateTime? updatedAt,
@@ -1258,7 +1454,7 @@ class ExercisesCompanion extends UpdateCompanion<Exercise> {
   final Value<String> id;
   final Value<String> verseId;
   final Value<int> grade;
-  final Value<String> exerciseType;
+  final Value<GameType> exerciseType;
   final Value<int> durationSeconds;
   final Value<DateTime> performedAt;
   final Value<DateTime> updatedAt;
@@ -1281,7 +1477,7 @@ class ExercisesCompanion extends UpdateCompanion<Exercise> {
     required String id,
     required String verseId,
     required int grade,
-    required String exerciseType,
+    required GameType exerciseType,
     required int durationSeconds,
     this.performedAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
@@ -1323,7 +1519,7 @@ class ExercisesCompanion extends UpdateCompanion<Exercise> {
     Value<String>? id,
     Value<String>? verseId,
     Value<int>? grade,
-    Value<String>? exerciseType,
+    Value<GameType>? exerciseType,
     Value<int>? durationSeconds,
     Value<DateTime>? performedAt,
     Value<DateTime>? updatedAt,
@@ -1358,7 +1554,9 @@ class ExercisesCompanion extends UpdateCompanion<Exercise> {
       map['grade'] = Variable<int>(grade.value);
     }
     if (exerciseType.present) {
-      map['exercise_type'] = Variable<String>(exerciseType.value);
+      map['exercise_type'] = Variable<String>(
+        $ExercisesTable.$converterexerciseType.toSql(exerciseType.value),
+      );
     }
     if (durationSeconds.present) {
       map['duration_seconds'] = Variable<int>(durationSeconds.value);
@@ -2546,11 +2744,15 @@ typedef $$SavedVersesTableCreateCompanionBuilder =
       required int verse,
       required String translation,
       required String verseText,
-      Value<double> easeFactor,
       Value<int> repetitionCount,
       required DateTime nextReviewDate,
       Value<DateTime?> lastReviewDate,
+      Value<double> easeFactor,
       Value<double> baseComplexity,
+      Value<int> correctCount,
+      Value<int> incorrectCount,
+      Value<double> stability,
+      Value<double> difficulty,
       Value<DateTime> updatedAt,
       Value<DateTime?> deletedAt,
       Value<bool> needsSync,
@@ -2564,11 +2766,15 @@ typedef $$SavedVersesTableUpdateCompanionBuilder =
       Value<int> verse,
       Value<String> translation,
       Value<String> verseText,
-      Value<double> easeFactor,
       Value<int> repetitionCount,
       Value<DateTime> nextReviewDate,
       Value<DateTime?> lastReviewDate,
+      Value<double> easeFactor,
       Value<double> baseComplexity,
+      Value<int> correctCount,
+      Value<int> incorrectCount,
+      Value<double> stability,
+      Value<double> difficulty,
       Value<DateTime> updatedAt,
       Value<DateTime?> deletedAt,
       Value<bool> needsSync,
@@ -2637,11 +2843,6 @@ class $$SavedVersesTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<double> get easeFactor => $composableBuilder(
-    column: $table.easeFactor,
-    builder: (column) => ColumnFilters(column),
-  );
-
   ColumnFilters<int> get repetitionCount => $composableBuilder(
     column: $table.repetitionCount,
     builder: (column) => ColumnFilters(column),
@@ -2657,8 +2858,33 @@ class $$SavedVersesTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
+  ColumnFilters<double> get easeFactor => $composableBuilder(
+    column: $table.easeFactor,
+    builder: (column) => ColumnFilters(column),
+  );
+
   ColumnFilters<double> get baseComplexity => $composableBuilder(
     column: $table.baseComplexity,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get correctCount => $composableBuilder(
+    column: $table.correctCount,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get incorrectCount => $composableBuilder(
+    column: $table.incorrectCount,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get stability => $composableBuilder(
+    column: $table.stability,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get difficulty => $composableBuilder(
+    column: $table.difficulty,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -2742,11 +2968,6 @@ class $$SavedVersesTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<double> get easeFactor => $composableBuilder(
-    column: $table.easeFactor,
-    builder: (column) => ColumnOrderings(column),
-  );
-
   ColumnOrderings<int> get repetitionCount => $composableBuilder(
     column: $table.repetitionCount,
     builder: (column) => ColumnOrderings(column),
@@ -2762,8 +2983,33 @@ class $$SavedVersesTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<double> get easeFactor => $composableBuilder(
+    column: $table.easeFactor,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<double> get baseComplexity => $composableBuilder(
     column: $table.baseComplexity,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get correctCount => $composableBuilder(
+    column: $table.correctCount,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get incorrectCount => $composableBuilder(
+    column: $table.incorrectCount,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get stability => $composableBuilder(
+    column: $table.stability,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get difficulty => $composableBuilder(
+    column: $table.difficulty,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -2812,11 +3058,6 @@ class $$SavedVersesTableAnnotationComposer
   GeneratedColumn<String> get verseText =>
       $composableBuilder(column: $table.verseText, builder: (column) => column);
 
-  GeneratedColumn<double> get easeFactor => $composableBuilder(
-    column: $table.easeFactor,
-    builder: (column) => column,
-  );
-
   GeneratedColumn<int> get repetitionCount => $composableBuilder(
     column: $table.repetitionCount,
     builder: (column) => column,
@@ -2832,8 +3073,31 @@ class $$SavedVersesTableAnnotationComposer
     builder: (column) => column,
   );
 
+  GeneratedColumn<double> get easeFactor => $composableBuilder(
+    column: $table.easeFactor,
+    builder: (column) => column,
+  );
+
   GeneratedColumn<double> get baseComplexity => $composableBuilder(
     column: $table.baseComplexity,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get correctCount => $composableBuilder(
+    column: $table.correctCount,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get incorrectCount => $composableBuilder(
+    column: $table.incorrectCount,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get stability =>
+      $composableBuilder(column: $table.stability, builder: (column) => column);
+
+  GeneratedColumn<double> get difficulty => $composableBuilder(
+    column: $table.difficulty,
     builder: (column) => column,
   );
 
@@ -2906,11 +3170,15 @@ class $$SavedVersesTableTableManager
                 Value<int> verse = const Value.absent(),
                 Value<String> translation = const Value.absent(),
                 Value<String> verseText = const Value.absent(),
-                Value<double> easeFactor = const Value.absent(),
                 Value<int> repetitionCount = const Value.absent(),
                 Value<DateTime> nextReviewDate = const Value.absent(),
                 Value<DateTime?> lastReviewDate = const Value.absent(),
+                Value<double> easeFactor = const Value.absent(),
                 Value<double> baseComplexity = const Value.absent(),
+                Value<int> correctCount = const Value.absent(),
+                Value<int> incorrectCount = const Value.absent(),
+                Value<double> stability = const Value.absent(),
+                Value<double> difficulty = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
                 Value<DateTime?> deletedAt = const Value.absent(),
                 Value<bool> needsSync = const Value.absent(),
@@ -2922,11 +3190,15 @@ class $$SavedVersesTableTableManager
                 verse: verse,
                 translation: translation,
                 verseText: verseText,
-                easeFactor: easeFactor,
                 repetitionCount: repetitionCount,
                 nextReviewDate: nextReviewDate,
                 lastReviewDate: lastReviewDate,
+                easeFactor: easeFactor,
                 baseComplexity: baseComplexity,
+                correctCount: correctCount,
+                incorrectCount: incorrectCount,
+                stability: stability,
+                difficulty: difficulty,
                 updatedAt: updatedAt,
                 deletedAt: deletedAt,
                 needsSync: needsSync,
@@ -2940,11 +3212,15 @@ class $$SavedVersesTableTableManager
                 required int verse,
                 required String translation,
                 required String verseText,
-                Value<double> easeFactor = const Value.absent(),
                 Value<int> repetitionCount = const Value.absent(),
                 required DateTime nextReviewDate,
                 Value<DateTime?> lastReviewDate = const Value.absent(),
+                Value<double> easeFactor = const Value.absent(),
                 Value<double> baseComplexity = const Value.absent(),
+                Value<int> correctCount = const Value.absent(),
+                Value<int> incorrectCount = const Value.absent(),
+                Value<double> stability = const Value.absent(),
+                Value<double> difficulty = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
                 Value<DateTime?> deletedAt = const Value.absent(),
                 Value<bool> needsSync = const Value.absent(),
@@ -2956,11 +3232,15 @@ class $$SavedVersesTableTableManager
                 verse: verse,
                 translation: translation,
                 verseText: verseText,
-                easeFactor: easeFactor,
                 repetitionCount: repetitionCount,
                 nextReviewDate: nextReviewDate,
                 lastReviewDate: lastReviewDate,
+                easeFactor: easeFactor,
                 baseComplexity: baseComplexity,
+                correctCount: correctCount,
+                incorrectCount: incorrectCount,
+                stability: stability,
+                difficulty: difficulty,
                 updatedAt: updatedAt,
                 deletedAt: deletedAt,
                 needsSync: needsSync,
@@ -3027,7 +3307,7 @@ typedef $$ExercisesTableCreateCompanionBuilder =
       required String id,
       required String verseId,
       required int grade,
-      required String exerciseType,
+      required GameType exerciseType,
       required int durationSeconds,
       Value<DateTime> performedAt,
       Value<DateTime> updatedAt,
@@ -3040,7 +3320,7 @@ typedef $$ExercisesTableUpdateCompanionBuilder =
       Value<String> id,
       Value<String> verseId,
       Value<int> grade,
-      Value<String> exerciseType,
+      Value<GameType> exerciseType,
       Value<int> durationSeconds,
       Value<DateTime> performedAt,
       Value<DateTime> updatedAt,
@@ -3092,10 +3372,11 @@ class $$ExercisesTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<String> get exerciseType => $composableBuilder(
-    column: $table.exerciseType,
-    builder: (column) => ColumnFilters(column),
-  );
+  ColumnWithTypeConverterFilters<GameType, GameType, String> get exerciseType =>
+      $composableBuilder(
+        column: $table.exerciseType,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
 
   ColumnFilters<int> get durationSeconds => $composableBuilder(
     column: $table.durationSeconds,
@@ -3234,10 +3515,11 @@ class $$ExercisesTableAnnotationComposer
   GeneratedColumn<int> get grade =>
       $composableBuilder(column: $table.grade, builder: (column) => column);
 
-  GeneratedColumn<String> get exerciseType => $composableBuilder(
-    column: $table.exerciseType,
-    builder: (column) => column,
-  );
+  GeneratedColumnWithTypeConverter<GameType, String> get exerciseType =>
+      $composableBuilder(
+        column: $table.exerciseType,
+        builder: (column) => column,
+      );
 
   GeneratedColumn<int> get durationSeconds => $composableBuilder(
     column: $table.durationSeconds,
@@ -3313,7 +3595,7 @@ class $$ExercisesTableTableManager
                 Value<String> id = const Value.absent(),
                 Value<String> verseId = const Value.absent(),
                 Value<int> grade = const Value.absent(),
-                Value<String> exerciseType = const Value.absent(),
+                Value<GameType> exerciseType = const Value.absent(),
                 Value<int> durationSeconds = const Value.absent(),
                 Value<DateTime> performedAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
@@ -3337,7 +3619,7 @@ class $$ExercisesTableTableManager
                 required String id,
                 required String verseId,
                 required int grade,
-                required String exerciseType,
+                required GameType exerciseType,
                 required int durationSeconds,
                 Value<DateTime> performedAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),

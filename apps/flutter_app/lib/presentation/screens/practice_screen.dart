@@ -3,7 +3,8 @@ import 'package:flutter_app/data/repositories/stats_repository.dart';
 import 'package:flutter_app/providers/reader/saved_verses_controller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_app/data/models/saved_verse.dart';
-import 'package:flutter_app/presentation/screens/practice/flashcard_practice_screen.dart';
+import 'package:flutter_app/providers/practice/practice_session_controller.dart';
+import 'package:go_router/go_router.dart';
 
 class PracticeScreen extends ConsumerWidget {
   const PracticeScreen({super.key});
@@ -22,12 +23,10 @@ class PracticeScreen extends ConsumerWidget {
         error: (err, _) => Center(child: Text('Error: $err')),
         data: (allVerses) {
           // Find verses due for review
-          // Check if nextReviewDate is today or in the past
           final now = DateTime.now();
           final dueVerses = allVerses.where((v) {
-            if (v.nextReviewDate == null) return true; // Review immediately if null
-            // Compare dates only (ignore time)
-            final reviewDate = DateUtils.dateOnly(v.nextReviewDate!);
+            // FIX 1: Removed unnecessary null checks. Drift guarantees nextReviewDate is not null.
+            final reviewDate = DateUtils.dateOnly(v.nextReviewDate);
             final today = DateUtils.dateOnly(now);
             return !reviewDate.isAfter(today); 
           }).toList();
@@ -43,7 +42,8 @@ class PracticeScreen extends ConsumerWidget {
                   totalCount: allVerses.length,
                   onStart: () {
                     if (dueVerses.isNotEmpty) {
-                      _launchFlashcards(context, dueVerses);
+                      // FIX 2: Pass ref to initialize the session
+                      _launchPracticeSession(context, ref, dueVerses);
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text("You're all caught up! Great job!")),
@@ -71,8 +71,8 @@ class PracticeScreen extends ConsumerWidget {
                       title: "Flashcards",
                       icon: Icons.style,
                       color: Colors.blue,
-                      // Option to practice ALL verses even if not due
-                      onTap: () => _launchFlashcards(context, allVerses), 
+                      // FIX 2: Pass ref to initialize the session
+                      onTap: () => _launchPracticeSession(context, ref, allVerses), 
                       description: "Classic flip cards",
                     ),
                   ],
@@ -85,18 +85,20 @@ class PracticeScreen extends ConsumerWidget {
     );
   }
 
-  void _launchFlashcards(BuildContext context, List<SavedVerse> verses) {
+  // FIX 3: Renamed to reflect the new generic shell and updated the navigation logic
+  void _launchPracticeSession(BuildContext context, WidgetRef ref, List<SavedVerse> verses) {
     if (verses.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("No verses available to practice.")),
       );
       return;
     }
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => FlashcardPracticeScreen(versesToPractice: verses),
-      ),
-    );
+    
+    // 1. Initialize the session state with the selected verses
+    ref.read(practiceSessionProvider.notifier).startSession(verses);
+    
+    // 2. Navigate to the generic Practice Shell
+    context.push('/practice_shell');
   }
 }
 

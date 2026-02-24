@@ -11,7 +11,7 @@ class StatsScreen extends ConsumerWidget {
     final statsAsync = ref.watch(myStatsProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('My Profile')),
+      appBar: AppBar(title: const Text('Můj profil')),
       body: statsAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (err, stack) => Center(child: Text('Error loading stats: $err')),

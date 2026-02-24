@@ -64,6 +64,26 @@ class UserRepository {
     }
     return null;
   }
+  Future<void> deleteAccountLocally() async {
+    try {
+      // TODO: Add backend API call here later 
+      // await _dio.delete('/users/me');
+
+      // 1. Wipe all local Drift tables in a transaction
+      await _db.transaction(() async {
+        await _db.delete(_db.exercises).go();
+        await _db.delete(_db.savedVerses).go();
+        await _db.delete(_db.friendships).go();
+        await _db.delete(_db.users).go();
+      });
+
+      // 2. Clear all cached data (like the user profile and JWT token)
+      await _prefs.clear();
+      
+    } catch (e) {
+      throw Exception('Failed to delete local data: $e');
+    }
+  }
 }
 
 final userRepositoryProvider = FutureProvider<UserRepository>((ref) async {

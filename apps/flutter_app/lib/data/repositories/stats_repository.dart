@@ -17,7 +17,7 @@ class StatsRepository {
   StatsRepository(this._dio, this._db, this._prefs);
 
   Future<UserStats> getMyStats() async {
-    // Get Name from Local Cache
+    // 1. Get Name from Local Cache
     String fullName = "Me";
     final cachedUser = _prefs.getString('cached_user_profile');
     if (cachedUser != null) {
@@ -27,62 +27,91 @@ class StatsRepository {
       } catch (_) {}
     }
 
-    // Count Total Verses
-    final versesCountExpr = _db.savedVerses.id.count();
-    final totalVerses =
-        await (_db.selectOnly(_db.savedVerses)
-              ..where(_db.savedVerses.deletedAt.isNull())
-              ..addColumns([versesCountExpr]))
-            .map((row) => row.read(versesCountExpr))
-            .getSingle();
+    // 2. Aggregate Query: Total Practices, Time Spent, and Score
+    // SQLite's DATE(..., 'localtime') handles the midnight-to-midnight timezone requirement perfectly.
+    final aggregateQuery = await _db.customSelect('''
+      SELECT 
+        COUNT(id) AS total_practices,
+        COALESCE(SUM(duration_seconds), 0) AS time_spent,
+        (COUNT(DISTINCT DATE(performed_at, 'localtime')) * 5) + 
+        COALESCE(SUM(CASE WHEN grade >= 3 THEN 3 ELSE 1 END), 0) AS score
+      FROM exercises
+    ''').getSingle();
 
-    // Count Mastered Verses (> 4 reps)
-    final masteredExpr = _db.savedVerses.id.count();
-    final masteredVerses =
-        await (_db.selectOnly(_db.savedVerses)
-              ..where(
-                _db.savedVerses.deletedAt.isNull() &
-                    _db.savedVerses.repetitionCount.isBiggerThanValue(4),
-              )
-              ..addColumns([masteredExpr]))
-            .map((row) => row.read(masteredExpr))
-            .getSingle();
+    final totalPractices = aggregateQuery.read<int>('total_practices');
+    final timeSpentSeconds = aggregateQuery.read<int>('time_spent');
+    final score = aggregateQuery.read<int>('score');
 
-    // Count Total Reviews
-    final reviewsCountExpr = _db.exercises.id.count();
-    final totalReviews =
-        await (_db.selectOnly(_db.exercises)..addColumns([reviewsCountExpr]))
-            .map((row) => row.read(reviewsCountExpr))
-            .getSingle();
+    // 3. Memorized Verses (Only counts if the *latest* practice was successful)
+    final memorizedQuery = await _db.customSelect('''
+      SELECT COUNT(*) as memorized_count FROM (
+        SELECT verse_id, grade
+        FROM exercises e1
+        WHERE performed_at = (
+          SELECT MAX(performed_at)
+          FROM exercises e2
+          WHERE e1.verse_id = e2.verse_id
+        )
+      ) WHERE grade >= 3
+    ''').getSingle();
+    
+    final memorizedVerses = memorizedQuery.read<int>('memorized_count');
 
-    // Calculate Accuracy
-    final passedExpr = _db.exercises.id.count();
-    final passedReviews =
-        await (_db.selectOnly(_db.exercises)
-              ..where(_db.exercises.grade.isBiggerOrEqualValue(3))
-              ..addColumns([passedExpr]))
-            .map((row) => row.read(passedExpr))
-            .getSingle();
+    // 4. Daily Streak Calculation (Local Time)
+    final datesQuery = await _db.customSelect('''
+      SELECT DISTINCT DATE(performed_at, 'unixepoch', 'localtime') as practice_date
+      FROM exercises
+      WHERE practice_date IS NOT NULL
+      ORDER BY practice_date DESC
+    ''').get();
 
-    double accuracy = 0.0;
-    if (totalReviews != null && totalReviews > 0) {
-      accuracy = ((passedReviews ?? 0) / totalReviews) * 100;
+    int currentStreak = 0;
+    DateTime now = DateTime.now();
+    // These are initialized in Local time
+    DateTime today = DateTime(now.year, now.month, now.day);
+    DateTime yesterday = today.subtract(const Duration(days: 1));
+
+    List<DateTime> practiceDates = [];
+    
+    // Safely parse the YYYY-MM-DD string into a Local DateTime
+    for (var row in datesQuery) {
+      final dateStr = row.read<String?>('practice_date');
+      if (dateStr != null && dateStr.contains('-')) {
+        final parts = dateStr.split('-');
+        practiceDates.add(DateTime(
+          int.parse(parts[0]), // year
+          int.parse(parts[1]), // month
+          int.parse(parts[2]), // day
+        ));
+      }
     }
 
-    // Calculate Streak
-    int currentStreak = 0;
-    try {
-      currentStreak = await _db.calculateLocalStreak();
-    } catch (_) {}
+    if (practiceDates.isNotEmpty) {
+      if (practiceDates.contains(today) || practiceDates.contains(yesterday)) {
+        DateTime checkDate = practiceDates.contains(today) ? today : yesterday;
+        
+        for (var date in practiceDates) {
+          if (date == checkDate) {
+            currentStreak++;
+            // Move our check date back exactly 1 day
+            checkDate = checkDate.subtract(const Duration(days: 1));
+          } else if (date.isBefore(checkDate)) {
+            // As soon as we miss a day, the streak is broken
+            break; 
+          }
+        }
+      }
+    }
 
+    // 5. Return the updated model
     return UserStats(
       userId: 'me',
-      fullName: fullName, 
+      fullName: fullName,
       streak: currentStreak,
-      totalVerses: totalVerses ?? 0,
-      masteredVerses: masteredVerses ?? 0,
-      totalReviews: totalReviews ?? 0,
-      averageAccuracy: double.parse(accuracy.toStringAsFixed(1)),
+      totalPractices: totalPractices,
+      memorizedVerses: memorizedVerses,
+      timeSpentSeconds: timeSpentSeconds, 
+      score: score,
     );
   }
 
@@ -116,12 +145,12 @@ final statsRepositoryProvider = FutureProvider((ref) async {
   return StatsRepository(dio, database, prefs);
 });
 
-final myStatsProvider = StreamProvider<UserStats>((ref) {
-  final repo = ref.watch(statsRepositoryProvider).asData?.value;
+final myStatsProvider = StreamProvider<UserStats>((ref) async* {
+  // Wait for the repository to be fully initialized
+  final repo = await ref.watch(statsRepositoryProvider.future);
   
-  if (repo == null) return const Stream.empty();
-  
-  return repo.watchMyStats();
+  // Yield all events from the repository's stream
+  yield* repo.watchMyStats();
 });
 
 final friendStatsProvider = FutureProvider.family<UserStats, String>((

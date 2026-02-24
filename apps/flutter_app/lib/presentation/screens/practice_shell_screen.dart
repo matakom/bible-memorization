@@ -1,0 +1,85 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_app/data/models/practice_feedback.dart';
+import 'package:flutter_app/presentation/widgets/games/first_letter_typing_game_widget.dart';
+import 'package:flutter_app/presentation/widgets/games/reference_match_game_widget.dart';
+import 'package:flutter_app/presentation/widgets/games/verse_builder_game_widget.dart';
+import 'package:flutter_app/presentation/widgets/games/word_choice_game_widget.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:flutter_app/providers/practice/practice_session_controller.dart';
+import 'package:flutter_app/presentation/widgets/games/flashcard_game_widget.dart'; // We'll create this next
+
+class PracticeShellScreen extends ConsumerWidget {
+  const PracticeShellScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final sessionState = ref.watch(practiceSessionProvider);
+
+    // 1. Handle Loading/Empty Start
+    if (sessionState.queue.isEmpty && !sessionState.isFinished) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+
+    // 2. Handle Session Complete
+    if (sessionState.isFinished) {
+      return Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.celebration, size: 80, color: Colors.orange),
+              const SizedBox(height: 20),
+              Text(
+                "Session Complete!",
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
+              const SizedBox(height: 10),
+              Text("Verses mastered today: ${sessionState.completedCount}"),
+              const SizedBox(height: 30),
+              ElevatedButton(
+                onPressed: () => context.pop(), // Go back to dashboard
+                child: const Text('Finish'),
+              )
+            ],
+          ),
+        ),
+      );
+    }
+
+    // 3. Handle Active Gameplay
+    final currentTurn = sessionState.queue.first;
+    final currentVerse = currentTurn.verse;
+    
+    // In the future, you will dynamically choose the GameType here based on verse maturity.
+    // For now, we default to Flashcard.
+    
+    Widget gameWidget;
+    switch (currentTurn.gameType) {
+      case GameType.wordChoice:
+        gameWidget = WordChoiceGameWidget(key: ValueKey(currentVerse.id), verse: currentVerse);
+        break;
+      case GameType.firstLetterTyping:
+        gameWidget = FirstLetterTypingGameWidget(key: ValueKey(currentVerse.id), verse: currentVerse);
+        break;
+      case GameType.referenceMatch:
+        gameWidget = ReferenceMatchGameWidget(key: ValueKey(currentVerse.id), verse: currentVerse);
+        break;
+      case GameType.verseBuilder:
+        gameWidget = VerseBuilderGameWidget(key: ValueKey(currentVerse.id), verse: currentVerse);
+        break;
+      case GameType.flashcard:
+      default:
+        gameWidget = FlashcardGameWidget(key: ValueKey(currentVerse.id), verse: currentVerse);
+        break;
+    }
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Remaining: ${sessionState.queue.length}'),
+        leading: IconButton(icon: const Icon(Icons.close), onPressed: () => context.pop()),
+      ),
+      body: gameWidget,
+    );
+  }
+}

@@ -1,8 +1,11 @@
+import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
+import 'package:flutter_app/data/local/app_database.dart';
 import 'package:flutter_app/l10n/app_localizations.dart';
 import 'package:flutter_app/providers/settings/language_provider.dart';
 import 'package:flutter_app/providers/core/router_provider.dart';
 import 'package:flutter_app/providers/settings/theme_provider.dart';
+import 'package:flutter_app/services/notification_service.dart';
 import 'package:flutter_app/services/sync_service.dart';
 import 'package:flutter_app/themes/amber_dark.dart';
 import 'package:flutter_app/themes/amber_light.dart';
@@ -19,6 +22,17 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env.$environment");
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await NotificationService.init();
+  await NotificationService.requestPermissions();
+  final database = AppDatabase();
+  final now = DateTime.now();
+  final startOfDay = DateTime(now.year, now.month, now.day);
+  final todayPractices = await (database.select(database.exercises)
+        ..where((e) => e.performedAt.isBiggerOrEqualValue(startOfDay))
+        ..limit(1))
+      .get();
+  final hasPracticedToday = todayPractices.isNotEmpty;
+  await NotificationService.scheduleDailyReminder(hasPracticedToday);
 
   runApp(const ProviderScope(child: MyApp()));
 }

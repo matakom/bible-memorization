@@ -9,6 +9,13 @@ class SavedVerse {
   final DateTime nextReviewDate;
   final DateTime? lastReviewDate;
 
+  // --- NEW: History & HLR Stats ---
+  final int repetitionCount;
+  final int correctCount;
+  final int incorrectCount;
+  final double stability;
+  final double difficulty;
+
   SavedVerse({
     required this.id,
     required this.book,
@@ -19,6 +26,12 @@ class SavedVerse {
     required this.easeFactor,
     required this.nextReviewDate,
     this.lastReviewDate,
+    // Add defaults so you don't have to rewrite all your tests/mocks
+    this.repetitionCount = 0,
+    this.correctCount = 0,
+    this.incorrectCount = 0,
+    this.stability = 0.0,
+    this.difficulty = 0.0,
   });
 }
 

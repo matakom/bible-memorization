@@ -19,6 +19,7 @@ class SavedVersesRepository {
   final Ref _ref;
 
   SavedVersesRepository(this._db, this._ref);
+
   /// Fetches all active saved verses from Local DB
   Future<List<SavedVerse>> getSavedVerses() async {
     try {
@@ -45,6 +46,13 @@ class SavedVersesRepository {
           
           verseText: row.verseText,
           easeFactor: row.easeFactor,
+          
+          // MAP THE NEW FIELDS HERE:
+          repetitionCount: row.repetitionCount,
+          correctCount: row.correctCount,
+          incorrectCount: row.incorrectCount,
+          stability: row.stability,
+          difficulty: row.difficulty,
         );
       }).toList();
     } catch (e) {
@@ -79,6 +87,8 @@ class SavedVersesRepository {
               baseComplexity: Value(complexity),
               easeFactor: Value(initialEf),
               repetitionCount: const Value(0),
+              // We don't need to insert the new fields in the Companion manually here 
+              // because Drift will use the `.withDefault()` we set up in app_database.dart!
               nextReviewDate: initialNextReview,
               updatedAt: Value(DateTime.now()),
               needsSync: const Value(true),
@@ -93,20 +103,26 @@ class SavedVersesRepository {
             translation: payload.translation,
             nextReviewDate: initialNextReview,
             verseText: text,
-            easeFactor: initialEf
+            easeFactor: initialEf,
+            // Explicitly set the defaults for the UI return object
+            repetitionCount: 0,
+            correctCount: 0,
+            incorrectCount: 0,
+            stability: 0.0,
+            difficulty: 0.0,
           ));
         }
       });
 
       try {
-      final syncService = await _ref.read(syncServiceProvider.future);
-      syncService.runSync();
-    } catch (_) {}
+        final syncService = await _ref.read(syncServiceProvider.future);
+        syncService.runSync();
+      } catch (_) {}
+      
       return createdVerses;
     } catch (e) {
       throw SavedVersesException('Failed to save verses locally: $e');
     }
-
   }
 
   /// Soft Deletes a verse locally
@@ -122,9 +138,9 @@ class SavedVersesRepository {
       throw SavedVersesException('Failed to delete verse locally: $e');
     }
     try {
-    final syncService = await _ref.read(syncServiceProvider.future);
-    syncService.runSync();
-  } catch (_) {}
+      final syncService = await _ref.read(syncServiceProvider.future);
+      syncService.runSync();
+    } catch (_) {}
   }
 }
 

@@ -6,6 +6,16 @@ class StatsProfileView extends StatelessWidget {
 
   const StatsProfileView({super.key, required this.stats});
 
+  // Helper function to convert seconds into readable text
+  String _formatTime(int totalSeconds) {
+    if (totalSeconds < 60) return '${totalSeconds}s';
+    final minutes = totalSeconds ~/ 60;
+    if (minutes < 60) return '${minutes}m';
+    final hours = minutes ~/ 60;
+    final remainingMinutes = minutes % 60;
+    return '${hours}h ${remainingMinutes}m';
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -13,43 +23,69 @@ class StatsProfileView extends StatelessWidget {
       child: Column(
         children: [
           _StatsHeader(
-            name: stats.fullName,
-            streak: stats.streak,
+            name: "Matěj Komárek",
           ),
           
           const SizedBox(height: 32),
 
-          GridView.count(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            crossAxisCount: 2,
-            crossAxisSpacing: 16,
-            mainAxisSpacing: 16,
-            childAspectRatio: 1.3,
+          // 1st Row: Score (Width 2)
+          SizedBox(
+            width: double.infinity,
+            child: _StatCard(
+              label: 'Skóre',
+              value: stats.score.toString(),
+              icon: Icons.emoji_events,
+              color: Colors.amber,
+              padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+            ),
+          ),
+
+          const SizedBox(height: 16),
+
+          // 2nd Row: Streak and Memorized Verses
+          Row(
             children: [
-              _StatCard(
-                label: 'Saved Verses',
-                value: stats.totalVerses.toString(),
-                icon: Icons.bookmark_border,
-                color: Colors.blue,
+              Expanded(
+                child: _StatCard(
+                  label: 'Denní řada',
+                  value: stats.streak.toString(),
+                  icon: Icons.local_fire_department,
+                  color: Colors.orange,
+                ),
               ),
-              _StatCard(
-                label: 'Mastered',
-                value: stats.masteredVerses.toString(),
-                icon: Icons.school_outlined,
-                color: Colors.purple,
+              const SizedBox(width: 16),
+              Expanded(
+                child: _StatCard(
+                  label: 'Zapamatováno',
+                  value: stats.memorizedVerses.toString(),
+                  icon: Icons.school_outlined,
+                  color: Colors.purple,
+                ),
               ),
-              _StatCard(
-                label: 'Total Reviews',
-                value: stats.totalReviews.toString(),
-                icon: Icons.history,
-                color: Colors.orange,
+            ],
+          ),
+
+          const SizedBox(height: 16),
+
+          // 3rd Row: Time Spent and Total Practices
+          Row(
+            children: [
+              Expanded(
+                child: _StatCard(
+                  label: 'Čas strávený učením',
+                  value: _formatTime(stats.timeSpentSeconds),
+                  icon: Icons.timer_outlined,
+                  color: Colors.blue,
+                ),
               ),
-              _StatCard(
-                label: 'Accuracy',
-                value: '${stats.averageAccuracy}%',
-                icon: Icons.pie_chart_outline,
-                color: Colors.green,
+              const SizedBox(width: 16),
+              Expanded(
+                child: _StatCard(
+                  label: 'Procvičení',
+                  value: stats.totalPractices.toString(),
+                  icon: Icons.repeat,
+                  color: Colors.green,
+                ),
               ),
             ],
           ),
@@ -61,9 +97,8 @@ class StatsProfileView extends StatelessWidget {
 
 class _StatsHeader extends StatelessWidget {
   final String name;
-  final int streak;
 
-  const _StatsHeader({required this.name, required this.streak});
+  const _StatsHeader({required this.name});
 
   @override
   Widget build(BuildContext context) {
@@ -86,33 +121,6 @@ class _StatsHeader extends StatelessWidget {
           name,
           style: theme.textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
         ),
-        
-        const SizedBox(height: 8),
-        
-        // STREAK BADGE
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          decoration: BoxDecoration(
-            color: Colors.orange.shade50,
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: Colors.orange.shade200),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.local_fire_department, color: Colors.deepOrange, size: 24),
-              const SizedBox(width: 8),
-              Text(
-                '$streak Day Streak',
-                style: const TextStyle(
-                  color: Colors.deepOrange,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-              ),
-            ],
-          ),
-        ),
       ],
     );
   }
@@ -123,18 +131,20 @@ class _StatCard extends StatelessWidget {
   final String value;
   final IconData icon;
   final Color color;
+  final EdgeInsetsGeometry padding;
 
   const _StatCard({
     required this.label,
     required this.value,
     required this.icon,
     required this.color,
+    this.padding = const EdgeInsets.all(16),
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: padding,
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(16),

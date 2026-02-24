@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:flutter_app/data/models/practice_feedback.dart';
 
 class SavedVerses extends Table {
   TextColumn get id => text()(); 
@@ -10,12 +11,21 @@ class SavedVerses extends Table {
   
   TextColumn get verseText => text().named('text')(); 
   
-  // SRS Stats
-  RealColumn get easeFactor => real().withDefault(const Constant(2.5))();
+  // General SRS
   IntColumn get repetitionCount => integer().withDefault(const Constant(0))();
   DateTimeColumn get nextReviewDate => dateTime()(); 
   DateTimeColumn get lastReviewDate => dateTime().nullable()();
+  
+  // SM-2 Stats
+  RealColumn get easeFactor => real().withDefault(const Constant(2.5))();
   RealColumn get baseComplexity => real().withDefault(const Constant(0.0))();
+
+  // HLR Stats
+  IntColumn get correctCount => integer().withDefault(const Constant(0))();
+  IntColumn get incorrectCount => integer().withDefault(const Constant(0))();
+  RealColumn get stability => real().withDefault(const Constant(0.0))(); 
+  RealColumn get difficulty => real().withDefault(const Constant(0.0))();
+
 
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)(); 
   DateTimeColumn get deletedAt => dateTime().nullable()(); 
@@ -31,11 +41,10 @@ class Exercises extends Table {
   TextColumn get verseId => text().references(SavedVerses, #id)(); 
   
   IntColumn get grade => integer()();
-  TextColumn get exerciseType => text()();
+  TextColumn get exerciseType => textEnum<GameType>()();  
   IntColumn get durationSeconds => integer()();
-  
+
   DateTimeColumn get performedAt => dateTime().withDefault(currentDateAndTime)();
-  
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
   DateTimeColumn get deletedAt => dateTime().nullable()();
   BoolColumn get needsSync => boolean().withDefault(const Constant(false))();
