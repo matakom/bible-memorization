@@ -47,7 +47,7 @@ class ReaderScreen extends ConsumerWidget {
           ),
           IconButton(
             icon: const Icon(Icons.text_format_rounded),
-            tooltip: 'Appearance',
+            tooltip: context.l10n.reader_appearanceTooltip,
             onPressed: () {
               showModalBottomSheet(
                 context: context,
@@ -145,7 +145,7 @@ class ReaderScreen extends ConsumerWidget {
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text("Error saving verses: ${e.toString()}"),
+                      content: Text(context.l10n.reader_errorSavingVerses(e.toString())),
                       backgroundColor: Theme.of(context).colorScheme.error,
                     ),
                   );

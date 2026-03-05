@@ -1,83 +1,316 @@
 {
   "@@locale": "cs",
 
-  "common_comingSoon": "Již brzy!",
-
+  "common_comingSoon": "Brzy dostupné!",
 
   "login_screenTitle": "Přihlášení",
   "login_signInButton": "Přihlásit se",
-  "login_errorOnSignIn": "Přihlášení se nezdařilo",
+  "login_errorOnSignIn": "Přihlášení selhalo",
   
   "reader_navbar": "Bible",
 
   "stats_navbar": "Statistiky",
 
-  "practice_navbar": "Trénink",
+  "practice_navbar": "Procvičování",
 
   "social_navbar": "Přátelé",
 
   "settings_navbar": "Nastavení",
   "settings_screenTitle": "Nastavení",
   "settings_signOutButton": "Odhlásit se",
-  "settings_errorOnSignOut": "Odhlášení se nezdařilo",
+  "settings_errorOnSignOut": "Odhlášení selhalo",
   "settings_appsLanguage": "Jazyk aplikace",
   "settings_themeLight": "Světlý",
   "settings_themeDark": "Tmavý",
-  "settings_themeSystem": "Systém",
+  "settings_themeSystem": "Výchozí systémový",
 
-  "settings_tokenButton": "Vypiš token",
+  "settings_tokenButton": "Zobrazit token",
 
   "social_screenTitle": "Přátelé",
   "social_addFriend": "Přidat přítele",
   "social_sendRequest": "Odeslat žádost",
-  "social_yourCode": "Váš kód",
-  "social_codeFetchError": "Chyba při získávání kódu",
-  "social_nothingHere": "Nic zde...",
-  "social_nothingToSeeHereYet": "Zatím zde nic není. Začněte přidáním přátel!",
+  "social_yourCode": "Tvůj kód",
+  "social_codeFetchError": "Chyba při načítání kódu",
+  "social_nothingHere": "Zatím tu nic není...",
+  "social_nothingToSeeHereYet": "Zatím tu nic není. Začni tím, že si přidáš pár přátel!",
   "social_friendRequest": "Žádost o přátelství",
   "social_friends": "Přátelé",
   "social_sentRequests": "Odeslané žádosti",
-  "social_pending": "Nevyřízené",
+  "social_pending": "Čeká se",
   "social_accept": "Přijmout",
-  "social_unfriendTitle": "Odebrat přítele?",
-  "social_unfriendBody": "Opravdu chcete odebrat tohoto přítele?",
+  "social_unfriendTitle": "Odebrat z přátel?",
+  "social_unfriendBody": "Opravdu chceš odebrat tohoto přítele?",
   "social_cancel": "Zrušit",
   "social_remove": "Odebrat",
   
-  "friendsStats_screenTitle": "Statistiky přátel",
+  "friendsStats_screenTitle": "Statistiky přítele",
   "friendsStats_future": "Zde se zobrazí statistiky.",
 
   "reader_screenTitle": "Bible",
   "reader_loading": "Načítání Písma...",
-  "reader_error": "Text se nepodařilo načíst",
+  "reader_error": "Nepodařilo se načíst text",
   "reader_bookSelector": "Kniha",
   "reader_chapterSelector": "Kapitola",
-  "reader_saveButton": "{count, plural, one{Uložit verš} few{Uložit {count} verše} other{Uložit {count} veršů}}",
+  "reader_saveButton": "Uložit {count} veršů",
   "@reader_saveButton": {
-    "description": "Tlačítko pro uložení vybraných veršů s českým skloňováním",
     "placeholders": {
       "count": {
-        "type": "int",
-        "example": "3"
+        "type": "int"
       }
     }
   },
   "reader_saveDialogTitle": "Uložit k zapamatování",
-  "reader_saveDialogBody": "Chcete přidat tyto verše do svého denního procvičování?",
+  "reader_saveDialogBody": "Chceš tyto verše přidat do svého denního procvičování?",
   "reader_cancel": "Zrušit",
   "reader_confirm": "Uložit",
-  "reader_savedVerses": "{count, plural, one{Verš uložen} few{Uloženy {count} verše} other{Uloženo {count} veršů}}",
+  "reader_savedVerses": "Uloženo {count} veršů",
   "@reader_savedVerses": {
-    "description": "Hláška po uložení veršů",
     "placeholders": {
       "count": {
-        "type": "int",
-        "example": "3"
+        "type": "int"
       }
     }
   },
   "reader_savedVersesTitle": "Uložené verše",
   "reader_retrySavedVersesFetch": "Zkusit znovu",
-  "reader_errorLoadingSavedVerses": "Nepovedlo se načíst verše: ",
-  "reader_noSavedVersesYet": "Zatím tu nemáš žádné verše!\nBěž do Bible a přidej nějaký!"
+  "reader_errorLoadingSavedVerses": "Chyba při načítání uložených veršů: ",
+  "reader_noSavedVersesYet": "Zatím nemáš žádné uložené verše.\nBěž do Bible a nějaké si přidej!",
+
+  "practice_title": "Procvičování",
+  "practice_completedForToday": "Pro dnešek máš hotovo!",
+  "practice_modes": "Režimy učení",
+  "practice_flashcards": "Kartičky",
+  "practice_flashcardsDescription": "Klasické oboustranné kartičky",
+  "practice_noVerses": "Žádné verše k procvičování.",
+  "practice_readeToReview": "Připraveno k opakování",
+  
+  "practice_error": "Chyba: {error}",
+  "@practice_error": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "practice_allVersesReviewed": "Zopakoval jsi všech {totalCount} veršů.",
+  "@practice_allVersesReviewed": {
+    "placeholders": {
+      "totalCount": {
+        "type": "int"
+      }
+    }
+  },
+  "practice_versesScheduled": "Na dnešek máš naplánováno {dueCount} veršů.",
+  "@practice_versesScheduled": {
+    "placeholders": {
+      "dueCount": {
+        "type": "int"
+      }
+    }
+  },
+  "practice_practiceAnyway": "Přesto procvičovat",
+  "practice_startSession": "Začít lekci",
+
+  "practiceShell_sessionComplete": "Lekce dokončena!",
+  "practiceShell_versesMastered": "Dnes zvládnutých veršů: {count}",
+  "@practiceShell_versesMastered": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "practiceShell_finish": "Dokončit",
+  "practiceShell_remaining": "Zbývá: {count}",
+  "@practiceShell_remaining": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "reader_appearanceTooltip": "Vzhled",
+  "reader_errorSavingVerses": "Chyba při ukládání veršů: {error}",
+  "@reader_errorSavingVerses": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+
+  "savedVerses_currentTranslation": "Aktuální překlad: {abbreviation}",
+  "@savedVerses_currentTranslation": {
+    "placeholders": {
+      "abbreviation": {
+        "type": "String"
+      }
+    }
+  },
+  "savedVerses_verseDeleted": "Verš byl smazán",
+  "savedVerses_bookFallback": "Kniha {book} {chapter}:{verse}",
+  "@savedVerses_bookFallback": {
+    "placeholders": {
+      "book": { "type": "int" },
+      "chapter": { "type": "int" },
+      "verse": { "type": "int" }
+    }
+  },
+  "savedVerses_difficultyEasy": "Snadné",
+  "savedVerses_difficultyNormal": "Normální",
+  "savedVerses_difficultyModerate": "Střední",
+  "savedVerses_difficultyHard": "Těžké",
+  "savedVerses_difficultyElite": "Elitní",
+  
+  "settings_debugTools": "Nástroje pro vývojáře",
+  "settings_debugDb": "Ladění DB",
+  "settings_testNotification": "Testovací oznámení (10s)",
+  "settings_notificationScheduled": "Oznámení je naplánováno za 10 sekund!",
+  "settings_forceSync": "Vynutit synchronizaci",
+  "settings_forceSyncDescription": "Ruční odeslání/stažení dat",
+  "settings_syncing": "Synchronizace...",
+  "settings_syncSuccess": "Synchronizace byla úspěšná!",
+  "settings_syncError": "Chyba: {error}",
+  "@settings_syncError": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "settings_errorLoadingProfile": "Chyba při načítání profilu: {error}",
+  "@settings_errorLoadingProfile": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "settings_guestUser": "Host",
+  "settings_guestProgressSavedLocally": "Pokrok se ukládá pouze v zařízení",
+
+  "social_errorLoadingUser": "Chyba při načítání uživatele: {error}",
+  "@social_errorLoadingUser": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "social_unavailableOfflineTitle": "Sociální funkce nejsou dostupné offline",
+  "social_unavailableOfflineDescription": "Připoj se k internetu a restartuj aplikaci, aby se synchronizoval tvůj kód přítele.",
+  "social_errorLoadingFriendships": "Chyba při načítání přátel: {error}",
+  "@social_errorLoadingFriendships": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "social_guestTitle": "Učte se společně",
+  "social_guestDescription": "Přihlas se, abys mohl komunikovat s přáteli, sdílet svůj pokrok a navzájem se motivovat.",
+
+  "stats_screenTitle": "Můj profil",
+  "stats_errorLoadingStats": "Chyba při načítání statistik: {error}",
+  "@stats_errorLoadingStats": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+
+  "game_firstLetter_hardMode": "Těžký režim",
+  "game_firstLetter_easyMode": "Lehký režim",
+  "game_firstLetter_mistakes": "Chyby: {count}",
+  "@game_firstLetter_mistakes": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "game_firstLetter_hintText": "Napiš první písmeno...",
+  "game_firstLetter_revealTooltip": "Odhalit další slovo",
+
+  "game_flashcard_markedForReview": "Označeno k opakování. Brzy tento verš uvidíš znovu!",
+  "game_flashcard_rateRecall": "Ohodnoť, jak sis to pamatoval:",
+  "game_flashcard_tapToShow": "Klepnutím zobrazíš odpověď",
+  "game_flashcard_errorBookName": "Nastala chyba!",
+  "game_flashcard_errorLoadText": "Nepodařilo se načíst text",
+
+  "game_reference_prompt": "Kde se nachází tento verš?",
+  "game_reference_incorrect": "Nesprávný odkaz. Zkusíme to příště znovu!",
+  "game_reference_bookFallback": "Kniha {book}",
+  "@game_reference_bookFallback": {
+    "placeholders": {
+      "book": { "type": "int" }
+    }
+  },
+
+  "game_builder_prompt": "Sestav verš:",
+  "game_builder_incorrect": "Těsně vedle! Zkus jiné slovo.",
+  "game_builder_dummyLord": "Hospodin",
+  "game_builder_dummyGrace": "milost",
+  "game_builder_dummyFaith": "víra",
+  "game_builder_dummyHoly": "svatý",
+
+  "game_wordChoice_prompt": "Doplň verš ({current} / {total}):",
+  "@game_wordChoice_prompt": {
+    "placeholders": {
+      "current": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "game_wordChoice_incorrect": "Jejda! Správné slovo bylo '{word}'",
+  "@game_wordChoice_incorrect": {
+    "placeholders": {
+      "word": { "type": "String" }
+    }
+  },
+  "game_wordChoice_errorFallback1": "Chyba",
+  "game_wordChoice_errorFallback2": "při",
+  "game_wordChoice_errorFallback3": "načítání",
+
+  "reader_appearanceTitle": "Vzhled",
+  "reader_appearanceSansSerif": "Bezpatkové",
+  "reader_appearanceSerif": "Patkové",
+  "reader_appearanceSpacing": "Řádkování",
+
+  "settings_deleteAccountButton": "Smazat účet",
+  "settings_deleteAccountDialogTitle": "Smazat všechna data",
+  "settings_deleteAccountDialogBody": "Opravdu chceš smazat všechna svá data? Tím trvale odstraníš všechny uložené verše, statistiky a přátele. Začneš úplně od začátku.",
+  "settings_deleteAccountCancel": "Zrušit",
+  "settings_deleteAccountConfirm": "Smazat",
+  "settings_deleteAccountSuccess": "Všechna data byla smazána. Začínáš s čistým štítem!",
+  "settings_deleteAccountError": "Chyba při mazání dat: {error}",
+  "@settings_deleteAccountError": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  
+  "leaderboard_title": "ŽEBŘÍČEK",
+  "leaderboard_you": "{name} (Ty)",
+  "@leaderboard_you": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "leaderboard_points": "{score} b",
+  "@leaderboard_points": {
+    "placeholders": {
+      "score": { "type": "int" }
+    }
+  },
+
+  "stats_score": "Skóre",
+  "stats_streak": "Denní řada",
+  "stats_memorized": "Zapamatováno",
+  "stats_timeSpent": "Čas učení",
+  "stats_practices": "Procvičení",
+  "stats_timeSeconds": "{seconds}s",
+  "@stats_timeSeconds": {
+    "placeholders": { "seconds": { "type": "int" } }
+  },
+  "stats_timeMinutes": "{minutes}m",
+  "@stats_timeMinutes": {
+    "placeholders": { "minutes": { "type": "int" } }
+  },
+  "stats_timeHoursMinutes": "{hours}h {minutes}m",
+  "@stats_timeHoursMinutes": {
+    "placeholders": {
+      "hours": { "type": "int" },
+      "minutes": { "type": "int" }
+    }
+  }
 }

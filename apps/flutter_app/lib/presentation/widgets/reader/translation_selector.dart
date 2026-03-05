@@ -16,7 +16,6 @@ class BibleTranslationSelector extends ConsumerWidget {
       data: (currentVersion) {
         return PopupMenuButton<BibleTranslation>(
           initialValue: currentVersion,
-          tooltip: 'Select Translation',
           icon: Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(

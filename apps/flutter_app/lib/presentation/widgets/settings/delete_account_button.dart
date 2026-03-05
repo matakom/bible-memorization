@@ -8,6 +8,7 @@ import 'package:flutter_app/providers/user_provider.dart';
 import 'package:flutter_app/services/sync_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_app/l10n/l10n_extension.dart';
 
 class DeleteAccountButton extends ConsumerWidget {
   const DeleteAccountButton({super.key});
@@ -15,22 +16,19 @@ class DeleteAccountButton extends ConsumerWidget {
   Future<void> _showDeleteConfirmation(BuildContext context, WidgetRef ref) async {
     final confirmed = await showDialog<bool>(
       context: context,
-      // FIX 1: Renamed 'context' to 'dialogContext' here so it matches the buttons
       builder: (BuildContext dialogContext) {
         return AlertDialog(
-          title: const Text('Delete All Data'),
-          content: const Text(
-            'Are you sure you want to wipe all your data? This will permanently remove all your saved verses, statistics, and friendships. You will start completely fresh.',
-          ),
+          title: Text(dialogContext.l10n.settings_deleteAccountDialogTitle),
+          content: Text(dialogContext.l10n.settings_deleteAccountDialogBody),
           actions: [
             TextButton(
-              onPressed: () => dialogContext.pop(false), // Uses go_router
-              child: const Text('Cancel'),
+              onPressed: () => dialogContext.pop(false), 
+              child: Text(dialogContext.l10n.settings_deleteAccountCancel),
             ),
             TextButton(
               style: TextButton.styleFrom(foregroundColor: Colors.red),
-              onPressed: () => dialogContext.pop(true), // Uses go_router
-              child: const Text('Delete'),
+              onPressed: () => dialogContext.pop(true), 
+              child: Text(dialogContext.l10n.settings_deleteAccountConfirm),
             ),
           ],
         );
@@ -43,7 +41,6 @@ class DeleteAccountButton extends ConsumerWidget {
         showDialog(
           context: context,
           barrierDismissible: false,
-          // FIX 2: Named this 'loadingContext' to prevent context mix-ups
           builder: (BuildContext loadingContext) => const Center(child: CircularProgressIndicator()),
         );
 
@@ -66,13 +63,12 @@ class DeleteAccountButton extends ConsumerWidget {
 
           // Show a success message
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('All data deleted. Starting fresh!'),
+            SnackBar(
+              content: Text(context.l10n.settings_deleteAccountSuccess),
               backgroundColor: Colors.green,
             ),
           );
 
-          // FIX 3: Reset the go_router shell so you don't get a black screen
           context.go('/practice'); 
         }
       } catch (e) {
@@ -81,7 +77,7 @@ class DeleteAccountButton extends ConsumerWidget {
           Navigator.of(context, rootNavigator: true).pop(); 
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Error deleting data: $e'),
+              content: Text(context.l10n.settings_deleteAccountError(e.toString())),
               backgroundColor: Colors.red,
             ),
           );
@@ -99,7 +95,7 @@ class DeleteAccountButton extends ConsumerWidget {
         elevation: 0,
       ),
       icon: const Icon(Icons.delete_forever),
-      label: const Text('Delete Account'),
+      label: Text(context.l10n.settings_deleteAccountButton),
       onPressed: () => _showDeleteConfirmation(context, ref),
     );
   }

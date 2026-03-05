@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_app/providers/user_provider.dart';
 import 'package:flutter_app/providers/friendships/friendships_provider.dart';
 import 'package:flutter_app/data/repositories/stats_repository.dart';
+import 'package:flutter_app/l10n/l10n_extension.dart';
 
 class LeaderboardEntry {
   final String id;
@@ -25,11 +26,11 @@ final leaderboardProvider = FutureProvider.autoDispose<List<LeaderboardEntry>>((
 
   if (currentUser == null) return [];
 
-  // 1. Add yourself
+  // 1. Add yourself (Translation logic moved to the UI)
   List<LeaderboardEntry> entries = [
     LeaderboardEntry(
       id: currentUser.id,
-      name: "${currentUser.firstName} ${currentUser.lastName} (You)",
+      name: "${currentUser.firstName} ${currentUser.lastName}",
       score: myStats.score,
       isMe: true,
     )
@@ -81,7 +82,7 @@ class LeaderboardWidget extends ConsumerWidget {
         Padding(
           padding: const EdgeInsets.fromLTRB(20.0, 24.0, 20.0, 16.0),
           child: Text(
-            "LEADERBOARD",
+            context.l10n.leaderboard_title,
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: theme.colorScheme.primary,
@@ -94,7 +95,7 @@ class LeaderboardWidget extends ConsumerWidget {
           loading: () => const Center(child: CircularProgressIndicator()),
           error: (err, _) => Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Text("Could not load leaderboard: $err"),
+            child: Text("Error: $err"), // Raw error output, no translation needed
           ),
           data: (entries) {
             return Card(
@@ -129,17 +130,22 @@ class LeaderboardWidget extends ConsumerWidget {
                     );
                   }
 
+                  // Determine display name (e.g., "John Doe (You)" vs "Jane Doe")
+                  final displayName = entry.isMe 
+                      ? context.l10n.leaderboard_you(entry.name) 
+                      : entry.name;
+
                   return ListTile(
                     leading: leadingWidget,
                     title: Text(
-                      entry.name,
+                      displayName,
                       style: TextStyle(
                         fontWeight: entry.isMe ? FontWeight.bold : FontWeight.normal,
                         color: entry.isMe ? theme.colorScheme.primary : null,
                       ),
                     ),
                     trailing: Text(
-                      "${entry.score} pts",
+                      context.l10n.leaderboard_points(entry.score),
                       style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     ),
                     tileColor: entry.isMe ? theme.colorScheme.primaryContainer.withValues(alpha: 0.2) : null,

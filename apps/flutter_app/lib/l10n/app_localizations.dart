@@ -397,6 +397,558 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No verses saved yet.\nGo to the Bible to add some!'**
   String get reader_noSavedVersesYet;
+
+  /// No description provided for @practice_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Practice'**
+  String get practice_title;
+
+  /// No description provided for @practice_completedForToday.
+  ///
+  /// In en, this message translates to:
+  /// **'All done today!'**
+  String get practice_completedForToday;
+
+  /// No description provided for @practice_modes.
+  ///
+  /// In en, this message translates to:
+  /// **'Study modes'**
+  String get practice_modes;
+
+  /// No description provided for @practice_flashcards.
+  ///
+  /// In en, this message translates to:
+  /// **'Flashcards'**
+  String get practice_flashcards;
+
+  /// No description provided for @practice_flashcardsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Classic flip cards'**
+  String get practice_flashcardsDescription;
+
+  /// No description provided for @practice_noVerses.
+  ///
+  /// In en, this message translates to:
+  /// **'No verses available to practice.'**
+  String get practice_noVerses;
+
+  /// No description provided for @practice_readeToReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready to review'**
+  String get practice_readeToReview;
+
+  /// No description provided for @practice_error.
+  ///
+  /// In en, this message translates to:
+  /// **'Error: {error}'**
+  String practice_error(String error);
+
+  /// No description provided for @practice_allVersesReviewed.
+  ///
+  /// In en, this message translates to:
+  /// **'You have reviewed all {totalCount} verses.'**
+  String practice_allVersesReviewed(int totalCount);
+
+  /// No description provided for @practice_versesScheduled.
+  ///
+  /// In en, this message translates to:
+  /// **'You have {dueCount} verses scheduled for today.'**
+  String practice_versesScheduled(int dueCount);
+
+  /// No description provided for @practice_practiceAnyway.
+  ///
+  /// In en, this message translates to:
+  /// **'Practice Anyway'**
+  String get practice_practiceAnyway;
+
+  /// No description provided for @practice_startSession.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Session'**
+  String get practice_startSession;
+
+  /// No description provided for @practiceShell_sessionComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Session Complete!'**
+  String get practiceShell_sessionComplete;
+
+  /// No description provided for @practiceShell_versesMastered.
+  ///
+  /// In en, this message translates to:
+  /// **'Verses mastered today: {count}'**
+  String practiceShell_versesMastered(int count);
+
+  /// No description provided for @practiceShell_finish.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish'**
+  String get practiceShell_finish;
+
+  /// No description provided for @practiceShell_remaining.
+  ///
+  /// In en, this message translates to:
+  /// **'Remaining: {count}'**
+  String practiceShell_remaining(int count);
+
+  /// No description provided for @reader_appearanceTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get reader_appearanceTooltip;
+
+  /// No description provided for @reader_errorSavingVerses.
+  ///
+  /// In en, this message translates to:
+  /// **'Error saving verses: {error}'**
+  String reader_errorSavingVerses(String error);
+
+  /// No description provided for @savedVerses_currentTranslation.
+  ///
+  /// In en, this message translates to:
+  /// **'Current Translation: {abbreviation}'**
+  String savedVerses_currentTranslation(String abbreviation);
+
+  /// No description provided for @savedVerses_verseDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Verse deleted'**
+  String get savedVerses_verseDeleted;
+
+  /// No description provided for @savedVerses_bookFallback.
+  ///
+  /// In en, this message translates to:
+  /// **'Book {book} {chapter}:{verse}'**
+  String savedVerses_bookFallback(int book, int chapter, int verse);
+
+  /// No description provided for @savedVerses_difficultyEasy.
+  ///
+  /// In en, this message translates to:
+  /// **'Easy'**
+  String get savedVerses_difficultyEasy;
+
+  /// No description provided for @savedVerses_difficultyNormal.
+  ///
+  /// In en, this message translates to:
+  /// **'Normal'**
+  String get savedVerses_difficultyNormal;
+
+  /// No description provided for @savedVerses_difficultyModerate.
+  ///
+  /// In en, this message translates to:
+  /// **'Moderate'**
+  String get savedVerses_difficultyModerate;
+
+  /// No description provided for @savedVerses_difficultyHard.
+  ///
+  /// In en, this message translates to:
+  /// **'Hard'**
+  String get savedVerses_difficultyHard;
+
+  /// No description provided for @savedVerses_difficultyElite.
+  ///
+  /// In en, this message translates to:
+  /// **'Elite'**
+  String get savedVerses_difficultyElite;
+
+  /// No description provided for @settings_debugTools.
+  ///
+  /// In en, this message translates to:
+  /// **'Debug Tools'**
+  String get settings_debugTools;
+
+  /// No description provided for @settings_debugDb.
+  ///
+  /// In en, this message translates to:
+  /// **'Debug DB'**
+  String get settings_debugDb;
+
+  /// No description provided for @settings_testNotification.
+  ///
+  /// In en, this message translates to:
+  /// **'Test 10s Notification'**
+  String get settings_testNotification;
+
+  /// No description provided for @settings_notificationScheduled.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification scheduled for 10 seconds from now!'**
+  String get settings_notificationScheduled;
+
+  /// No description provided for @settings_forceSync.
+  ///
+  /// In en, this message translates to:
+  /// **'Force Sync Now'**
+  String get settings_forceSync;
+
+  /// No description provided for @settings_forceSyncDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Push/Pull data manually'**
+  String get settings_forceSyncDescription;
+
+  /// No description provided for @settings_syncing.
+  ///
+  /// In en, this message translates to:
+  /// **'Syncing...'**
+  String get settings_syncing;
+
+  /// No description provided for @settings_syncSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync Success!'**
+  String get settings_syncSuccess;
+
+  /// No description provided for @settings_syncError.
+  ///
+  /// In en, this message translates to:
+  /// **'Error: {error}'**
+  String settings_syncError(String error);
+
+  /// No description provided for @settings_errorLoadingProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading profile: {error}'**
+  String settings_errorLoadingProfile(String error);
+
+  /// No description provided for @settings_guestUser.
+  ///
+  /// In en, this message translates to:
+  /// **'Guest User'**
+  String get settings_guestUser;
+
+  /// No description provided for @settings_guestProgressSavedLocally.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress saved locally'**
+  String get settings_guestProgressSavedLocally;
+
+  /// No description provided for @social_errorLoadingUser.
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading user: {error}'**
+  String social_errorLoadingUser(String error);
+
+  /// No description provided for @social_unavailableOfflineTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Social features unavailable offline'**
+  String get social_unavailableOfflineTitle;
+
+  /// No description provided for @social_unavailableOfflineDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Please connect to the internet and restart the app to sync your friend code.'**
+  String get social_unavailableOfflineDescription;
+
+  /// No description provided for @social_errorLoadingFriendships.
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading friendships: {error}'**
+  String social_errorLoadingFriendships(String error);
+
+  /// No description provided for @social_guestTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Memorize Together'**
+  String get social_guestTitle;
+
+  /// No description provided for @social_guestDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Log in to connect with friends, share your progress, and motivate each other to keep learning.'**
+  String get social_guestDescription;
+
+  /// No description provided for @stats_screenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'My Profile'**
+  String get stats_screenTitle;
+
+  /// No description provided for @stats_errorLoadingStats.
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading stats: {error}'**
+  String stats_errorLoadingStats(String error);
+
+  /// No description provided for @game_firstLetter_hardMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Hard Mode'**
+  String get game_firstLetter_hardMode;
+
+  /// No description provided for @game_firstLetter_easyMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Easy Mode'**
+  String get game_firstLetter_easyMode;
+
+  /// No description provided for @game_firstLetter_mistakes.
+  ///
+  /// In en, this message translates to:
+  /// **'Mistakes: {count}'**
+  String game_firstLetter_mistakes(int count);
+
+  /// No description provided for @game_firstLetter_hintText.
+  ///
+  /// In en, this message translates to:
+  /// **'Type first letter...'**
+  String get game_firstLetter_hintText;
+
+  /// No description provided for @game_firstLetter_revealTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Reveal Next Word'**
+  String get game_firstLetter_revealTooltip;
+
+  /// No description provided for @game_flashcard_markedForReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Marked for review. You\'ll see this again soon!'**
+  String get game_flashcard_markedForReview;
+
+  /// No description provided for @game_flashcard_rateRecall.
+  ///
+  /// In en, this message translates to:
+  /// **'Rate your recall:'**
+  String get game_flashcard_rateRecall;
+
+  /// No description provided for @game_flashcard_tapToShow.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap card to show answer'**
+  String get game_flashcard_tapToShow;
+
+  /// No description provided for @game_flashcard_errorBookName.
+  ///
+  /// In en, this message translates to:
+  /// **'There was an error!'**
+  String get game_flashcard_errorBookName;
+
+  /// No description provided for @game_flashcard_errorLoadText.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load text'**
+  String get game_flashcard_errorLoadText;
+
+  /// No description provided for @game_reference_prompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Where is this verse found?'**
+  String get game_reference_prompt;
+
+  /// No description provided for @game_reference_incorrect.
+  ///
+  /// In en, this message translates to:
+  /// **'Incorrect reference. Let\'s study this one again!'**
+  String get game_reference_incorrect;
+
+  /// No description provided for @game_reference_bookFallback.
+  ///
+  /// In en, this message translates to:
+  /// **'Book {book}'**
+  String game_reference_bookFallback(int book);
+
+  /// No description provided for @game_builder_prompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Build the verse:'**
+  String get game_builder_prompt;
+
+  /// No description provided for @game_builder_incorrect.
+  ///
+  /// In en, this message translates to:
+  /// **'Not quite! Try a different word.'**
+  String get game_builder_incorrect;
+
+  /// No description provided for @game_builder_dummyLord.
+  ///
+  /// In en, this message translates to:
+  /// **'Lord'**
+  String get game_builder_dummyLord;
+
+  /// No description provided for @game_builder_dummyGrace.
+  ///
+  /// In en, this message translates to:
+  /// **'grace'**
+  String get game_builder_dummyGrace;
+
+  /// No description provided for @game_builder_dummyFaith.
+  ///
+  /// In en, this message translates to:
+  /// **'faith'**
+  String get game_builder_dummyFaith;
+
+  /// No description provided for @game_builder_dummyHoly.
+  ///
+  /// In en, this message translates to:
+  /// **'holy'**
+  String get game_builder_dummyHoly;
+
+  /// No description provided for @game_wordChoice_prompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete the verse ({current} / {total}):'**
+  String game_wordChoice_prompt(int current, int total);
+
+  /// No description provided for @game_wordChoice_incorrect.
+  ///
+  /// In en, this message translates to:
+  /// **'Oops! The correct word was \'{word}\''**
+  String game_wordChoice_incorrect(String word);
+
+  /// No description provided for @game_wordChoice_errorFallback1.
+  ///
+  /// In en, this message translates to:
+  /// **'Error'**
+  String get game_wordChoice_errorFallback1;
+
+  /// No description provided for @game_wordChoice_errorFallback2.
+  ///
+  /// In en, this message translates to:
+  /// **'loading'**
+  String get game_wordChoice_errorFallback2;
+
+  /// No description provided for @game_wordChoice_errorFallback3.
+  ///
+  /// In en, this message translates to:
+  /// **'verse'**
+  String get game_wordChoice_errorFallback3;
+
+  /// No description provided for @reader_appearanceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get reader_appearanceTitle;
+
+  /// No description provided for @reader_appearanceSansSerif.
+  ///
+  /// In en, this message translates to:
+  /// **'Sans-Serif'**
+  String get reader_appearanceSansSerif;
+
+  /// No description provided for @reader_appearanceSerif.
+  ///
+  /// In en, this message translates to:
+  /// **'Serif'**
+  String get reader_appearanceSerif;
+
+  /// No description provided for @reader_appearanceSpacing.
+  ///
+  /// In en, this message translates to:
+  /// **'Spacing'**
+  String get reader_appearanceSpacing;
+
+  /// No description provided for @settings_deleteAccountButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Account'**
+  String get settings_deleteAccountButton;
+
+  /// No description provided for @settings_deleteAccountDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete All Data'**
+  String get settings_deleteAccountDialogTitle;
+
+  /// No description provided for @settings_deleteAccountDialogBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to wipe all your data? This will permanently remove all your saved verses, statistics, and friendships. You will start completely fresh.'**
+  String get settings_deleteAccountDialogBody;
+
+  /// No description provided for @settings_deleteAccountCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get settings_deleteAccountCancel;
+
+  /// No description provided for @settings_deleteAccountConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get settings_deleteAccountConfirm;
+
+  /// No description provided for @settings_deleteAccountSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'All data deleted. Starting fresh!'**
+  String get settings_deleteAccountSuccess;
+
+  /// No description provided for @settings_deleteAccountError.
+  ///
+  /// In en, this message translates to:
+  /// **'Error deleting data: {error}'**
+  String settings_deleteAccountError(String error);
+
+  /// No description provided for @leaderboard_title.
+  ///
+  /// In en, this message translates to:
+  /// **'LEADERBOARD'**
+  String get leaderboard_title;
+
+  /// No description provided for @leaderboard_you.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} (You)'**
+  String leaderboard_you(String name);
+
+  /// No description provided for @leaderboard_points.
+  ///
+  /// In en, this message translates to:
+  /// **'{score} pts'**
+  String leaderboard_points(int score);
+
+  /// No description provided for @stats_score.
+  ///
+  /// In en, this message translates to:
+  /// **'Score'**
+  String get stats_score;
+
+  /// No description provided for @stats_streak.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Streak'**
+  String get stats_streak;
+
+  /// No description provided for @stats_memorized.
+  ///
+  /// In en, this message translates to:
+  /// **'Memorized'**
+  String get stats_memorized;
+
+  /// No description provided for @stats_timeSpent.
+  ///
+  /// In en, this message translates to:
+  /// **'Time Spent'**
+  String get stats_timeSpent;
+
+  /// No description provided for @stats_practices.
+  ///
+  /// In en, this message translates to:
+  /// **'Practices'**
+  String get stats_practices;
+
+  /// No description provided for @stats_timeSeconds.
+  ///
+  /// In en, this message translates to:
+  /// **'{seconds}s'**
+  String stats_timeSeconds(int seconds);
+
+  /// No description provided for @stats_timeMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes}m'**
+  String stats_timeMinutes(int minutes);
+
+  /// No description provided for @stats_timeHoursMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'{hours}h {minutes}m'**
+  String stats_timeHoursMinutes(int hours, int minutes);
 }
 
 class _AppLocalizationsDelegate

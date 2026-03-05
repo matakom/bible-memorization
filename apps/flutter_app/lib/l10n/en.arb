@@ -74,5 +74,240 @@
   "reader_savedVersesTitle": "Saved verses",
   "reader_retrySavedVersesFetch": "Retry",
   "reader_errorLoadingSavedVerses": "Error loading saved verses: ",
-  "reader_noSavedVersesYet": "No verses saved yet.\nGo to the Bible to add some!"
+  "reader_noSavedVersesYet": "No verses saved yet.\nGo to the Bible to add some!",
+
+  "practice_title": "Practice",
+  "practice_completedForToday": "All done today!",
+  "practice_modes": "Study modes",
+  "practice_flashcards": "Flashcards",
+  "practice_flashcardsDescription": "Classic flip cards",
+  "practice_noVerses": "No verses available to practice.",
+  "practice_readeToReview": "Ready to review",
+  
+  "practice_error": "Error: {error}",
+  "@practice_error": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "practice_allVersesReviewed": "You have reviewed all {totalCount} verses.",
+  "@practice_allVersesReviewed": {
+    "placeholders": {
+      "totalCount": {
+        "type": "int"
+      }
+    }
+  },
+  "practice_versesScheduled": "You have {dueCount} verses scheduled for today.",
+  "@practice_versesScheduled": {
+    "placeholders": {
+      "dueCount": {
+        "type": "int"
+      }
+    }
+  },
+  "practice_practiceAnyway": "Practice Anyway",
+  "practice_startSession": "Start Session",
+
+  "practiceShell_sessionComplete": "Session Complete!",
+  "practiceShell_versesMastered": "Verses mastered today: {count}",
+  "@practiceShell_versesMastered": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "practiceShell_finish": "Finish",
+  "practiceShell_remaining": "Remaining: {count}",
+  "@practiceShell_remaining": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "reader_appearanceTooltip": "Appearance",
+  "reader_errorSavingVerses": "Error saving verses: {error}",
+  "@reader_errorSavingVerses": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+
+  "savedVerses_currentTranslation": "Current Translation: {abbreviation}",
+  "@savedVerses_currentTranslation": {
+    "placeholders": {
+      "abbreviation": {
+        "type": "String"
+      }
+    }
+  },
+  "savedVerses_verseDeleted": "Verse deleted",
+  "savedVerses_bookFallback": "Book {book} {chapter}:{verse}",
+  "@savedVerses_bookFallback": {
+    "placeholders": {
+      "book": { "type": "int" },
+      "chapter": { "type": "int" },
+      "verse": { "type": "int" }
+    }
+  },
+  "savedVerses_difficultyEasy": "Easy",
+  "savedVerses_difficultyNormal": "Normal",
+  "savedVerses_difficultyModerate": "Moderate",
+  "savedVerses_difficultyHard": "Hard",
+  "savedVerses_difficultyElite": "Elite",
+"settings_debugTools": "Debug Tools",
+  "settings_debugDb": "Debug DB",
+  "settings_testNotification": "Test 10s Notification",
+  "settings_notificationScheduled": "Notification scheduled for 10 seconds from now!",
+  "settings_forceSync": "Force Sync Now",
+  "settings_forceSyncDescription": "Push/Pull data manually",
+  "settings_syncing": "Syncing...",
+  "settings_syncSuccess": "Sync Success!",
+  "settings_syncError": "Error: {error}",
+  "@settings_syncError": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "settings_errorLoadingProfile": "Error loading profile: {error}",
+  "@settings_errorLoadingProfile": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "settings_guestUser": "Guest User",
+  "settings_guestProgressSavedLocally": "Progress saved locally",
+
+  "social_errorLoadingUser": "Error loading user: {error}",
+  "@social_errorLoadingUser": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "social_unavailableOfflineTitle": "Social features unavailable offline",
+  "social_unavailableOfflineDescription": "Please connect to the internet and restart the app to sync your friend code.",
+  "social_errorLoadingFriendships": "Error loading friendships: {error}",
+  "@social_errorLoadingFriendships": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "social_guestTitle": "Memorize Together",
+  "social_guestDescription": "Log in to connect with friends, share your progress, and motivate each other to keep learning.",
+
+  "stats_screenTitle": "My Profile",
+  "stats_errorLoadingStats": "Error loading stats: {error}",
+  "@stats_errorLoadingStats": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+
+  "game_firstLetter_hardMode": "Hard Mode",
+  "game_firstLetter_easyMode": "Easy Mode",
+  "game_firstLetter_mistakes": "Mistakes: {count}",
+  "@game_firstLetter_mistakes": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "game_firstLetter_hintText": "Type first letter...",
+  "game_firstLetter_revealTooltip": "Reveal Next Word",
+
+  "game_flashcard_markedForReview": "Marked for review. You'll see this again soon!",
+  "game_flashcard_rateRecall": "Rate your recall:",
+  "game_flashcard_tapToShow": "Tap card to show answer",
+  "game_flashcard_errorBookName": "There was an error!",
+  "game_flashcard_errorLoadText": "Could not load text",
+
+  "game_reference_prompt": "Where is this verse found?",
+  "game_reference_incorrect": "Incorrect reference. Let's study this one again!",
+  "game_reference_bookFallback": "Book {book}",
+  "@game_reference_bookFallback": {
+    "placeholders": {
+      "book": { "type": "int" }
+    }
+  },
+
+  "game_builder_prompt": "Build the verse:",
+  "game_builder_incorrect": "Not quite! Try a different word.",
+  "game_builder_dummyLord": "Lord",
+  "game_builder_dummyGrace": "grace",
+  "game_builder_dummyFaith": "faith",
+  "game_builder_dummyHoly": "holy",
+
+  "game_wordChoice_prompt": "Complete the verse ({current} / {total}):",
+  "@game_wordChoice_prompt": {
+    "placeholders": {
+      "current": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "game_wordChoice_incorrect": "Oops! The correct word was '{word}'",
+  "@game_wordChoice_incorrect": {
+    "placeholders": {
+      "word": { "type": "String" }
+    }
+  },
+  "game_wordChoice_errorFallback1": "Error",
+  "game_wordChoice_errorFallback2": "loading",
+  "game_wordChoice_errorFallback3": "verse",
+  "reader_appearanceTitle": "Appearance",
+  "reader_appearanceSansSerif": "Sans-Serif",
+  "reader_appearanceSerif": "Serif",
+  "reader_appearanceSpacing": "Spacing",
+
+  "settings_deleteAccountButton": "Delete Account",
+  "settings_deleteAccountDialogTitle": "Delete All Data",
+  "settings_deleteAccountDialogBody": "Are you sure you want to wipe all your data? This will permanently remove all your saved verses, statistics, and friendships. You will start completely fresh.",
+  "settings_deleteAccountCancel": "Cancel",
+  "settings_deleteAccountConfirm": "Delete",
+  "settings_deleteAccountSuccess": "All data deleted. Starting fresh!",
+  "settings_deleteAccountError": "Error deleting data: {error}",
+  "@settings_deleteAccountError": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "leaderboard_title": "LEADERBOARD",
+  "leaderboard_you": "{name} (You)",
+  "@leaderboard_you": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "leaderboard_points": "{score} pts",
+  "@leaderboard_points": {
+    "placeholders": {
+      "score": { "type": "int" }
+    }
+  },
+
+  "stats_score": "Score",
+  "stats_streak": "Daily Streak",
+  "stats_memorized": "Memorized",
+  "stats_timeSpent": "Time Spent",
+  "stats_practices": "Practices",
+  "stats_timeSeconds": "{seconds}s",
+  "@stats_timeSeconds": {
+    "placeholders": { "seconds": { "type": "int" } }
+  },
+  "stats_timeMinutes": "{minutes}m",
+  "@stats_timeMinutes": {
+    "placeholders": { "minutes": { "type": "int" } }
+  },
+  "stats_timeHoursMinutes": "{hours}h {minutes}m",
+  "@stats_timeHoursMinutes": {
+    "placeholders": {
+      "hours": { "type": "int" },
+      "minutes": { "type": "int" }
+    }
+  }
 }

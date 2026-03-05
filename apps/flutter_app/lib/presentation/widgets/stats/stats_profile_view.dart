@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/data/models/user_stats.dart';
+import 'package:flutter_app/l10n/l10n_extension.dart';
 
 class StatsProfileView extends StatelessWidget {
   final UserStats stats;
 
   const StatsProfileView({super.key, required this.stats});
 
-  // Helper function to convert seconds into readable text
-  String _formatTime(int totalSeconds) {
-    if (totalSeconds < 60) return '${totalSeconds}s';
+  // Passed context in so we can localize the time formats!
+  String _formatTime(BuildContext context, int totalSeconds) {
+    if (totalSeconds < 60) return context.l10n.stats_timeSeconds(totalSeconds);
     final minutes = totalSeconds ~/ 60;
-    if (minutes < 60) return '${minutes}m';
+    if (minutes < 60) return context.l10n.stats_timeMinutes(minutes);
     final hours = minutes ~/ 60;
     final remainingMinutes = minutes % 60;
-    return '${hours}h ${remainingMinutes}m';
+    return context.l10n.stats_timeHoursMinutes(hours, remainingMinutes);
   }
 
   @override
@@ -23,7 +24,7 @@ class StatsProfileView extends StatelessWidget {
       child: Column(
         children: [
           _StatsHeader(
-            name: "Matěj Komárek",
+            name: stats.fullName, // Swapped out your hardcoded name!
           ),
           
           const SizedBox(height: 32),
@@ -32,7 +33,7 @@ class StatsProfileView extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             child: _StatCard(
-              label: 'Skóre',
+              label: context.l10n.stats_score,
               value: stats.score.toString(),
               icon: Icons.emoji_events,
               color: Colors.amber,
@@ -47,7 +48,7 @@ class StatsProfileView extends StatelessWidget {
             children: [
               Expanded(
                 child: _StatCard(
-                  label: 'Denní řada',
+                  label: context.l10n.stats_streak,
                   value: stats.streak.toString(),
                   icon: Icons.local_fire_department,
                   color: Colors.orange,
@@ -56,7 +57,7 @@ class StatsProfileView extends StatelessWidget {
               const SizedBox(width: 16),
               Expanded(
                 child: _StatCard(
-                  label: 'Zapamatováno',
+                  label: context.l10n.stats_memorized,
                   value: stats.memorizedVerses.toString(),
                   icon: Icons.school_outlined,
                   color: Colors.purple,
@@ -72,8 +73,8 @@ class StatsProfileView extends StatelessWidget {
             children: [
               Expanded(
                 child: _StatCard(
-                  label: 'Čas strávený učením',
-                  value: _formatTime(stats.timeSpentSeconds),
+                  label: context.l10n.stats_timeSpent,
+                  value: _formatTime(context, stats.timeSpentSeconds),
                   icon: Icons.timer_outlined,
                   color: Colors.blue,
                 ),
@@ -81,7 +82,7 @@ class StatsProfileView extends StatelessWidget {
               const SizedBox(width: 16),
               Expanded(
                 child: _StatCard(
-                  label: 'Procvičení',
+                  label: context.l10n.stats_practices,
                   value: stats.totalPractices.toString(),
                   icon: Icons.repeat,
                   color: Colors.green,

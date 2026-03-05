@@ -1,7 +1,6 @@
 import 'package:flutter_app/presentation/screens/friends_stats_screen.dart';
 import 'package:flutter_app/presentation/screens/practice_shell_screen.dart';
 import 'package:flutter_app/presentation/screens/settings_screen.dart';
-import 'package:flutter_app/presentation/screens/login_screen.dart';
 import 'package:flutter_app/presentation/screens/practice_screen.dart';
 import 'package:flutter_app/presentation/screens/reader_screen.dart';
 import 'package:flutter_app/presentation/screens/social_screen.dart';
@@ -17,10 +16,6 @@ final goRouterProvider = Provider<GoRouter>((ref) {
     initialLocation: '/practice',
 
     routes: <RouteBase>[
-      GoRoute(
-        path: '/login',
-        builder: (context, state) => const LoginScreen(),
-      ),
       GoRoute(
         path: '/splash',
         builder: (context, state) => const SplashScreen(),

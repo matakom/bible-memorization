@@ -22,7 +22,7 @@ class SocialScreen extends ConsumerWidget {
       appBar: AppBar(title: Text(context.l10n.social_screenTitle)),
       body: asyncUser.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (err, stack) => Center(child: Text('Error loading user: $err')),
+        error: (err, stack) => Center(child: Text(context.l10n.social_errorLoadingUser(err.toString()))),
         data: (user) {
           
           // --- GUEST VIEW (Not Logged In) ---
@@ -41,15 +41,15 @@ class SocialScreen extends ConsumerWidget {
                     const Icon(Icons.cloud_off, size: 64, color: Colors.grey),
                     const SizedBox(height: 16),
                     Text(
-                      "Social features unavailable offline",
+                      context.l10n.social_unavailableOfflineTitle,
                       style: Theme.of(context).textTheme.titleLarge,
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 8),
-                    const Text(
-                      "Please connect to the internet and restart the app to sync your friend code.",
+                    Text(
+                      context.l10n.social_unavailableOfflineDescription,
                       textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.grey),
+                      style: const TextStyle(color: Colors.grey),
                     ),
                   ],
                 ),
@@ -80,7 +80,7 @@ class SocialScreen extends ConsumerWidget {
             loading: () => const Center(child: CircularProgressIndicator()),
             error: (err, stack) => Center(
               child: Text(
-                'Error loading friendships: $err',
+                context.l10n.social_errorLoadingFriendships(err.toString()),
                 style: TextStyle(color: Theme.of(context).colorScheme.error),
               ),
             ),
@@ -110,13 +110,13 @@ class SocialScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 32),
             Text(
-              "Memorize Together",
+              context.l10n.social_guestTitle,
               style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
             Text(
-              "Log in to connect with friends, share your progress, and motivate each other to keep learning.",
+              context.l10n.social_guestDescription,
               style: theme.textTheme.bodyLarge?.copyWith(color: Colors.grey.shade600),
               textAlign: TextAlign.center,
             ),

@@ -50,7 +50,7 @@ class SavedVersesScreen extends ConsumerWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    "Current Translation: ${currentTranslation?.abbreviation}",
+                    context.l10n.savedVerses_currentTranslation(currentTranslation?.abbreviation ?? ''),
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ],
@@ -95,7 +95,7 @@ class _SavedVerseTile extends ConsumerWidget {
       onDismissed: (_) {
         ref.read(savedVersesControllerProvider.notifier).deleteVerse(verse.id);
         ScaffoldMessenger.of(context).showSnackBar(
-           SnackBar(content: Text('Verse deleted'), duration: const Duration(seconds: 2)),
+           SnackBar(content: Text(context.l10n.savedVerses_verseDeleted), duration: const Duration(seconds: 2)),
         );
       },
       child: Card(
@@ -126,7 +126,7 @@ class _SavedVerseTile extends ConsumerWidget {
                         child: LinearProgressIndicator(minHeight: 2), // Subtle loading
                       ),
                       error: (_, __) => Text(
-                        'Book ${verse.book} ${verse.chapter}:${verse.verse}',
+                        context.l10n.savedVerses_bookFallback(verse.book, verse.chapter, verse.verse),
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                     ),
@@ -173,12 +173,14 @@ class _DifficultyBadge extends StatelessWidget {
       4 => Colors.deepOrange,
       _ => Colors.red,         // Hard
     };
+    
+    // Localize the labels using the BuildContext
     final label = switch (difficulty) {
-      1 => 'Easy',
-      2 => 'Normal',
-      3 => 'Moderate',
-      4 => 'Hard',
-      _ => 'Elite',
+      1 => context.l10n.savedVerses_difficultyEasy,
+      2 => context.l10n.savedVerses_difficultyNormal,
+      3 => context.l10n.savedVerses_difficultyModerate,
+      4 => context.l10n.savedVerses_difficultyHard,
+      _ => context.l10n.savedVerses_difficultyElite,
     };
 
     return Container(

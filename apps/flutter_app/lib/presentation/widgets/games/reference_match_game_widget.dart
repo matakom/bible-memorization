@@ -6,8 +6,8 @@ import 'package:flutter_app/data/models/practice_feedback.dart';
 import 'package:flutter_app/providers/practice/practice_session_controller.dart';
 import 'package:flutter_app/providers/reader/saved_verses_controller.dart';
 import 'package:flutter_app/providers/reader/bible_provider.dart';
+import 'package:flutter_app/l10n/l10n_extension.dart';
 
-// Lightweight class to hold the option data
 class _RefOption {
   final int book;
   final int chapter;
@@ -113,10 +113,10 @@ class _ReferenceMatchGameWidgetState extends ConsumerState<ReferenceMatchGameWid
 
     if (!selectedOption.isCorrect && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Incorrect reference. Let's study this one again!"),
+        SnackBar(
+          content: Text(context.l10n.game_reference_incorrect),
           backgroundColor: Colors.red,
-          duration: Duration(seconds: 2),
+          duration: const Duration(seconds: 2),
         ),
       );
     }
@@ -138,9 +138,9 @@ class _ReferenceMatchGameWidgetState extends ConsumerState<ReferenceMatchGameWid
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Text(
-            "Where is this verse found?",
-            style: TextStyle(color: Colors.grey, fontSize: 16),
+          Text(
+            context.l10n.game_reference_prompt,
+            style: const TextStyle(color: Colors.grey, fontSize: 16),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 32),
@@ -185,7 +185,6 @@ class _ReferenceMatchGameWidgetState extends ConsumerState<ReferenceMatchGameWid
   }
 }
 
-// Dedicated widget to safely resolve the async Book Name from your DB
 class _ReferenceOptionButton extends ConsumerWidget {
   final _RefOption option;
   final VoidCallback onTap;
@@ -197,7 +196,6 @@ class _ReferenceOptionButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // This perfectly fetches the localized book name (e.g. "Genesis", "1. Mojžíšova")
     final bookNameAsync = ref.watch(bookNameProvider(option.book));
 
     return ElevatedButton(
@@ -214,7 +212,7 @@ class _ReferenceOptionButton extends ConsumerWidget {
           textAlign: TextAlign.center,
         ),
         loading: () => const SizedBox(width: 24, height: 24, child: CircularProgressIndicator(strokeWidth: 2)),
-        error: (_, __) => Text("Book ${option.book}"),
+        error: (_, __) => Text(context.l10n.game_reference_bookFallback(option.book)),
       ),
     );
   }

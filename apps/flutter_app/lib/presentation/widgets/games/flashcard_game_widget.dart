@@ -5,6 +5,7 @@ import 'package:flutter_app/data/models/practice_feedback.dart';
 import 'package:flutter_app/providers/practice/practice_session_controller.dart';
 import 'package:flutter_app/providers/reader/bible_provider.dart';
 import 'package:flutter_app/providers/reader/verse_text_provider.dart';
+import 'package:flutter_app/l10n/l10n_extension.dart';
 
 class FlashcardGameWidget extends ConsumerStatefulWidget {
   final SavedVerse verse;
@@ -37,9 +38,9 @@ class _FlashcardGameWidgetState extends ConsumerState<FlashcardGameWidget> {
 
     if (grade < 3 && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Marked for review. You'll see this again soon!"),
-          duration: Duration(milliseconds: 800),
+        SnackBar(
+          content: Text(context.l10n.game_flashcard_markedForReview),
+          duration: const Duration(milliseconds: 800),
         ),
       );
     }
@@ -86,7 +87,7 @@ class _FlashcardGameWidgetState extends ConsumerState<FlashcardGameWidget> {
             padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
-                const Text("Rate your recall:", style: TextStyle(color: Colors.grey)),
+                Text(context.l10n.game_flashcard_rateRecall, style: const TextStyle(color: Colors.grey)),
                 const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -110,9 +111,9 @@ class _FlashcardGameWidgetState extends ConsumerState<FlashcardGameWidget> {
             ),
           )
         else
-          const Padding(
-            padding: EdgeInsets.all(32.0),
-            child: Text("Tap card to show answer", style: TextStyle(color: Colors.grey)),
+          Padding(
+            padding: const EdgeInsets.all(32.0),
+            child: Text(context.l10n.game_flashcard_tapToShow, style: const TextStyle(color: Colors.grey)),
           ),
       ],
     );
@@ -141,7 +142,7 @@ class _FrontSide extends ConsumerWidget {
             textAlign: TextAlign.center,
           ),
           loading: () => const CircularProgressIndicator(),
-          error: (_, __) => const Text("There was an error!"),
+          error: (_, __) => Text(context.l10n.game_flashcard_errorBookName),
         ),
         
         const SizedBox(height: 10),
@@ -191,7 +192,7 @@ class _BackSide extends ConsumerWidget {
                   textAlign: TextAlign.center,
                 ),
                 loading: () => const CircularProgressIndicator(),
-                error: (e, _) => const Text("Could not load text"),
+                error: (e, _) => Text(context.l10n.game_flashcard_errorLoadText),
               ),
             ),
           ),

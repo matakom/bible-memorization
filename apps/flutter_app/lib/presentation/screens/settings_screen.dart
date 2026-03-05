@@ -4,7 +4,6 @@ import 'package:flutter_app/presentation/widgets/settings/delete_account_button.
 import 'package:flutter_app/presentation/widgets/settings/get_token_button.dart';
 import 'package:flutter_app/presentation/widgets/settings/locale_select.dart';
 import 'package:flutter_app/presentation/widgets/authentication/sign_out_button.dart';
-// Note: Ensure this import path matches where you put your SignInButton!
 import 'package:flutter_app/presentation/widgets/authentication/sign_in_button.dart';
 import 'package:flutter_app/presentation/widgets/settings/theme_select.dart';
 import 'package:drift_db_viewer/drift_db_viewer.dart';
@@ -45,18 +44,18 @@ class SettingsScreen extends ConsumerWidget {
           
           const SizedBox(height: 16),
           const Divider(),
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 8.0),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: Text(
-              "Debug Tools",
-              style: TextStyle(fontWeight: FontWeight.bold),
+              context.l10n.settings_debugTools,
+              style: const TextStyle(fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
           ),
           
           GetTokenButton(),
           ElevatedButton(
-            child: const Text("Debug DB"),
+            child: Text(context.l10n.settings_debugDb),
             onPressed: () {
               final database = ref.read(db.databaseProvider);
               Navigator.of(context).push(
@@ -69,12 +68,12 @@ class SettingsScreen extends ConsumerWidget {
           
           ElevatedButton.icon(
             icon: const Icon(Icons.timer),
-            label: const Text('Test 10s Notification'),
+            label: Text(context.l10n.settings_testNotification),
             onPressed: () async {
               await NotificationService.scheduleTestNotification();
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Notification scheduled for 10 seconds from now!')),
+                  SnackBar(content: Text(context.l10n.settings_notificationScheduled)),
                 );
               }
             },
@@ -82,25 +81,28 @@ class SettingsScreen extends ConsumerWidget {
           
           ListTile(
             leading: const Icon(Icons.sync),
-            title: const Text("Force Sync Now"),
-            subtitle: const Text("Push/Pull data manually"),
+            title: Text(context.l10n.settings_forceSync),
+            subtitle: Text(context.l10n.settings_forceSyncDescription),
             onTap: () async {
               try {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("Syncing..."))
+                  SnackBar(content: Text(context.l10n.settings_syncing))
                 );
                 final syncService = await ref.read(syncServiceProvider.future);
                 await syncService.runSync();
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("Sync Success!")),
+                    SnackBar(content: Text(context.l10n.settings_syncSuccess)),
                   );
                 }
               } catch (e) {
                 print("MANUAL SYNC ERROR: $e");
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text("Error: $e"), backgroundColor: Colors.red),
+                    SnackBar(
+                      content: Text(context.l10n.settings_syncError(e.toString())), 
+                      backgroundColor: Colors.red
+                    ),
                   );
                 }
               }
@@ -123,7 +125,12 @@ class _AccountSection extends ConsumerWidget {
 
     return userDataAsync.when(
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (err, _) => Card(child: Padding(padding: const EdgeInsets.all(16), child: Text('Error loading profile: $err'))),
+      error: (err, _) => Card(
+        child: Padding(
+          padding: const EdgeInsets.all(16), 
+          child: Text(context.l10n.settings_errorLoadingProfile(err.toString()))
+        )
+      ),
       data: (currentUser) {
         
         // --- GUEST CARD ---
@@ -146,8 +153,8 @@ class _AccountSection extends ConsumerWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Guest User", style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
-                        const Text("Progress saved locally", style: TextStyle(color: Colors.grey, fontSize: 12)),
+                        Text(context.l10n.settings_guestUser, style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
+                        Text(context.l10n.settings_guestProgressSavedLocally, style: const TextStyle(color: Colors.grey, fontSize: 12)),
                       ],
                     ),
                   ),

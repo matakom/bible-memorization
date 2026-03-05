@@ -5,10 +5,10 @@ import 'package:flutter_app/data/models/practice_feedback.dart';
 import 'package:flutter_app/providers/practice/practice_session_controller.dart';
 import 'package:flutter_app/providers/reader/bible_provider.dart';
 import 'package:flutter_app/providers/reader/saved_verses_controller.dart';
+import 'package:flutter_app/l10n/l10n_extension.dart';
 
-// Represents a clickable word in the word bank
 class _WordOption {
-  final String id; // Unique ID to handle duplicate words
+  final String id; 
   final String text;
 
   _WordOption({required this.id, required this.text});
@@ -25,19 +25,24 @@ class VerseBuilderGameWidget extends ConsumerStatefulWidget {
 
 class _VerseBuilderGameWidgetState extends ConsumerState<VerseBuilderGameWidget> {
   final Stopwatch _stopwatch = Stopwatch();
+  bool _isInitialized = false;
   
-  late List<String> _rawWords;      // Original words with punctuation (e.g., "God,")
-  late List<String> _targetWords;   // Cleaned words to match against (e.g., "God")
+  late List<String> _rawWords;      
+  late List<String> _targetWords;   
   
-  List<_WordOption> _wordBank = []; // The buttons at the bottom
-  int _currentIndex = 0;            // Which word we are currently guessing
+  List<_WordOption> _wordBank = []; 
+  int _currentIndex = 0;            
   int _mistakes = 0;
 
   @override
-  void initState() {
-    super.initState();
-    _setupGame();
-    _stopwatch.start();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Using didChangeDependencies to safely access context.l10n for fallback words
+    if (!_isInitialized) {
+      _setupGame();
+      _stopwatch.start();
+      _isInitialized = true;
+    }
   }
 
   void _setupGame() {
@@ -49,14 +54,13 @@ class _VerseBuilderGameWidgetState extends ConsumerState<VerseBuilderGameWidget>
 
     // 1. Process actual words
     for (int i = 0; i < _rawWords.length; i++) {
-      // Strip punctuation for matching, but keep the original case
       final cleanWord = _rawWords[i].replaceAll(RegExp(r'[.,;!?":\(\)\[\]]'), '');
       _targetWords.add(cleanWord);
       
       correctOptions.add(_WordOption(id: 'correct_$i', text: cleanWord));
     }
 
-    // 2. Add some "dummy" words from other verses to make it harder
+    // 2. Add some "dummy" words
     final dummyOptions = _getDummyWords(count: 4);
     
     // 3. Combine and shuffle the word bank
@@ -83,9 +87,14 @@ class _VerseBuilderGameWidgetState extends ConsumerState<VerseBuilderGameWidget>
     final dummyList = uniqueDummies.toList()..shuffle();
     final selectedDummies = dummyList.take(count).toList();
     
-    // Fallback if user has no other verses
+    // Localized fallbacks if user has no other verses
     if (selectedDummies.isEmpty) {
-      selectedDummies.addAll(["Lord", "grace", "faith", "holy"]);
+      selectedDummies.addAll([
+        context.l10n.game_builder_dummyLord, 
+        context.l10n.game_builder_dummyGrace, 
+        context.l10n.game_builder_dummyFaith, 
+        context.l10n.game_builder_dummyHoly
+      ]);
     }
 
     return List.generate(
@@ -95,11 +104,10 @@ class _VerseBuilderGameWidgetState extends ConsumerState<VerseBuilderGameWidget>
   }
 
   void _onWordSelected(_WordOption option) {
-    // Check if the text matches the current expected word (case-insensitive for fairness)
     final expectedWord = _targetWords[_currentIndex].toLowerCase();
     
     if (option.text.toLowerCase() == expectedWord) {
-      // SUCCESS: Move word from bank to built sentence
+      // SUCCESS
       setState(() {
         _wordBank.removeWhere((w) => w.id == option.id);
         _currentIndex++;
@@ -116,10 +124,10 @@ class _VerseBuilderGameWidgetState extends ConsumerState<VerseBuilderGameWidget>
       
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Not quite! Try a different word."),
+          SnackBar(
+            content: Text(context.l10n.game_builder_incorrect),
             backgroundColor: Colors.red,
-            duration: Duration(milliseconds: 600),
+            duration: const Duration(milliseconds: 600),
           ),
         );
       }
@@ -132,13 +140,13 @@ class _VerseBuilderGameWidgetState extends ConsumerState<VerseBuilderGameWidget>
 
     int grade;
     if (_mistakes == 0) {
-      grade = 5; // Perfect
+      grade = 5; 
     } else if (_mistakes <= 2) {
-      grade = 4; // Minor hesitations
+      grade = 4; 
     } else if (_mistakes <= (_rawWords.length / 2)) {
-      grade = 3; // Passed, but struggled
+      grade = 3; 
     } else {
-      grade = 2; // Too many blind guesses. Force them to review it.
+      grade = 2; 
     }
 
     final feedback = PracticeFeedback(
@@ -178,7 +186,7 @@ class _VerseBuilderGameWidgetState extends ConsumerState<VerseBuilderGameWidget>
             
             const SizedBox(height: 8),
             Text(
-              "Build the verse:",
+              context.l10n.game_builder_prompt,
               style: TextStyle(color: theme.colorScheme.primary, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
@@ -200,13 +208,11 @@ class _VerseBuilderGameWidgetState extends ConsumerState<VerseBuilderGameWidget>
                     runSpacing: 12.0,
                     children: List.generate(_rawWords.length, (index) {
                       if (index < _currentIndex) {
-                        // Words already correctly guessed (shows original punctuation!)
                         return Text(
                           _rawWords[index], 
                           style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w600),
                         );
                       } else if (index == _currentIndex) {
-                        // Active slot
                         return Container(
                           width: 50,
                           decoration: BoxDecoration(
@@ -215,7 +221,6 @@ class _VerseBuilderGameWidgetState extends ConsumerState<VerseBuilderGameWidget>
                           child: Text(" ", style: theme.textTheme.headlineSmall),
                         );
                       } else {
-                        // Future slots
                         return Text(
                           "_", 
                           style: theme.textTheme.headlineSmall?.copyWith(color: Colors.grey.shade400),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/data/repositories/stats_repository.dart';
+import 'package:flutter_app/l10n/l10n_extension.dart';
 import 'package:flutter_app/providers/reader/saved_verses_controller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_app/data/models/saved_verse.dart';
@@ -16,16 +17,15 @@ class PracticeScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Practice Center'),
+        title: Text(context.l10n.practice_title),
       ),
       body: versesState.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (err, _) => Center(child: Text('Error: $err')),
+        error: (err, _) => Center(child: Text(context.l10n.practice_error(err.toString()))),
         data: (allVerses) {
           // Find verses due for review
           final now = DateTime.now();
           final dueVerses = allVerses.where((v) {
-            // FIX 1: Removed unnecessary null checks. Drift guarantees nextReviewDate is not null.
             final reviewDate = DateUtils.dateOnly(v.nextReviewDate);
             final today = DateUtils.dateOnly(now);
             return !reviewDate.isAfter(today); 
@@ -42,11 +42,10 @@ class PracticeScreen extends ConsumerWidget {
                   totalCount: allVerses.length,
                   onStart: () {
                     if (dueVerses.isNotEmpty) {
-                      // FIX 2: Pass ref to initialize the session
                       _launchPracticeSession(context, ref, dueVerses);
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("You're all caught up! Great job!")),
+                        SnackBar(content: Text(context.l10n.practice_completedForToday)),
                       );
                     }
                   },
@@ -54,7 +53,7 @@ class PracticeScreen extends ConsumerWidget {
                 
                 const SizedBox(height: 32),
                 Text(
-                  "Study Modes",
+                  context.l10n.practice_modes,
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 16),
@@ -68,12 +67,11 @@ class PracticeScreen extends ConsumerWidget {
                   mainAxisSpacing: 16,
                   children: [
                     _GameCard(
-                      title: "Flashcards",
+                      title: context.l10n.practice_flashcards,
                       icon: Icons.style,
                       color: Colors.blue,
-                      // FIX 2: Pass ref to initialize the session
                       onTap: () => _launchPracticeSession(context, ref, allVerses), 
-                      description: "Classic flip cards",
+                      description: context.l10n.practice_flashcardsDescription,
                     ),
                   ],
                 ),
@@ -85,11 +83,10 @@ class PracticeScreen extends ConsumerWidget {
     );
   }
 
-  // FIX 3: Renamed to reflect the new generic shell and updated the navigation logic
   void _launchPracticeSession(BuildContext context, WidgetRef ref, List<SavedVerse> verses) {
     if (verses.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("No verses available to practice.")),
+        SnackBar(content: Text(context.l10n.practice_noVerses)),
       );
       return;
     }
@@ -142,14 +139,14 @@ class _DailyStatusCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            isAllDone ? "All Caught Up!" : "Ready to Review",
+            isAllDone ? context.l10n.practice_completedForToday : context.l10n.practice_readeToReview,
             style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
           Text(
             isAllDone 
-                ? "You have reviewed all $totalCount verses." 
-                : "You have $dueCount verses scheduled for today.",
+                ? context.l10n.practice_allVersesReviewed(totalCount)
+                : context.l10n.practice_versesScheduled(dueCount),
             style: const TextStyle(color: Colors.white70, fontSize: 16),
           ),
           const SizedBox(height: 24),
@@ -165,7 +162,7 @@ class _DailyStatusCard extends StatelessWidget {
               ),
               icon: Icon(isAllDone ? Icons.check : Icons.play_arrow_rounded),
               label: Text(
-                isAllDone ? "Practice Anyway" : "Start Session",
+                isAllDone ? context.l10n.practice_practiceAnyway : context.l10n.practice_startSession,
                 style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
             ),

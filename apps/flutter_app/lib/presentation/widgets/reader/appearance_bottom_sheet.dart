@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_app/providers/reader/reader_settings_controller.dart';
+import 'package:flutter_app/l10n/l10n_extension.dart';
 
 class AppearanceBottomSheet extends ConsumerWidget {
   const AppearanceBottomSheet({super.key});
@@ -13,7 +14,7 @@ class AppearanceBottomSheet extends ConsumerWidget {
 
     return Container(
       padding: const EdgeInsets.all(24),
-      height: 250, // Fixed height for simplicity
+      height: 250, 
       decoration: BoxDecoration(
         color: theme.scaffoldBackgroundColor,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
@@ -29,7 +30,7 @@ class AppearanceBottomSheet extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Appearance', 
+            context.l10n.reader_appearanceTitle, 
             style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 20),
@@ -59,17 +60,18 @@ class AppearanceBottomSheet extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               _OptionButton(
-                label: settings.fontFamily == 'Sans' ? 'Sans-Serif' : 'Serif',
+                label: settings.fontFamily == 'Sans' 
+                    ? context.l10n.reader_appearanceSansSerif 
+                    : context.l10n.reader_appearanceSerif,
                 icon: Icons.font_download_outlined,
                 isSelected: false, 
                 onTap: () => controller.toggleFontFamily(),
               ),
               _OptionButton(
-                label: 'Spacing',
+                label: context.l10n.reader_appearanceSpacing,
                 icon: Icons.format_line_spacing,
                 isSelected: settings.lineHeight > 1.6,
                 onTap: () {
-                   // Toggle between normal (1.6) and wide (2.2)
                   controller.setLineHeight(settings.lineHeight > 1.8 ? 1.6 : 2.2);
                 },
               ),

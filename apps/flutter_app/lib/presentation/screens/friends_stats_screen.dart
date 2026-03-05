@@ -34,6 +34,7 @@ class FriendStatsScreen extends ConsumerWidget {
       ),
       body: friendStatsAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
+        // TODO
         error: (err, _) => Center(child: Text('Error loading stats: $err')),
         data: (stats) => Center(
           child: Padding(

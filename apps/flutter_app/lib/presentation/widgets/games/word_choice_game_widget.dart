@@ -4,8 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_app/data/models/saved_verse.dart';
 import 'package:flutter_app/data/models/practice_feedback.dart';
 import 'package:flutter_app/providers/practice/practice_session_controller.dart';
-// Import this to access the user's other verses for the dictionary
 import 'package:flutter_app/providers/reader/saved_verses_controller.dart';
+import 'package:flutter_app/l10n/l10n_extension.dart';
 
 class WordChoiceGameWidget extends ConsumerStatefulWidget {
   final SavedVerse verse;
@@ -18,24 +18,34 @@ class WordChoiceGameWidget extends ConsumerStatefulWidget {
 
 class _WordChoiceGameWidgetState extends ConsumerState<WordChoiceGameWidget> {
   final Stopwatch _stopwatch = Stopwatch();
+  bool _isInitialized = false;
   
   late List<String> _words;
   late List<int> _blankIndices;
-  late List<String> _globalDictionary; // Holds words from other verses
+  late List<String> _globalDictionary; 
   
   int _currentStep = 0;
   late List<String> _currentOptions;
 
   @override
-  void initState() {
-    super.initState();
-    _setupGame();
-    _stopwatch.start();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_isInitialized) {
+      _setupGame();
+      _stopwatch.start();
+      _isInitialized = true;
+    }
   }
 
   void _setupGame() {
     _words = widget.verse.verseText.trim().split(RegExp(r'\s+'));
-    if (_words.isEmpty) _words = ["Error", "loading", "verse"];
+    if (_words.isEmpty) {
+      _words = [
+        context.l10n.game_wordChoice_errorFallback1, 
+        context.l10n.game_wordChoice_errorFallback2, 
+        context.l10n.game_wordChoice_errorFallback3
+      ];
+    }
 
     _blankIndices = [];
     
@@ -55,18 +65,15 @@ class _WordChoiceGameWidgetState extends ConsumerState<WordChoiceGameWidget> {
     _generateOptionsForCurrentStep();
   }
 
-  // Extracts words from ALL other saved verses to use as fake options
   void _buildGlobalDictionary() {
     final allVerses = ref.read(savedVersesControllerProvider).value ?? [];
     final Set<String> uniqueWords = {};
 
     for (final v in allVerses) {
-      // Skip the current verse so we don't accidentally pull the exact missing word contextually
       if (v.id == widget.verse.id) continue;
 
       final words = v.verseText.split(RegExp(r'\s+'));
       for (var w in words) {
-        // Safely strip punctuation but keep international letters
         final clean = w.replaceAll(RegExp(r'[.,;!?":\(\)\[\]]'), '').trim();
         if (clean.length > 2) {
           uniqueWords.add(clean);
@@ -123,7 +130,6 @@ class _WordChoiceGameWidgetState extends ConsumerState<WordChoiceGameWidget> {
       });
 
       if (_currentStep >= _blankIndices.length) {
-        // WIN THE WHOLE GAME
         _stopwatch.stop();
         final elapsedSeconds = _stopwatch.elapsed.inSeconds;
         
@@ -143,7 +149,7 @@ class _WordChoiceGameWidgetState extends ConsumerState<WordChoiceGameWidget> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text("Oops! The correct word was '$correctWord'"),
+            content: Text(context.l10n.game_wordChoice_incorrect(correctWord)),
             backgroundColor: Colors.red,
             duration: const Duration(milliseconds: 1500),
           ),
@@ -174,7 +180,7 @@ class _WordChoiceGameWidgetState extends ConsumerState<WordChoiceGameWidget> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            "Complete the verse (${_currentStep + 1} / ${_blankIndices.length}):",
+            context.l10n.game_wordChoice_prompt(_currentStep + 1, _blankIndices.length),
             style: const TextStyle(color: Colors.grey, fontSize: 16),
             textAlign: TextAlign.center,
           ),
@@ -225,7 +231,6 @@ class _WordChoiceGameWidgetState extends ConsumerState<WordChoiceGameWidget> {
               crossAxisSpacing: 16,
               childAspectRatio: 2.5,
               physics: const NeverScrollableScrollPhysics(),
-              // Dynamic button rendering based on available options
               children: _currentOptions.map((option) {
                 return ElevatedButton(
                   style: ElevatedButton.styleFrom(

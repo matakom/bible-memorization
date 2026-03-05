@@ -9,7 +9,7 @@ class AppLocalizationsCs extends AppLocalizations {
   AppLocalizationsCs([String locale = 'cs']) : super(locale);
 
   @override
-  String get common_comingSoon => 'Již brzy!';
+  String get common_comingSoon => 'Brzy dostupné!';
 
   @override
   String get login_screenTitle => 'Přihlášení';
@@ -18,7 +18,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get login_signInButton => 'Přihlásit se';
 
   @override
-  String get login_errorOnSignIn => 'Přihlášení se nezdařilo';
+  String get login_errorOnSignIn => 'Přihlášení selhalo';
 
   @override
   String get reader_navbar => 'Bible';
@@ -27,7 +27,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get stats_navbar => 'Statistiky';
 
   @override
-  String get practice_navbar => 'Trénink';
+  String get practice_navbar => 'Procvičování';
 
   @override
   String get social_navbar => 'Přátelé';
@@ -42,7 +42,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get settings_signOutButton => 'Odhlásit se';
 
   @override
-  String get settings_errorOnSignOut => 'Odhlášení se nezdařilo';
+  String get settings_errorOnSignOut => 'Odhlášení selhalo';
 
   @override
   String get settings_appsLanguage => 'Jazyk aplikace';
@@ -54,10 +54,10 @@ class AppLocalizationsCs extends AppLocalizations {
   String get settings_themeDark => 'Tmavý';
 
   @override
-  String get settings_themeSystem => 'Systém';
+  String get settings_themeSystem => 'Výchozí systémový';
 
   @override
-  String get settings_tokenButton => 'Vypiš token';
+  String get settings_tokenButton => 'Zobrazit token';
 
   @override
   String get social_screenTitle => 'Přátelé';
@@ -69,17 +69,17 @@ class AppLocalizationsCs extends AppLocalizations {
   String get social_sendRequest => 'Odeslat žádost';
 
   @override
-  String get social_yourCode => 'Váš kód';
+  String get social_yourCode => 'Tvůj kód';
 
   @override
-  String get social_codeFetchError => 'Chyba při získávání kódu';
+  String get social_codeFetchError => 'Chyba při načítání kódu';
 
   @override
-  String get social_nothingHere => 'Nic zde...';
+  String get social_nothingHere => 'Zatím tu nic není...';
 
   @override
   String get social_nothingToSeeHereYet =>
-      'Zatím zde nic není. Začněte přidáním přátel!';
+      'Zatím tu nic není. Začni tím, že si přidáš pár přátel!';
 
   @override
   String get social_friendRequest => 'Žádost o přátelství';
@@ -91,16 +91,16 @@ class AppLocalizationsCs extends AppLocalizations {
   String get social_sentRequests => 'Odeslané žádosti';
 
   @override
-  String get social_pending => 'Nevyřízené';
+  String get social_pending => 'Čeká se';
 
   @override
   String get social_accept => 'Přijmout';
 
   @override
-  String get social_unfriendTitle => 'Odebrat přítele?';
+  String get social_unfriendTitle => 'Odebrat z přátel?';
 
   @override
-  String get social_unfriendBody => 'Opravdu chcete odebrat tohoto přítele?';
+  String get social_unfriendBody => 'Opravdu chceš odebrat tohoto přítele?';
 
   @override
   String get social_cancel => 'Zrušit';
@@ -109,7 +109,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get social_remove => 'Odebrat';
 
   @override
-  String get friendsStats_screenTitle => 'Statistiky přátel';
+  String get friendsStats_screenTitle => 'Statistiky přítele';
 
   @override
   String get friendsStats_future => 'Zde se zobrazí statistiky.';
@@ -121,7 +121,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get reader_loading => 'Načítání Písma...';
 
   @override
-  String get reader_error => 'Text se nepodařilo načíst';
+  String get reader_error => 'Nepodařilo se načíst text';
 
   @override
   String get reader_bookSelector => 'Kniha';
@@ -131,14 +131,7 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String reader_saveButton(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Uložit $count veršů',
-      few: 'Uložit $count verše',
-      one: 'Uložit verš',
-    );
-    return '$_temp0';
+    return 'Uložit $count veršů';
   }
 
   @override
@@ -146,7 +139,7 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get reader_saveDialogBody =>
-      'Chcete přidat tyto verše do svého denního procvičování?';
+      'Chceš tyto verše přidat do svého denního procvičování?';
 
   @override
   String get reader_cancel => 'Zrušit';
@@ -156,14 +149,7 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String reader_savedVerses(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Uloženo $count veršů',
-      few: 'Uloženy $count verše',
-      one: 'Verš uložen',
-    );
-    return '$_temp0';
+    return 'Uloženo $count veršů';
   }
 
   @override
@@ -173,9 +159,341 @@ class AppLocalizationsCs extends AppLocalizations {
   String get reader_retrySavedVersesFetch => 'Zkusit znovu';
 
   @override
-  String get reader_errorLoadingSavedVerses => 'Nepovedlo se načíst verše: ';
+  String get reader_errorLoadingSavedVerses =>
+      'Chyba při načítání uložených veršů: ';
 
   @override
   String get reader_noSavedVersesYet =>
-      'Zatím tu nemáš žádné verše!\nBěž do Bible a přidej nějaký!';
+      'Zatím nemáš žádné uložené verše.\nBěž do Bible a nějaké si přidej!';
+
+  @override
+  String get practice_title => 'Procvičování';
+
+  @override
+  String get practice_completedForToday => 'Pro dnešek máš hotovo!';
+
+  @override
+  String get practice_modes => 'Režimy učení';
+
+  @override
+  String get practice_flashcards => 'Kartičky';
+
+  @override
+  String get practice_flashcardsDescription => 'Klasické oboustranné kartičky';
+
+  @override
+  String get practice_noVerses => 'Žádné verše k procvičování.';
+
+  @override
+  String get practice_readeToReview => 'Připraveno k opakování';
+
+  @override
+  String practice_error(String error) {
+    return 'Chyba: $error';
+  }
+
+  @override
+  String practice_allVersesReviewed(int totalCount) {
+    return 'Zopakoval jsi všech $totalCount veršů.';
+  }
+
+  @override
+  String practice_versesScheduled(int dueCount) {
+    return 'Na dnešek máš naplánováno $dueCount veršů.';
+  }
+
+  @override
+  String get practice_practiceAnyway => 'Přesto procvičovat';
+
+  @override
+  String get practice_startSession => 'Začít lekci';
+
+  @override
+  String get practiceShell_sessionComplete => 'Lekce dokončena!';
+
+  @override
+  String practiceShell_versesMastered(int count) {
+    return 'Dnes zvládnutých veršů: $count';
+  }
+
+  @override
+  String get practiceShell_finish => 'Dokončit';
+
+  @override
+  String practiceShell_remaining(int count) {
+    return 'Zbývá: $count';
+  }
+
+  @override
+  String get reader_appearanceTooltip => 'Vzhled';
+
+  @override
+  String reader_errorSavingVerses(String error) {
+    return 'Chyba při ukládání veršů: $error';
+  }
+
+  @override
+  String savedVerses_currentTranslation(String abbreviation) {
+    return 'Aktuální překlad: $abbreviation';
+  }
+
+  @override
+  String get savedVerses_verseDeleted => 'Verš byl smazán';
+
+  @override
+  String savedVerses_bookFallback(int book, int chapter, int verse) {
+    return 'Kniha $book $chapter:$verse';
+  }
+
+  @override
+  String get savedVerses_difficultyEasy => 'Snadné';
+
+  @override
+  String get savedVerses_difficultyNormal => 'Normální';
+
+  @override
+  String get savedVerses_difficultyModerate => 'Střední';
+
+  @override
+  String get savedVerses_difficultyHard => 'Těžké';
+
+  @override
+  String get savedVerses_difficultyElite => 'Elitní';
+
+  @override
+  String get settings_debugTools => 'Nástroje pro vývojáře';
+
+  @override
+  String get settings_debugDb => 'Ladění DB';
+
+  @override
+  String get settings_testNotification => 'Testovací oznámení (10s)';
+
+  @override
+  String get settings_notificationScheduled =>
+      'Oznámení je naplánováno za 10 sekund!';
+
+  @override
+  String get settings_forceSync => 'Vynutit synchronizaci';
+
+  @override
+  String get settings_forceSyncDescription => 'Ruční odeslání/stažení dat';
+
+  @override
+  String get settings_syncing => 'Synchronizace...';
+
+  @override
+  String get settings_syncSuccess => 'Synchronizace byla úspěšná!';
+
+  @override
+  String settings_syncError(String error) {
+    return 'Chyba: $error';
+  }
+
+  @override
+  String settings_errorLoadingProfile(String error) {
+    return 'Chyba při načítání profilu: $error';
+  }
+
+  @override
+  String get settings_guestUser => 'Host';
+
+  @override
+  String get settings_guestProgressSavedLocally =>
+      'Pokrok se ukládá pouze v zařízení';
+
+  @override
+  String social_errorLoadingUser(String error) {
+    return 'Chyba při načítání uživatele: $error';
+  }
+
+  @override
+  String get social_unavailableOfflineTitle =>
+      'Sociální funkce nejsou dostupné offline';
+
+  @override
+  String get social_unavailableOfflineDescription =>
+      'Připoj se k internetu a restartuj aplikaci, aby se synchronizoval tvůj kód přítele.';
+
+  @override
+  String social_errorLoadingFriendships(String error) {
+    return 'Chyba při načítání přátel: $error';
+  }
+
+  @override
+  String get social_guestTitle => 'Učte se společně';
+
+  @override
+  String get social_guestDescription =>
+      'Přihlas se, abys mohl komunikovat s přáteli, sdílet svůj pokrok a navzájem se motivovat.';
+
+  @override
+  String get stats_screenTitle => 'Můj profil';
+
+  @override
+  String stats_errorLoadingStats(String error) {
+    return 'Chyba při načítání statistik: $error';
+  }
+
+  @override
+  String get game_firstLetter_hardMode => 'Těžký režim';
+
+  @override
+  String get game_firstLetter_easyMode => 'Lehký režim';
+
+  @override
+  String game_firstLetter_mistakes(int count) {
+    return 'Chyby: $count';
+  }
+
+  @override
+  String get game_firstLetter_hintText => 'Napiš první písmeno...';
+
+  @override
+  String get game_firstLetter_revealTooltip => 'Odhalit další slovo';
+
+  @override
+  String get game_flashcard_markedForReview =>
+      'Označeno k opakování. Brzy tento verš uvidíš znovu!';
+
+  @override
+  String get game_flashcard_rateRecall => 'Ohodnoť, jak sis to pamatoval:';
+
+  @override
+  String get game_flashcard_tapToShow => 'Klepnutím zobrazíš odpověď';
+
+  @override
+  String get game_flashcard_errorBookName => 'Nastala chyba!';
+
+  @override
+  String get game_flashcard_errorLoadText => 'Nepodařilo se načíst text';
+
+  @override
+  String get game_reference_prompt => 'Kde se nachází tento verš?';
+
+  @override
+  String get game_reference_incorrect =>
+      'Nesprávný odkaz. Zkusíme to příště znovu!';
+
+  @override
+  String game_reference_bookFallback(int book) {
+    return 'Kniha $book';
+  }
+
+  @override
+  String get game_builder_prompt => 'Sestav verš:';
+
+  @override
+  String get game_builder_incorrect => 'Těsně vedle! Zkus jiné slovo.';
+
+  @override
+  String get game_builder_dummyLord => 'Hospodin';
+
+  @override
+  String get game_builder_dummyGrace => 'milost';
+
+  @override
+  String get game_builder_dummyFaith => 'víra';
+
+  @override
+  String get game_builder_dummyHoly => 'svatý';
+
+  @override
+  String game_wordChoice_prompt(int current, int total) {
+    return 'Doplň verš ($current / $total):';
+  }
+
+  @override
+  String game_wordChoice_incorrect(String word) {
+    return 'Jejda! Správné slovo bylo \'$word\'';
+  }
+
+  @override
+  String get game_wordChoice_errorFallback1 => 'Chyba';
+
+  @override
+  String get game_wordChoice_errorFallback2 => 'při';
+
+  @override
+  String get game_wordChoice_errorFallback3 => 'načítání';
+
+  @override
+  String get reader_appearanceTitle => 'Vzhled';
+
+  @override
+  String get reader_appearanceSansSerif => 'Bezpatkové';
+
+  @override
+  String get reader_appearanceSerif => 'Patkové';
+
+  @override
+  String get reader_appearanceSpacing => 'Řádkování';
+
+  @override
+  String get settings_deleteAccountButton => 'Smazat účet';
+
+  @override
+  String get settings_deleteAccountDialogTitle => 'Smazat všechna data';
+
+  @override
+  String get settings_deleteAccountDialogBody =>
+      'Opravdu chceš smazat všechna svá data? Tím trvale odstraníš všechny uložené verše, statistiky a přátele. Začneš úplně od začátku.';
+
+  @override
+  String get settings_deleteAccountCancel => 'Zrušit';
+
+  @override
+  String get settings_deleteAccountConfirm => 'Smazat';
+
+  @override
+  String get settings_deleteAccountSuccess =>
+      'Všechna data byla smazána. Začínáš s čistým štítem!';
+
+  @override
+  String settings_deleteAccountError(String error) {
+    return 'Chyba při mazání dat: $error';
+  }
+
+  @override
+  String get leaderboard_title => 'ŽEBŘÍČEK';
+
+  @override
+  String leaderboard_you(String name) {
+    return '$name (Ty)';
+  }
+
+  @override
+  String leaderboard_points(int score) {
+    return '$score b';
+  }
+
+  @override
+  String get stats_score => 'Skóre';
+
+  @override
+  String get stats_streak => 'Denní řada';
+
+  @override
+  String get stats_memorized => 'Zapamatováno';
+
+  @override
+  String get stats_timeSpent => 'Čas učení';
+
+  @override
+  String get stats_practices => 'Procvičení';
+
+  @override
+  String stats_timeSeconds(int seconds) {
+    return '${seconds}s';
+  }
+
+  @override
+  String stats_timeMinutes(int minutes) {
+    return '${minutes}m';
+  }
+
+  @override
+  String stats_timeHoursMinutes(int hours, int minutes) {
+    return '${hours}h ${minutes}m';
+  }
 }

@@ -4,6 +4,7 @@ import 'package:flutter_app/data/models/saved_verse.dart';
 import 'package:flutter_app/data/models/practice_feedback.dart';
 import 'package:flutter_app/providers/practice/practice_session_controller.dart';
 import 'package:flutter_app/providers/reader/bible_provider.dart';
+import 'package:flutter_app/l10n/l10n_extension.dart';
 
 class _WordTarget {
   final String originalText; 
@@ -181,14 +182,14 @@ class _FirstLetterTypingGameWidgetState extends ConsumerState<FirstLetterTypingG
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                _isHardMode ? "Hard Mode" : "Easy Mode",
+                _isHardMode ? context.l10n.game_firstLetter_hardMode : context.l10n.game_firstLetter_easyMode,
                 style: TextStyle(
                   color: _isHardMode ? Colors.orange : Colors.green,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               Text(
-                "Mistakes: $_mistakes",
+                context.l10n.game_firstLetter_mistakes(_mistakes),
                 style: TextStyle(color: _mistakes > 0 ? Colors.red : Colors.grey),
               ),
             ],
@@ -220,7 +221,7 @@ class _FirstLetterTypingGameWidgetState extends ConsumerState<FirstLetterTypingG
               child: Wrap(
                 spacing: 6.0,
                 runSpacing: 12.0,
-                alignment: WrapAlignment.center, // Centering looks cleaner
+                alignment: WrapAlignment.center, 
                 children: _words.asMap().entries.map((entry) {
                   final index = entry.key;
                   final word = entry.value;
@@ -263,11 +264,10 @@ class _FirstLetterTypingGameWidgetState extends ConsumerState<FirstLetterTypingG
                   focusNode: _focusNode,
                   autocorrect: false,
                   enableSuggestions: false,
-                  // FIX: Standard text keyboard so diacritics are available if they want them
                   keyboardType: TextInputType.text, 
-                  decoration: const InputDecoration(
-                    hintText: "Type first letter...",
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    hintText: context.l10n.game_firstLetter_hintText,
+                    border: const OutlineInputBorder(),
                   ),
                   onChanged: _handleInput,
                 ),
@@ -276,7 +276,7 @@ class _FirstLetterTypingGameWidgetState extends ConsumerState<FirstLetterTypingG
               IconButton.filledTonal(
                 onPressed: _useHint,
                 icon: const Icon(Icons.lightbulb),
-                tooltip: "Reveal Next Word",
+                tooltip: context.l10n.game_firstLetter_revealTooltip,
               )
             ],
           ),
