@@ -13,6 +13,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_app/services/sync_service.dart';
 import 'package:flutter_app/providers/user_provider.dart';
 
+import '../../utils/debugger.dart';
+
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
@@ -96,7 +98,7 @@ class SettingsScreen extends ConsumerWidget {
                   );
                 }
               } catch (e) {
-                print("MANUAL SYNC ERROR: $e");
+                Debugger.log("MANUAL SYNC ERROR: $e");
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(

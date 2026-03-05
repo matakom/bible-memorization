@@ -13,9 +13,9 @@ class BibleTranslationNotifier extends AsyncNotifier<BibleTranslation> {
     final prefs = await SharedPreferences.getInstance();
     final savedId = prefs.getString(_kPrefKey);
 
-    return AvailableBibleTranslations.firstWhere(
+    return availableBibleTranslations.firstWhere(
       (v) => v.id == savedId,
-      orElse: () => AvailableBibleTranslations.first,
+      orElse: () => availableBibleTranslations.first,
     );
   }
 
@@ -34,7 +34,7 @@ final bibleRepositoryProvider = Provider<BibleRepository>((ref) {
   
   final currentVersion = versionAsync.maybeWhen(
     data: (data) => data,
-    orElse: () => AvailableBibleTranslations.first,
+    orElse: () => availableBibleTranslations.first,
   );
   return BibleRepository(assetPath: currentVersion.assetPath);
 });

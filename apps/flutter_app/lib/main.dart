@@ -67,13 +67,19 @@ class _MyAppState extends ConsumerState<MyApp> {
   Widget build(BuildContext context) {
     final router = ref.watch(goRouterProvider);
     final Locale currentLocale = ref.watch(languageProvider);
-    final ThemeMode currentThemeMode = ref.watch(themeProvider);
+    
+    // 1. Watch the AsyncValue
+    final themeAsync = ref.watch(themeProvider);
 
     return MaterialApp.router(
       routerConfig: router,
       theme: lightTheme,
       darkTheme: darkTheme,
-      themeMode: currentThemeMode,
+      // 2. Safely extract the data
+      themeMode: themeAsync.maybeWhen(
+        data: (mode) => mode,
+        orElse: () => ThemeMode.system,
+      ),
       locale: currentLocale,
       supportedLocales: AppLocalizations.supportedLocales,
       localizationsDelegates: const [

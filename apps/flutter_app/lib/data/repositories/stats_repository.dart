@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
-import 'package:drift/drift.dart'; // For SQL expressions
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_app/api/dio_client.dart';
@@ -129,7 +128,7 @@ class StatsRepository {
       final response = await _dio.get('/user/$userId/stats');
       return UserStats.fromJson(response.data);
     } on DioException catch (e) {
-      throw Exception('Failed to load friend stats');
+      throw Exception('Failed to load friend stats: $e');
     }
   }
 }

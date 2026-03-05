@@ -54,8 +54,8 @@ class TopBar extends ConsumerWidget {
                       child: Center(child: Text("${i + 1}")), 
                     );
                   }),
-                  onChanged: (num) {
-                    if (num != null) ref.read(readerProvider.notifier).selectChapter(num);
+                  onChanged: (value) {
+                    if (value != null) ref.read(readerProvider.notifier).selectChapter(value);
                   },
                 ),
               ),

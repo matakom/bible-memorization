@@ -14,6 +14,10 @@ class ReaderContentView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final readerState = ref.watch(readerProvider);
     final currentTranslation = ref.watch(currentBibleTranslationProvider).value;
+    final savedVersesState = ref.watch(savedVersesControllerProvider);
+    
+    // Watch the Async settings
+    final settingsAsync = ref.watch(readerSettingsProvider);
 
     final chapterAsync = ref.watch(
       chapterContentProvider(
@@ -21,49 +25,44 @@ class ReaderContentView extends ConsumerWidget {
       ),
     );
 
-    final savedVersesState = ref.watch(savedVersesControllerProvider);
-
-    final savedVerseNumbers =
-        savedVersesState.value
-            ?.where(
-              (v) =>
-                  v.book == readerState.bookId &&
-                  v.chapter == readerState.chapterNum &&
-                  v.translation == currentTranslation?.abbreviation,
-            )
+    final savedVerseNumbers = savedVersesState.value
+            ?.where((v) =>
+                v.book == readerState.bookId &&
+                v.chapter == readerState.chapterNum &&
+                v.translation == currentTranslation?.abbreviation)
             .map((v) => v.verse)
-            .toSet() ??
-        {};
+            .toSet() ?? {};
 
-    final settings = ref.watch(readerSettingsProvider);
-
+    // We combine the two AsyncValues (Chapter + Settings)
     return chapterAsync.when(
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (err, _) =>
-          Center(child: Text('${context.l10n.reader_error}: $err')),
+      error: (err, _) => Center(child: Text('${context.l10n.reader_error}: $err')),
       data: (chapter) {
-        return ListView.builder(
-          padding: const EdgeInsets.fromLTRB(0, 8, 0, 100),
-          itemCount: chapter.verses.length,
-          itemBuilder: (context, index) {
-            final verse = chapter.verses[index];
-            final verseNum = verse.verseNumber;
+        // Now handle the Settings AsyncValue
+        return settingsAsync.when(
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (err, _) => const SizedBox.shrink(), // Or fallback settings
+          data: (settings) {
+            return ListView.builder(
+              padding: const EdgeInsets.fromLTRB(0, 8, 0, 100),
+              itemCount: chapter.verses.length,
+              itemBuilder: (context, index) {
+                final verse = chapter.verses[index];
+                final verseNum = verse.verseNumber;
+                final isSelected = ref.watch(verseSelectionProvider).contains(verseNum);
+                final isSaved = savedVerseNumbers.contains(verseNum);
 
-            final isSelected = ref
-                .watch(verseSelectionProvider)
-                .contains(verseNum);
-            final isSaved = savedVerseNumbers.contains(verseNum);
-
-            return _VerseItem(
-              verseNum: verseNum,
-              text: verse.text,
-              isSelected: isSelected,
-              isSaved: isSaved,
-              onTap: () =>
-                  ref.read(verseSelectionProvider.notifier).toggle(verseNum),
-              fontSizeScale: settings.fontSizeScale,
-              lineHeight: settings.lineHeight,
-              fontFamily: settings.fontFamily,
+                return _VerseItem(
+                  verseNum: verseNum,
+                  text: verse.text,
+                  isSelected: isSelected,
+                  isSaved: isSaved,
+                  onTap: () => ref.read(verseSelectionProvider.notifier).toggle(verseNum),
+                  fontSizeScale: settings.fontSizeScale,
+                  lineHeight: settings.lineHeight,
+                  fontFamily: settings.fontFamily,
+                );
+              },
             );
           },
         );
@@ -99,9 +98,9 @@ class _VerseItem extends StatelessWidget {
 
     Color? backgroundColor;
     if (isSelected) {
-      backgroundColor = theme.colorScheme.primaryContainer.withOpacity(0.5);
+      backgroundColor = theme.colorScheme.primaryContainer.withValues(alpha: 0.5);
     } else if (isSaved) {
-      backgroundColor = theme.colorScheme.tertiaryContainer.withOpacity(0.3);
+      backgroundColor = theme.colorScheme.tertiaryContainer.withValues(alpha: 0.3);
     } else {
       backgroundColor = Colors.transparent;
     }
@@ -129,7 +128,7 @@ class _VerseItem extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                         color: isSaved || isSelected
                             ? theme.colorScheme.primary
-                            : theme.colorScheme.onSurfaceVariant.withOpacity(0.7),
+                            : theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
                       ),
                     ),
                     if (isSaved && !isSelected)

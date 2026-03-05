@@ -10,13 +10,14 @@ class _WordTarget {
   final String originalText; 
   final String? targetLetter; 
   final int length; 
-  bool isRevealed;
+  
+  // FIX: Assigned directly here instead of in the constructor
+  bool isRevealed = false; 
 
   _WordTarget({
     required this.originalText,
     required this.targetLetter,
     required this.length,
-    this.isRevealed = false,
   });
 }
 

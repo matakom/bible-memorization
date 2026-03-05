@@ -7,6 +7,8 @@ import {
     Param,
     NotFoundException,
     Query,
+    Delete,
+    Req,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { UserService } from './user.service';
@@ -51,5 +53,12 @@ export class UserController {
     @Get(':id/stats')
     async getUserStats(@Param('id') id: string) {
         return this.userService.getUserStats(id);
+    }
+
+    @Delete('me')
+    @UseGuards(AuthGuard())
+    async deleteAccount(@Req() req) {
+        const userId = req.user.id;
+        return this.userService.deleteUserFully(userId);
     }
 }

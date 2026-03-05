@@ -70,7 +70,6 @@ class PracticeShellScreen extends ConsumerWidget {
         gameWidget = VerseBuilderGameWidget(key: ValueKey(currentVerse.id), verse: currentVerse);
         break;
       case GameType.flashcard:
-      default:
         gameWidget = FlashcardGameWidget(key: ValueKey(currentVerse.id), verse: currentVerse);
         break;
     }

@@ -33,7 +33,7 @@ class BibleTranslationSelector extends ConsumerWidget {
             ref.read(currentBibleTranslationProvider.notifier).setVersion(version);
           },
           itemBuilder: (context) {
-            return AvailableBibleTranslations.map((version) {
+            return availableBibleTranslations.map((version) {
               return PopupMenuItem(
                 value: version,
                 child: Row(

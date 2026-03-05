@@ -12,7 +12,7 @@ class BibleTranslation {
   });
 }
 
-const List<BibleTranslation> AvailableBibleTranslations = [
+const List<BibleTranslation> availableBibleTranslations = [
   BibleTranslation(
     id: 'b21',
     name: 'Bible 21',

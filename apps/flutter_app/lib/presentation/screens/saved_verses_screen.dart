@@ -87,7 +87,7 @@ class _SavedVerseTile extends ConsumerWidget {
       direction: DismissDirection.endToStart,
       background: Container(
         margin: const EdgeInsets.symmetric(vertical: 8),
-        color: Colors.red.withOpacity(0.9),
+        color: Colors.red.withValues(alpha:0.9),
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: const Icon(Icons.delete_outline, color: Colors.white, size: 28),
@@ -186,9 +186,9 @@ class _DifficultyBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha:0.1),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: color.withOpacity(0.3)),
+        border: Border.all(color: color.withValues(alpha:0.3)),
       ),
       child: Text(
         label,

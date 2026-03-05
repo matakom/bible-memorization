@@ -5,7 +5,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_app/api/dio_client.dart';
 import 'package:flutter_app/providers/core/security_context_provider.dart';
 import 'package:flutter_app/data/local/app_database.dart' as db;
-import 'package:flutter_app/data/models/practice_feedback.dart'; // Needed for GameType enum!
+import 'package:flutter_app/data/models/practice_feedback.dart';
+
+import '../utils/debugger.dart'; // Needed for GameType enum!
 
 class SyncService {
   final Dio _dio;
@@ -21,36 +23,34 @@ class SyncService {
   /// Main entry point to run synchronization
   Future<void> runSync() async {
     if (_isSyncing) {
-      print("⚠️ Sync skipped: Already in progress.");
       return;
     }
 
     _isSyncing = true;
-    print("🔄 SYNC STARTED");
 
     try {
       // --- STEP 1: PUSH (Client -> Server) ---
       try {
-        print("➡️ Attempting PUSH...");
+        Debugger.log("➡️ Attempting PUSH...");
         await _pushChanges();
-        print("✅ PUSH Finished");
+        Debugger.log("✅ PUSH Finished");
       } catch (e) {
-        print("❌ PUSH FAILED: $e");
+        Debugger.log("❌ PUSH FAILED: $e");
       }
 
       // --- STEP 2: PULL (Server -> Client) ---
       try {
-        print("⬅️ Attempting PULL...");
+        Debugger.log("⬅️ Attempting PULL...");
         await _pullChanges();
-        print("✅ PULL Finished");
+        Debugger.log("✅ PULL Finished");
       } catch (e) {
-        print("❌ PULL FAILED: $e");
+        Debugger.log("❌ PULL FAILED: $e");
       }
     } catch (e) {
-      print("❌ CRITICAL SYNC ERROR: $e");
+      Debugger.log("❌ CRITICAL SYNC ERROR: $e");
     } finally {
       _isSyncing = false;
-      print("🏁 SYNC COMPLETE");
+      Debugger.log("🏁 SYNC COMPLETE");
     }
   }
 

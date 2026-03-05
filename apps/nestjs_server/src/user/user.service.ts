@@ -179,4 +179,28 @@ export class UserService {
         };
     }
 
+    async deleteUserFully(userId: string) {
+    // We use a transaction to ensure everything is deleted or nothing is
+    return await this.userRepository.manager.transaction(async (transactionalEntityManager) => {
+        // 1. Delete relations first
+        await transactionalEntityManager.delete(Exercise, { userId });
+        await transactionalEntityManager.delete(SavedVerse, { userId });
+        
+        // 2. Delete Friendships (where user is either the initiator or the friend)
+        await transactionalEntityManager.delete(Friendship, [
+            { userId },
+            { friendId: userId }
+        ]);
+
+        // 3. Finally, delete the user
+        const deleteResult = await transactionalEntityManager.delete(User, { id: userId });
+
+        if (deleteResult.affected === 0) {
+            throw new NotFoundException('User not found');
+        }
+
+        return { success: true };
+    });
+}
+
 }

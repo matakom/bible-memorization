@@ -8,81 +8,77 @@ class AppearanceBottomSheet extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final settings = ref.watch(readerSettingsProvider);
-    final controller = ref.read(readerSettingsProvider.notifier);
+    final settingsAsync = ref.watch(readerSettingsProvider);
     final theme = Theme.of(context);
 
     return Container(
       padding: const EdgeInsets.all(24),
-      height: 250, 
+      height: 250,
       decoration: BoxDecoration(
         color: theme.scaffoldBackgroundColor,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
-            blurRadius: 10,
-            offset: const Offset(0, -5),
-          ),
-        ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            context.l10n.reader_appearanceTitle, 
-            style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 20),
+      child: settingsAsync.when(
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (err, _) => Center(child: Text('Error: $err')),
+        data: (settings) {
+          final controller = ref.read(readerSettingsProvider.notifier);
           
-          // Font Size Slider
-          Row(
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Icon(Icons.text_fields, size: 16),
-              Expanded(
-                child: Slider(
-                  value: settings.fontSizeScale,
-                  min: 0.8,
-                  max: 1.8,
-                  divisions: 5,
-                  label: '${(settings.fontSizeScale * 100).round()}%',
-                  onChanged: (val) => controller.setFontSize(val),
-                ),
+              Text(
+                context.l10n.reader_appearanceTitle,
+                style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
               ),
-              const Icon(Icons.text_fields, size: 24),
+              const SizedBox(height: 20),
+              
+              // Font Size Slider
+              Row(
+                children: [
+                  const Icon(Icons.text_fields, size: 16),
+                  Expanded(
+                    child: Slider(
+                      value: settings.fontSizeScale,
+                      min: 0.8,
+                      max: 1.8,
+                      divisions: 5,
+                      label: '${(settings.fontSizeScale * 100).round()}%',
+                      onChanged: (val) => controller.setFontSize(val),
+                    ),
+                  ),
+                  const Icon(Icons.text_fields, size: 24),
+                ],
+              ),
+              
+              const SizedBox(height: 16),
+              
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  _OptionButton(
+                    label: settings.fontFamily == 'Sans' 
+                        ? context.l10n.reader_appearanceSansSerif 
+                        : context.l10n.reader_appearanceSerif,
+                    icon: Icons.font_download_outlined,
+                    isSelected: settings.fontFamily == 'Serif', // Fixed selection logic
+                    onTap: () => controller.toggleFontFamily(),
+                  ),
+                  _OptionButton(
+                    label: context.l10n.reader_appearanceSpacing,
+                    icon: Icons.format_line_spacing,
+                    isSelected: settings.lineHeight > 1.8,
+                    onTap: () => controller.setLineHeight(settings.lineHeight > 1.8 ? 1.6 : 2.2),
+                  ),
+                ],
+              )
             ],
-          ),
-          
-          const SizedBox(height: 16),
-          
-          // Toggles (Font Family & Line Height)
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _OptionButton(
-                label: settings.fontFamily == 'Sans' 
-                    ? context.l10n.reader_appearanceSansSerif 
-                    : context.l10n.reader_appearanceSerif,
-                icon: Icons.font_download_outlined,
-                isSelected: false, 
-                onTap: () => controller.toggleFontFamily(),
-              ),
-              _OptionButton(
-                label: context.l10n.reader_appearanceSpacing,
-                icon: Icons.format_line_spacing,
-                isSelected: settings.lineHeight > 1.6,
-                onTap: () {
-                  controller.setLineHeight(settings.lineHeight > 1.8 ? 1.6 : 2.2);
-                },
-              ),
-            ],
-          )
-        ],
+          );
+        },
       ),
     );
   }
 }
-
 class _OptionButton extends StatelessWidget {
   final String label;
   final IconData icon;

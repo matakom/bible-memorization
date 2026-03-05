@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ReaderSettings {
   final double fontSizeScale;
@@ -6,9 +7,9 @@ class ReaderSettings {
   final String fontFamily;
 
   const ReaderSettings({
-    this.fontSizeScale = 1.0,
-    this.lineHeight = 1.6,
-    this.fontFamily = 'Sans', 
+    required this.fontSizeScale,
+    required this.lineHeight,
+    required this.fontFamily,
   });
 
   ReaderSettings copyWith({
@@ -24,30 +25,52 @@ class ReaderSettings {
   }
 }
 
-class ReaderSettingsController extends Notifier<ReaderSettings> {
+class ReaderSettingsController extends AsyncNotifier<ReaderSettings> {
+  static const _fsKey = 'reader_font_size_scale';
+  static const _lhKey = 'reader_line_height';
+  static const _ffKey = 'reader_font_family';
+
   @override
-  ReaderSettings build() {
-    // TODO: Later load this from SharedPreferences
-    return const ReaderSettings();
-  }
-
-  void setFontSize(double scale) {
-    // Clamp between 0.8 (tiny) and 2.0 (huge)
-    state = state.copyWith(fontSizeScale: scale.clamp(0.8, 2.0));
-  }
-
-  void setLineHeight(double height) {
-    state = state.copyWith(lineHeight: height);
-  }
-
-  void toggleFontFamily() {
-    state = state.copyWith(
-      fontFamily: state.fontFamily == 'Sans' ? 'Serif' : 'Sans',
+  Future<ReaderSettings> build() async {
+    // 1. Fetch the instance
+    final prefs = await SharedPreferences.getInstance();
+    
+    // 2. Return the data. This runs every time the app starts or the provider is invalidated.
+    return ReaderSettings(
+      fontSizeScale: prefs.getDouble(_fsKey) ?? 1.0,
+      lineHeight: prefs.getDouble(_lhKey) ?? 1.6,
+      fontFamily: prefs.getString(_ffKey) ?? 'Sans',
     );
+  }
+
+  Future<void> setFontSize(double scale) async {
+    final newScale = scale.clamp(0.8, 2.0);
+    final prefs = await SharedPreferences.getInstance();
+    
+    // Write to disk FIRST to ensure persistence
+    await prefs.setDouble(_fsKey, newScale);
+    
+    // Then update the UI state
+    state = AsyncData(state.value!.copyWith(fontSizeScale: newScale));
+  }
+
+  Future<void> setLineHeight(double height) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setDouble(_lhKey, height);
+    
+    state = AsyncData(state.value!.copyWith(lineHeight: height));
+  }
+
+  Future<void> toggleFontFamily() async {
+    final newFamily = state.value!.fontFamily == 'Sans' ? 'Serif' : 'Sans';
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_ffKey, newFamily);
+    
+    state = AsyncData(state.value!.copyWith(fontFamily: newFamily));
   }
 }
 
 final readerSettingsProvider = 
-    NotifierProvider<ReaderSettingsController, ReaderSettings>(() {
+    AsyncNotifierProvider<ReaderSettingsController, ReaderSettings>(() {
   return ReaderSettingsController();
 });
