@@ -28,13 +28,7 @@ class FriendshipsRepository {
     try {
       final rows =
           await (_db.select(_db.friendships)
-                ..where((t) => t.deletedAt.isNull())
-                ..orderBy([
-                  (t) => OrderingTerm(
-                    expression: t.createdAt,
-                    mode: OrderingMode.desc,
-                  ),
-                ]))
+                ..where((t) => t.deletedAt.isNull()))
               .get();
       return rows.map((row) => Friendship.fromEntity(row)).toList();
     } catch (e) {
@@ -92,7 +86,6 @@ class FriendshipsRepository {
               friendLastName: friendData['lastName'],
               status: 'pending',
               needsSync: const Value(true),
-              createdAt: Value(DateTime.now()),
               updatedAt: Value(DateTime.now()),
             ),
             mode: InsertMode.insertOrReplace,

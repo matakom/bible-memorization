@@ -49,10 +49,6 @@ class SavedVersesRepository {
           
           // MAP THE NEW FIELDS HERE:
           repetitionCount: row.repetitionCount,
-          correctCount: row.correctCount,
-          incorrectCount: row.incorrectCount,
-          stability: row.stability,
-          difficulty: row.difficulty,
         );
       }).toList();
     } catch (e) {

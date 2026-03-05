@@ -7,7 +7,6 @@ class Friendship {
   final String friendFirstName;
   final String friendLastName;
   final String status; // 'pending', 'accepted'
-  final DateTime createdAt;
 
   Friendship({
     required this.id,
@@ -16,7 +15,6 @@ class Friendship {
     required this.friendFirstName,
     required this.friendLastName,
     required this.status,
-    required this.createdAt,
   });
 
   factory Friendship.fromEntity(db.Friendship entity) {
@@ -27,7 +25,6 @@ class Friendship {
       friendFirstName: entity.friendFirstName,
       friendLastName: entity.friendLastName,
       status: entity.status,
-      createdAt: entity.createdAt,
     );
   }
 }

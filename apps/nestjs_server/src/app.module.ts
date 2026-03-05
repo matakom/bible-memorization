@@ -12,8 +12,8 @@ import { FriendshipsModule } from './friendships/friendships.module';
 import { Friendship } from './friendships/friendships.entity';
 import { SavedVerse } from './saved_verses/saved_verses.entity';
 import { SavedVersesModule } from './saved_verses/saved_verses.module';
-import { PracticeModule } from './practice/practice.module';
-import { Exercise } from './practice/exercise.entity';
+import { ExerciseModule } from './exercise/exercise.module';
+import { Exercise } from './exercise/exercise.entity';
 import { SyncModule } from './sync/sync.module';
 
 @Module({
@@ -44,7 +44,7 @@ import { SyncModule } from './sync/sync.module';
     AuthModule,
     FriendshipsModule,
     SavedVersesModule,
-    PracticeModule,
+    ExerciseModule,
     SyncModule
   ],
   controllers: [AppController],

@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_app/api/dio_client.dart';
 import 'package:flutter_app/providers/core/security_context_provider.dart';
 import 'package:flutter_app/data/local/app_database.dart' as db;
+import 'package:flutter_app/data/models/practice_feedback.dart'; // Needed for GameType enum!
 
 class SyncService {
   final Dio _dio;
@@ -34,7 +35,6 @@ class SyncService {
         await _pushChanges();
         print("✅ PUSH Finished");
       } catch (e) {
-        // If push fails, log it but DON'T stop. We still want to pull new data.
         print("❌ PUSH FAILED: $e");
       }
 
@@ -59,20 +59,10 @@ class SyncService {
   // =================================================================
   Future<void> _pushChanges() async {
     // 1. GATHER DIRTY DATA
-    final dirtyVerses = await (_db.select(
-      _db.savedVerses,
-    )..where((t) => t.needsSync.equals(true))).get();
-    final dirtyExercises = await (_db.select(
-      _db.exercises,
-    )..where((t) => t.needsSync.equals(true))).get();
-    final dirtyFriendships = await (_db.select(
-      _db.friendships,
-    )..where((t) => t.needsSync.equals(true))).get();
-
-    // We expect only 1 user row to be dirty at a time (the current user)
-    final dirtyUser = await (_db.select(
-      _db.users,
-    )..where((t) => t.needsSync.equals(true))).getSingleOrNull();
+    final dirtyVerses = await (_db.select(_db.savedVerses)..where((t) => t.needsSync.equals(true))).get();
+    final dirtyExercises = await (_db.select(_db.exercises)..where((t) => t.needsSync.equals(true))).get();
+    final dirtyFriendships = await (_db.select(_db.friendships)..where((t) => t.needsSync.equals(true))).get();
+    final dirtyUser = await (_db.select(_db.users)..where((t) => t.needsSync.equals(true))).getSingleOrNull();
 
     // Stop if nothing to sync
     if (dirtyVerses.isEmpty &&
@@ -82,72 +72,53 @@ class SyncService {
       return;
     }
 
-    // 2. BUILD PAYLOAD
+    // 2. BUILD PAYLOAD (HLR fields removed, GameType enum handled)
     final payload = {
-      'verses': dirtyVerses
-          .map(
-            (v) => {
-              'id': v.id,
-              'book': v.book,
-              'chapter': v.chapter,
-              'verse': v.verse,
-              'translation': v.translation,
-              'text': v.verseText,
-              'easeFactor': v.easeFactor,
-              'repetitionCount': v.repetitionCount,
-              'baseComplexity': v.baseComplexity,
-              'nextReviewDate': v.nextReviewDate.toIso8601String(),
-              'lastReviewDate': v.lastReviewDate?.toIso8601String(),
-              'updatedAt': v.updatedAt.toIso8601String(),
-              'deletedAt': v.deletedAt?.toIso8601String(),
-            },
-          )
-          .toList(),
+      'verses': dirtyVerses.map((v) => {
+        'id': v.id,
+        'book': v.book,
+        'chapter': v.chapter,
+        'verse': v.verse,
+        'translation': v.translation,
+        'text': v.verseText,
+        'easeFactor': v.easeFactor,
+        'repetitionCount': v.repetitionCount,
+        'baseComplexity': v.baseComplexity,
+        'nextReviewDate': v.nextReviewDate.toIso8601String(),
+        'lastReviewDate': v.lastReviewDate?.toIso8601String(),
+        'updatedAt': v.updatedAt.toIso8601String(),
+        'deletedAt': v.deletedAt?.toIso8601String(),
+      }).toList(),
 
-      'exercises': dirtyExercises
-          .map(
-            (e) => {
-              'id': e.id,
-              'verseId': e.verseId,
-              'grade': e.grade,
-              'exerciseType': e.exerciseType,
-              'durationSeconds': e.durationSeconds,
-              'performedAt': e.performedAt.toIso8601String(),
-              'updatedAt': e.updatedAt.toIso8601String(),
-              'deletedAt': e.deletedAt?.toIso8601String(),
-            },
-          )
-          .toList(),
+      'exercises': dirtyExercises.map((e) => {
+        'id': e.id,
+        'verseId': e.verseId,
+        'grade': e.grade,
+        'exerciseType': e.exerciseType.name, // Convert Enum to String
+        'durationSeconds': e.durationSeconds,
+        'performedAt': e.performedAt.toIso8601String(),
+        'updatedAt': e.updatedAt.toIso8601String(),
+        'deletedAt': e.deletedAt?.toIso8601String(),
+      }).toList(),
 
-      'friendships': dirtyFriendships
-          .map(
-            (f) => {
-              'id': f.id,
-              'userId': f.userId,
-              'friendId': f.friendId,
-              'status': f.status,
-              'createdAt': f.createdAt.toIso8601String(),
-              'updatedAt': f.updatedAt.toIso8601String(),
-              'deletedAt': f.deletedAt?.toIso8601String(),
-            },
-          )
-          .toList(),
+      'friendships': dirtyFriendships.map((f) => {
+        'id': f.id,
+        'userId': f.userId,
+        'friendId': f.friendId,
+        'status': f.status,
+        'updatedAt': f.updatedAt.toIso8601String(),
+        'deletedAt': f.deletedAt?.toIso8601String(),
+      }).toList(),
 
-      // User Object (Single object, not list)
-      'user': dirtyUser != null
-          ? {
-              'language': dirtyUser.language,
-              // Add other syncable user fields here if needed
-            }
-          : null,
+      'user': dirtyUser != null ? {
+        'language': dirtyUser.language,
+      } : null,
     };
 
     // 3. SEND TO API
     await _dio.post('/sync/push', data: payload);
 
-    // 4. MARK CLEAN (Explicitly for each table type)
-
-    // Clean Verses
+    // 4. MARK CLEAN
     if (dirtyVerses.isNotEmpty) {
       final ids = dirtyVerses.map((e) => e.id).toList();
       await (_db.update(_db.savedVerses)..where((t) => t.id.isIn(ids))).write(
@@ -155,7 +126,6 @@ class SyncService {
       );
     }
 
-    // Clean Exercises
     if (dirtyExercises.isNotEmpty) {
       final ids = dirtyExercises.map((e) => e.id).toList();
       await (_db.update(_db.exercises)..where((t) => t.id.isIn(ids))).write(
@@ -163,7 +133,6 @@ class SyncService {
       );
     }
 
-    // Clean Friendships
     if (dirtyFriendships.isNotEmpty) {
       final ids = dirtyFriendships.map((e) => e.id).toList();
       await (_db.update(_db.friendships)..where((t) => t.id.isIn(ids))).write(
@@ -171,7 +140,6 @@ class SyncService {
       );
     }
 
-    // Clean User
     if (dirtyUser != null) {
       await (_db.update(_db.users)..where((t) => t.id.equals(dirtyUser.id)))
           .write(const db.UsersCompanion(needsSync: Value(false)));
@@ -182,10 +150,8 @@ class SyncService {
   // 2. PULL: Server -> Client
   // =================================================================
   Future<void> _pullChanges() async {
-    // A. Get Checkpoint
     final lastSync = _prefs.getString(_kLastSyncKey);
 
-    // B. Call API
     final response = await _dio.get(
       '/sync/pull',
       queryParameters: {if (lastSync != null) 'lastSync': lastSync},
@@ -195,21 +161,14 @@ class SyncService {
     final serverTimestamp = data['timestamp'];
     final changes = data['changes'];
 
-    // C. Apply Changes to Local DB
-    await _db.batch((batch) {
+    await _db.transaction(() async {
       // 1. VERSES
       if (changes['verses'] != null) {
         for (final v in changes['verses']) {
           if (v['deletedAt'] != null) {
-            // Physical Delete
-            batch.delete(
-              _db.savedVerses,
-              db.SavedVersesCompanion(id: Value(v['id'])),
-            );
+            await (_db.delete(_db.savedVerses)..where((tbl) => tbl.id.equals(v['id']))).go();
           } else {
-            // Upsert
-            batch.insert(
-              _db.savedVerses,
+            await _db.into(_db.savedVerses).insert(
               _verseFromJson(v),
               mode: InsertMode.insertOrReplace,
             );
@@ -221,13 +180,9 @@ class SyncService {
       if (changes['exercises'] != null) {
         for (final e in changes['exercises']) {
           if (e['deletedAt'] != null) {
-            batch.delete(
-              _db.exercises,
-              db.ExercisesCompanion(id: Value(e['id'])),
-            );
+             await (_db.delete(_db.exercises)..where((tbl) => tbl.id.equals(e['id']))).go();
           } else {
-            batch.insert(
-              _db.exercises,
+            await _db.into(_db.exercises).insert(
               _exerciseFromJson(e),
               mode: InsertMode.insertOrReplace,
             );
@@ -235,21 +190,13 @@ class SyncService {
         }
       }
 
-      print('-----------------------------');
-      print(changes['friendships']);
-      print('-----------------------------');
-
       // 3. FRIENDSHIPS
       if (changes['friendships'] != null) {
         for (final f in changes['friendships']) {
           if (f['deletedAt'] != null) {
-            batch.delete(
-              _db.friendships,
-              db.FriendshipsCompanion(id: Value(f['id'])),
-            );
+             await (_db.delete(_db.friendships)..where((tbl) => tbl.id.equals(f['id']))).go();
           } else {
-            batch.insert(
-              _db.friendships,
+            await _db.into(_db.friendships).insert(
               _friendshipFromJson(f),
               mode: InsertMode.insertOrReplace,
             );
@@ -257,15 +204,14 @@ class SyncService {
         }
       }
 
-      // 4. USER SETTINGS (New)
+      // 4. USER SETTINGS
       if (changes['user'] != null) {
         for (final u in changes['user']) {
-          batch.update(_db.users, _userFromJson(u));
+          await (_db.update(_db.users)..where((tbl) => tbl.id.equals(u['id']))).write(_userFromJson(u));
         }
       }
     });
 
-    // D. Update Checkpoint
     if (serverTimestamp != null) {
       await _prefs.setString(_kLastSyncKey, serverTimestamp);
     }
@@ -286,9 +232,7 @@ class SyncService {
       baseComplexity: Value(json['baseComplexity']?.toDouble() ?? 0.0),
       nextReviewDate: DateTime.parse(json['nextReviewDate']),
       lastReviewDate: Value(
-        json['lastReviewDate'] != null
-            ? DateTime.parse(json['lastReviewDate'])
-            : null,
+        json['lastReviewDate'] != null ? DateTime.parse(json['lastReviewDate']) : null,
       ),
       updatedAt: Value(DateTime.parse(json['updatedAt'])),
       deletedAt: const Value(null),
@@ -297,11 +241,18 @@ class SyncService {
   }
 
   db.ExercisesCompanion _exerciseFromJson(Map<String, dynamic> json) {
+    // Convert string from server back to Enum safely
+    final typeString = json['exerciseType'] as String?;
+    final gameTypeEnum = GameType.values.firstWhere(
+      (e) => e.name == typeString,
+      orElse: () => GameType.flashcard, 
+    );
+
     return db.ExercisesCompanion.insert(
       id: json['id'],
       verseId: json['verseId'],
       grade: json['grade'],
-      exerciseType: json['exerciseType'],
+      exerciseType: gameTypeEnum,
       durationSeconds: json['durationSeconds'],
       performedAt: Value(DateTime.parse(json['performedAt'])),
       updatedAt: Value(DateTime.parse(json['updatedAt'])),
@@ -318,8 +269,9 @@ class SyncService {
       friendFirstName: json['friendFirstName'] ?? 'Unknown',
       friendLastName: json['friendLastName'] ?? '',
       status: json['status'],
-      createdAt: Value(DateTime.parse(json['createdAt'])),
-      updatedAt: Value(DateTime.parse(json['updatedAt'])),
+      updatedAt: Value(
+        json['updatedAt'] != null ? DateTime.parse(json['updatedAt']) : DateTime.now(),
+      ),
       deletedAt: const Value(null),
       needsSync: const Value(false),
     );
@@ -337,16 +289,9 @@ class SyncService {
 
 // Provider
 final syncServiceProvider = FutureProvider<SyncService>((ref) async {
-  // 1. Get Security Context (for SSL)
   final securityContext = await ref.watch(securityContextFutureProvider.future);
-
-  // 2. Create Dio
   final dio = createDioClient(securityContext, ref);
-
-  // 3. Get Database
   final database = ref.watch(db.databaseProvider);
-
-  // 4. Get Prefs
   final prefs = await SharedPreferences.getInstance();
 
   return SyncService(dio, database, prefs);

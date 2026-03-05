@@ -6,7 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { MoreThan, Repository } from 'typeorm';
 import { User } from './user.entity';
 import { SavedVerse } from 'src/saved_verses/saved_verses.entity';
-import { Exercise } from 'src/practice/exercise.entity';
+import { Exercise } from 'src/exercise/exercise.entity';
 import { UserStatsDto } from './dto/user-stats.dto';
 import { Friendship, FriendshipStatus } from 'src/friendships/friendships.entity';
 
@@ -80,65 +80,102 @@ export class UserService {
     }
 
     async findByFriendCode(code: string): Promise<User | undefined> {
+        console.log(`test ${code}`)
+        console.log(await this.userRepository.count({where: {firstName: `Matěj`}}))
         return this.userRepository.findOne({
             where: { friendCode: code }
         });
     }
 
-    async getFriendStats(currentUserId: string, targetUserId: string): Promise<UserStatsDto> {
-        if (currentUserId === targetUserId) {
-            return this._calculateStats(currentUserId);
+    async getUserStats(userId: string) {
+        const user = await this.userRepository.findOne({ where: { id: userId } });
+        if (!user) {
+            throw new NotFoundException('User not found');
         }
 
-        const isFriend = await this.friendshipRepository.findOne({
-            where: [
-                { userId: currentUserId, friendId: targetUserId, status: FriendshipStatus.ACCEPTED },
-                { userId: targetUserId, friendId: currentUserId, status: FriendshipStatus.ACCEPTED }
-            ]
+        // 1. Aggregate Query: Total Practices, Time Spent, and Score
+        // Note: ::int casts Postgres bigints back into JavaScript numbers
+        const aggResult = await this.exerciseRepository.query(`
+            SELECT 
+                COUNT(id)::int AS total_practices,
+                COALESCE(SUM(duration_seconds), 0)::int AS time_spent,
+                (COUNT(DISTINCT DATE(performed_at)) * 5) + 
+                COALESCE(SUM(CASE WHEN grade >= 3 THEN 3 ELSE 1 END), 0)::int AS score
+            FROM exercises
+            WHERE user_id = $1 AND deleted_at IS NULL
+        `, [userId]);
+
+        const { total_practices, time_spent, score } = aggResult[0];
+
+        // 2. Memorized Verses (Only counts if the *latest* practice was successful >= 3)
+        // Uses Window Functions (ROW_NUMBER) to grab the most recent attempt per verse
+        const memorizedResult = await this.exerciseRepository.query(`
+            SELECT COUNT(*)::int as memorized_count FROM (
+                SELECT grade,
+                       ROW_NUMBER() OVER(PARTITION BY verse_id ORDER BY performed_at DESC) as rn
+                FROM exercises
+                WHERE user_id = $1 AND deleted_at IS NULL
+            ) t WHERE rn = 1 AND grade >= 3
+        `, [userId]);
+
+        const memorizedVerses = memorizedResult[0].memorized_count;
+
+        // 3. Daily Streak Calculation
+        const datesResult = await this.exerciseRepository.query(`
+            SELECT DISTINCT DATE(performed_at) as practice_date
+            FROM exercises
+            WHERE user_id = $1 AND deleted_at IS NULL
+            ORDER BY practice_date DESC
+        `, [userId]);
+
+        let currentStreak = 0;
+        
+        // Normalize dates to midnight for accurate day-by-day comparison
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        
+        const yesterday = new Date(today);
+        yesterday.setDate(yesterday.getDate() - 1);
+
+        const practiceDates = datesResult.map(row => {
+            const d = new Date(row.practice_date);
+            d.setHours(0, 0, 0, 0);
+            return d.getTime();
         });
 
-        if (!isFriend) {
-            throw new ForbiddenException('You can only view stats of your friends.');
+        if (practiceDates.length > 0) {
+            const todayTime = today.getTime();
+            const yesterdayTime = yesterday.getTime();
+            
+            // Streak must start either today or yesterday to be active
+            let checkTime = -1;
+            if (practiceDates.includes(todayTime)) {
+                checkTime = todayTime;
+            } else if (practiceDates.includes(yesterdayTime)) {
+                checkTime = yesterdayTime;
+            }
+
+            if (checkTime !== -1) {
+                for (const time of practiceDates) {
+                    if (time === checkTime) {
+                        currentStreak++;
+                        checkTime -= 86400000; // Subtract exactly 24 hours (1 day)
+                    } else if (time < checkTime) {
+                        break; // Gap found, streak broken
+                    }
+                }
+            }
         }
 
-        return this._calculateStats(targetUserId);
-    }
-
-    private async _calculateStats(userId: string): Promise<UserStatsDto> {
-        const user = await this.userRepository.findOneBy({ id: userId });
-        if (!user) throw new NotFoundException('User not found');
-
-        const totalVerses = await this.verseRepository.count({ where: { userId } });
-
-        const masteredVerses = await this.verseRepository.countBy({
-            userId,
-            repetitionCount: MoreThan(5),
-        });
-
-        const { count, sum } = await this.exerciseRepository
-            .createQueryBuilder('exercise')
-            .select('COUNT(exercise.id)', 'count')
-            .addSelect('SUM(exercise.grade)', 'sum')
-            .where('exercise.user_id = :userId', { userId })
-            .getRawOne();
-
-        const totalReviews = parseInt(count || '0', 10);
-        const totalGradeSum = parseInt(sum || '0', 10);
-
-        let accuracy = 0;
-        if (totalReviews > 0) {
-            // Max score is 5. Accuracy = (ActualScore / MaxPossibleScore) * 100
-            accuracy = (totalGradeSum / (totalReviews * 5)) * 100;
-        }
-
+        // 4. Return the exact JSON structure your Flutter app expects
         return {
             userId: user.id,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            totalVerses,
-            masteredVerses,
-            totalReviews,
-            averageAccuracy: Math.round(accuracy),
+            fullName: `${user.firstName} ${user.lastName}`,
+            streak: Number(currentStreak) || 0,
+            totalPractices: Number(total_practices) || 0,
+            memorizedVerses: Number(memorizedVerses) || 0,
+            timeSpentSeconds: Number(time_spent) || 0,
+            score: Number(score) || 0,
         };
     }
 

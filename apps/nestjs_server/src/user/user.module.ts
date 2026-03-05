@@ -5,7 +5,7 @@ import { User } from './user.entity';
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { SavedVerse } from 'src/saved_verses/saved_verses.entity';
-import { Exercise } from 'src/practice/exercise.entity';
+import { Exercise } from 'src/exercise/exercise.entity';
 import { Friendship } from 'src/friendships/friendships.entity';
 
 @Module({

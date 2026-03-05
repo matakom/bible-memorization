@@ -22,7 +22,7 @@ export class SavedVerse {
     @Column({ name: 'user_id' })
     userId: string;
 
-    // Verse identifier fields
+    // --- Verse identifier fields ---
 
     @Column()
     book: number;
@@ -36,7 +36,7 @@ export class SavedVerse {
     @Column({ length: 50 })
     translation: string;
 
-    // SRS fields
+    // --- SRS fields (Pure SM-2, no HLR) ---
 
     @Column({ name: 'next_review_date', type: 'date' })
     nextReviewDate: Date;
@@ -45,7 +45,6 @@ export class SavedVerse {
     lastReviewDate: Date;
 
     // "Ease Factor" (SM-2 default start is 2.5)
-    // Determines how fast the interval grows. Lower = Harder.
     @Column({ name: 'ease_factor', type: 'float', default: 2.5 })
     easeFactor: number;
 
@@ -54,18 +53,18 @@ export class SavedVerse {
     repetitionCount: number;
 
     // Static difficulty calculated from word count/length
-    // Used to adjust the initial Ease Factor
     @Column({ name: 'base_complexity', type: 'float', default: 0 })
     baseComplexity: number;
 
-    // Fields for sync
+    // --- Sync fields ---
+    
     @UpdateDateColumn({ name: 'updated_at', type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     updatedAt: Date;
 
     @DeleteDateColumn({ name: 'deleted_at', type: 'timestamp', nullable: true })
     deletedAt: Date | null;
 
-    // ---
+    // --- Relations ---
 
     @ManyToOne(() => User, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'user_id' })

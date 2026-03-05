@@ -3,9 +3,9 @@
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, MoreThan, } from 'typeorm';
+import { Repository, MoreThan } from 'typeorm';
 import { SavedVerse } from '../saved_verses/saved_verses.entity';
-import { Exercise } from '../practice/exercise.entity';
+import { Exercise } from '../exercise/exercise.entity';
 import { Friendship } from '../friendships/friendships.entity';
 import { User } from '../user/user.entity';
 import { SyncPushDto } from './dto/sync.dto';
@@ -24,7 +24,7 @@ export class SyncService {
     ) { }
 
     // ==========================================================
-    // 1. PULL: Get changes since timestamp
+    // 1. PULL: Server -> Client
     // ==========================================================
     async pullChanges(userId: string, lastSyncStr?: string) {
         // If no timestamp provided, sync everything (epoch 0)
@@ -32,7 +32,7 @@ export class SyncService {
 
         const verses = await this.verseRepo.find({
             where: { userId, updatedAt: MoreThan(lastSync) },
-            withDeleted: true, // IMPORTANT: Include soft-deleted rows so client knows to delete them
+            withDeleted: true, // Includes soft-deleted rows
         });
 
         const exercises = await this.exerciseRepo.find({
@@ -46,39 +46,34 @@ export class SyncService {
                 { friendId: userId, updatedAt: MoreThan(lastSync) }
             ],
             withDeleted: true,
-            // IMPORTANT: We must join the tables to get the names
             relations: ['user', 'friend'],
         });
 
-        // 2. Flatten the data for the client
-        // The client expects 'friendFirstName' and 'friendLastName', but the DB
-        // has them nested inside the 'user' or 'friend' object.
+        // Flatten the data for the Flutter client
         const friendships = rawFriendships.map(f => {
-            // Determine who the "Other Person" is.
-            // If I am the sender (userId), the other is 'friend'.
-            // If I am the receiver (friendId), the other is 'user'.
             const otherPerson = f.userId === userId ? f.friend : f.user;
 
             return {
-                ...f, // Keep original fields (id, status, dates)
-
-                // Add the flattened fields expected by Flutter
+                id: f.id,
+                status: f.status,
+                // Explicitly grab the IDs, falling back to the relation object if TypeORM hid them
+                userId: f.userId || (f.user ? f.user.id : ''),
+                friendId: f.friendId || (f.friend ? f.friend.id : ''),
+                updatedAt: f.updatedAt,
+                deletedAt: f.deletedAt,
+                
                 friendFirstName: otherPerson ? otherPerson.firstName : 'Unknown',
                 friendLastName: otherPerson ? otherPerson.lastName : '',
-
-                // Optional: Remove the heavy nested objects to save bandwidth
-                user: undefined,
-                friend: undefined,
             };
         });
 
-        // Also sync User profile changes
+        // Sync User profile changes
         const user = await this.userRepo.findOne({
             where: { id: userId, updatedAt: MoreThan(lastSync) },
         });
 
         return {
-            timestamp: new Date(), // Current server time
+            timestamp: new Date(), // Current server time to save on client
             changes: {
                 verses,
                 exercises,
@@ -89,40 +84,35 @@ export class SyncService {
     }
 
     // ==========================================================
-    // 2. PUSH: Save changes from client
+    // 2. PUSH: Client -> Server
     // ==========================================================
     async pushChanges(userId: string, payload: SyncPushDto) {
         // 1. Save Verses
         if (payload.verses && payload.verses.length > 0) {
-            // Force userId to match the authenticated user (Security)
+            // Force userId to match the authenticated user to prevent data hijacking
             const versesToSave = payload.verses.map(v => ({ ...v, userId }));
             await this.verseRepo.save(versesToSave);
         }
 
-        // 2. Save Exercises
+        // 2. Save Exercises (Flutter sends exerciseType as a string automatically)
         if (payload.exercises && payload.exercises.length > 0) {
             const exercisesToSave = payload.exercises.map(e => ({ ...e, userId }));
             await this.exerciseRepo.save(exercisesToSave);
         }
 
         // 3. Save Friendships
-        // Note: Logic is complex here (validating IDs), usually clients don't 
-        // "create" friendships offline via sync, they use specific endpoints. 
-        // But for status updates (e.g. blocking/deleting), it works.
         if (payload.friendships && payload.friendships.length > 0) {
-            // Basic implementation:
-            // Ensure the user is actually part of this friendship
+            // Ensure the user is actually part of this friendship record
             const validFriendships = payload.friendships.filter(f =>
                 f.userId === userId || f.friendId === userId
             );
             await this.friendshipRepo.save(validFriendships);
         }
 
+        // 4. Save User Settings
         if (payload.user) {
-            // We only update specific settings, never the ID or Email
             await this.userRepo.update(userId, {
                 language: payload.user.language,
-                // Ensure 'language' exists in your User Entity
             });
         }
 

@@ -18,14 +18,23 @@ class UserStats {
   });
 
   factory UserStats.fromJson(Map<String, dynamic> json) {
+    // Helper function to safely parse ints even if the server sends a String
+    int parseInt(dynamic value) {
+      if (value == null) return 0;
+      if (value is int) return value;
+      if (value is String) return int.tryParse(value) ?? 0;
+      if (value is double) return value.toInt();
+      return 0;
+    }
+
     return UserStats(
       userId: json['userId'] ?? '',
       fullName: json['fullName'] ?? '',
-      streak: json['dailyVerseStreak'] ?? 0,
-      totalPractices: json['totalPractices'] ?? 0,
-      memorizedVerses: json['memorizedVerses'] ?? 0,
-      timeSpentSeconds: json['timeSpentSeconds'] ?? 0,
-      score: json['score'] ?? 0,
+      streak: parseInt(json['streak']),
+      totalPractices: parseInt(json['totalPractices']),
+      memorizedVerses: parseInt(json['memorizedVerses']),
+      timeSpentSeconds: parseInt(json['timeSpentSeconds']),
+      score: parseInt(json['score']),
     );
   }
 }

@@ -129,54 +129,6 @@ class $SavedVersesTable extends SavedVerses
     requiredDuringInsert: false,
     defaultValue: const Constant(0.0),
   );
-  static const VerificationMeta _correctCountMeta = const VerificationMeta(
-    'correctCount',
-  );
-  @override
-  late final GeneratedColumn<int> correctCount = GeneratedColumn<int>(
-    'correct_count',
-    aliasedName,
-    false,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-    defaultValue: const Constant(0),
-  );
-  static const VerificationMeta _incorrectCountMeta = const VerificationMeta(
-    'incorrectCount',
-  );
-  @override
-  late final GeneratedColumn<int> incorrectCount = GeneratedColumn<int>(
-    'incorrect_count',
-    aliasedName,
-    false,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-    defaultValue: const Constant(0),
-  );
-  static const VerificationMeta _stabilityMeta = const VerificationMeta(
-    'stability',
-  );
-  @override
-  late final GeneratedColumn<double> stability = GeneratedColumn<double>(
-    'stability',
-    aliasedName,
-    false,
-    type: DriftSqlType.double,
-    requiredDuringInsert: false,
-    defaultValue: const Constant(0.0),
-  );
-  static const VerificationMeta _difficultyMeta = const VerificationMeta(
-    'difficulty',
-  );
-  @override
-  late final GeneratedColumn<double> difficulty = GeneratedColumn<double>(
-    'difficulty',
-    aliasedName,
-    false,
-    type: DriftSqlType.double,
-    requiredDuringInsert: false,
-    defaultValue: const Constant(0.0),
-  );
   static const VerificationMeta _updatedAtMeta = const VerificationMeta(
     'updatedAt',
   );
@@ -228,10 +180,6 @@ class $SavedVersesTable extends SavedVerses
     lastReviewDate,
     easeFactor,
     baseComplexity,
-    correctCount,
-    incorrectCount,
-    stability,
-    difficulty,
     updatedAt,
     deletedAt,
     needsSync,
@@ -340,36 +288,6 @@ class $SavedVersesTable extends SavedVerses
         ),
       );
     }
-    if (data.containsKey('correct_count')) {
-      context.handle(
-        _correctCountMeta,
-        correctCount.isAcceptableOrUnknown(
-          data['correct_count']!,
-          _correctCountMeta,
-        ),
-      );
-    }
-    if (data.containsKey('incorrect_count')) {
-      context.handle(
-        _incorrectCountMeta,
-        incorrectCount.isAcceptableOrUnknown(
-          data['incorrect_count']!,
-          _incorrectCountMeta,
-        ),
-      );
-    }
-    if (data.containsKey('stability')) {
-      context.handle(
-        _stabilityMeta,
-        stability.isAcceptableOrUnknown(data['stability']!, _stabilityMeta),
-      );
-    }
-    if (data.containsKey('difficulty')) {
-      context.handle(
-        _difficultyMeta,
-        difficulty.isAcceptableOrUnknown(data['difficulty']!, _difficultyMeta),
-      );
-    }
     if (data.containsKey('updated_at')) {
       context.handle(
         _updatedAtMeta,
@@ -441,22 +359,6 @@ class $SavedVersesTable extends SavedVerses
         DriftSqlType.double,
         data['${effectivePrefix}base_complexity'],
       )!,
-      correctCount: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}correct_count'],
-      )!,
-      incorrectCount: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}incorrect_count'],
-      )!,
-      stability: attachedDatabase.typeMapping.read(
-        DriftSqlType.double,
-        data['${effectivePrefix}stability'],
-      )!,
-      difficulty: attachedDatabase.typeMapping.read(
-        DriftSqlType.double,
-        data['${effectivePrefix}difficulty'],
-      )!,
       updatedAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}updated_at'],
@@ -490,10 +392,6 @@ class SavedVerse extends DataClass implements Insertable<SavedVerse> {
   final DateTime? lastReviewDate;
   final double easeFactor;
   final double baseComplexity;
-  final int correctCount;
-  final int incorrectCount;
-  final double stability;
-  final double difficulty;
   final DateTime updatedAt;
   final DateTime? deletedAt;
   final bool needsSync;
@@ -509,10 +407,6 @@ class SavedVerse extends DataClass implements Insertable<SavedVerse> {
     this.lastReviewDate,
     required this.easeFactor,
     required this.baseComplexity,
-    required this.correctCount,
-    required this.incorrectCount,
-    required this.stability,
-    required this.difficulty,
     required this.updatedAt,
     this.deletedAt,
     required this.needsSync,
@@ -533,10 +427,6 @@ class SavedVerse extends DataClass implements Insertable<SavedVerse> {
     }
     map['ease_factor'] = Variable<double>(easeFactor);
     map['base_complexity'] = Variable<double>(baseComplexity);
-    map['correct_count'] = Variable<int>(correctCount);
-    map['incorrect_count'] = Variable<int>(incorrectCount);
-    map['stability'] = Variable<double>(stability);
-    map['difficulty'] = Variable<double>(difficulty);
     map['updated_at'] = Variable<DateTime>(updatedAt);
     if (!nullToAbsent || deletedAt != null) {
       map['deleted_at'] = Variable<DateTime>(deletedAt);
@@ -560,10 +450,6 @@ class SavedVerse extends DataClass implements Insertable<SavedVerse> {
           : Value(lastReviewDate),
       easeFactor: Value(easeFactor),
       baseComplexity: Value(baseComplexity),
-      correctCount: Value(correctCount),
-      incorrectCount: Value(incorrectCount),
-      stability: Value(stability),
-      difficulty: Value(difficulty),
       updatedAt: Value(updatedAt),
       deletedAt: deletedAt == null && nullToAbsent
           ? const Value.absent()
@@ -589,10 +475,6 @@ class SavedVerse extends DataClass implements Insertable<SavedVerse> {
       lastReviewDate: serializer.fromJson<DateTime?>(json['lastReviewDate']),
       easeFactor: serializer.fromJson<double>(json['easeFactor']),
       baseComplexity: serializer.fromJson<double>(json['baseComplexity']),
-      correctCount: serializer.fromJson<int>(json['correctCount']),
-      incorrectCount: serializer.fromJson<int>(json['incorrectCount']),
-      stability: serializer.fromJson<double>(json['stability']),
-      difficulty: serializer.fromJson<double>(json['difficulty']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
       deletedAt: serializer.fromJson<DateTime?>(json['deletedAt']),
       needsSync: serializer.fromJson<bool>(json['needsSync']),
@@ -613,10 +495,6 @@ class SavedVerse extends DataClass implements Insertable<SavedVerse> {
       'lastReviewDate': serializer.toJson<DateTime?>(lastReviewDate),
       'easeFactor': serializer.toJson<double>(easeFactor),
       'baseComplexity': serializer.toJson<double>(baseComplexity),
-      'correctCount': serializer.toJson<int>(correctCount),
-      'incorrectCount': serializer.toJson<int>(incorrectCount),
-      'stability': serializer.toJson<double>(stability),
-      'difficulty': serializer.toJson<double>(difficulty),
       'updatedAt': serializer.toJson<DateTime>(updatedAt),
       'deletedAt': serializer.toJson<DateTime?>(deletedAt),
       'needsSync': serializer.toJson<bool>(needsSync),
@@ -635,10 +513,6 @@ class SavedVerse extends DataClass implements Insertable<SavedVerse> {
     Value<DateTime?> lastReviewDate = const Value.absent(),
     double? easeFactor,
     double? baseComplexity,
-    int? correctCount,
-    int? incorrectCount,
-    double? stability,
-    double? difficulty,
     DateTime? updatedAt,
     Value<DateTime?> deletedAt = const Value.absent(),
     bool? needsSync,
@@ -656,10 +530,6 @@ class SavedVerse extends DataClass implements Insertable<SavedVerse> {
         : this.lastReviewDate,
     easeFactor: easeFactor ?? this.easeFactor,
     baseComplexity: baseComplexity ?? this.baseComplexity,
-    correctCount: correctCount ?? this.correctCount,
-    incorrectCount: incorrectCount ?? this.incorrectCount,
-    stability: stability ?? this.stability,
-    difficulty: difficulty ?? this.difficulty,
     updatedAt: updatedAt ?? this.updatedAt,
     deletedAt: deletedAt.present ? deletedAt.value : this.deletedAt,
     needsSync: needsSync ?? this.needsSync,
@@ -689,16 +559,6 @@ class SavedVerse extends DataClass implements Insertable<SavedVerse> {
       baseComplexity: data.baseComplexity.present
           ? data.baseComplexity.value
           : this.baseComplexity,
-      correctCount: data.correctCount.present
-          ? data.correctCount.value
-          : this.correctCount,
-      incorrectCount: data.incorrectCount.present
-          ? data.incorrectCount.value
-          : this.incorrectCount,
-      stability: data.stability.present ? data.stability.value : this.stability,
-      difficulty: data.difficulty.present
-          ? data.difficulty.value
-          : this.difficulty,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
       deletedAt: data.deletedAt.present ? data.deletedAt.value : this.deletedAt,
       needsSync: data.needsSync.present ? data.needsSync.value : this.needsSync,
@@ -719,10 +579,6 @@ class SavedVerse extends DataClass implements Insertable<SavedVerse> {
           ..write('lastReviewDate: $lastReviewDate, ')
           ..write('easeFactor: $easeFactor, ')
           ..write('baseComplexity: $baseComplexity, ')
-          ..write('correctCount: $correctCount, ')
-          ..write('incorrectCount: $incorrectCount, ')
-          ..write('stability: $stability, ')
-          ..write('difficulty: $difficulty, ')
           ..write('updatedAt: $updatedAt, ')
           ..write('deletedAt: $deletedAt, ')
           ..write('needsSync: $needsSync')
@@ -743,10 +599,6 @@ class SavedVerse extends DataClass implements Insertable<SavedVerse> {
     lastReviewDate,
     easeFactor,
     baseComplexity,
-    correctCount,
-    incorrectCount,
-    stability,
-    difficulty,
     updatedAt,
     deletedAt,
     needsSync,
@@ -766,10 +618,6 @@ class SavedVerse extends DataClass implements Insertable<SavedVerse> {
           other.lastReviewDate == this.lastReviewDate &&
           other.easeFactor == this.easeFactor &&
           other.baseComplexity == this.baseComplexity &&
-          other.correctCount == this.correctCount &&
-          other.incorrectCount == this.incorrectCount &&
-          other.stability == this.stability &&
-          other.difficulty == this.difficulty &&
           other.updatedAt == this.updatedAt &&
           other.deletedAt == this.deletedAt &&
           other.needsSync == this.needsSync);
@@ -787,10 +635,6 @@ class SavedVersesCompanion extends UpdateCompanion<SavedVerse> {
   final Value<DateTime?> lastReviewDate;
   final Value<double> easeFactor;
   final Value<double> baseComplexity;
-  final Value<int> correctCount;
-  final Value<int> incorrectCount;
-  final Value<double> stability;
-  final Value<double> difficulty;
   final Value<DateTime> updatedAt;
   final Value<DateTime?> deletedAt;
   final Value<bool> needsSync;
@@ -807,10 +651,6 @@ class SavedVersesCompanion extends UpdateCompanion<SavedVerse> {
     this.lastReviewDate = const Value.absent(),
     this.easeFactor = const Value.absent(),
     this.baseComplexity = const Value.absent(),
-    this.correctCount = const Value.absent(),
-    this.incorrectCount = const Value.absent(),
-    this.stability = const Value.absent(),
-    this.difficulty = const Value.absent(),
     this.updatedAt = const Value.absent(),
     this.deletedAt = const Value.absent(),
     this.needsSync = const Value.absent(),
@@ -828,10 +668,6 @@ class SavedVersesCompanion extends UpdateCompanion<SavedVerse> {
     this.lastReviewDate = const Value.absent(),
     this.easeFactor = const Value.absent(),
     this.baseComplexity = const Value.absent(),
-    this.correctCount = const Value.absent(),
-    this.incorrectCount = const Value.absent(),
-    this.stability = const Value.absent(),
-    this.difficulty = const Value.absent(),
     this.updatedAt = const Value.absent(),
     this.deletedAt = const Value.absent(),
     this.needsSync = const Value.absent(),
@@ -855,10 +691,6 @@ class SavedVersesCompanion extends UpdateCompanion<SavedVerse> {
     Expression<DateTime>? lastReviewDate,
     Expression<double>? easeFactor,
     Expression<double>? baseComplexity,
-    Expression<int>? correctCount,
-    Expression<int>? incorrectCount,
-    Expression<double>? stability,
-    Expression<double>? difficulty,
     Expression<DateTime>? updatedAt,
     Expression<DateTime>? deletedAt,
     Expression<bool>? needsSync,
@@ -876,10 +708,6 @@ class SavedVersesCompanion extends UpdateCompanion<SavedVerse> {
       if (lastReviewDate != null) 'last_review_date': lastReviewDate,
       if (easeFactor != null) 'ease_factor': easeFactor,
       if (baseComplexity != null) 'base_complexity': baseComplexity,
-      if (correctCount != null) 'correct_count': correctCount,
-      if (incorrectCount != null) 'incorrect_count': incorrectCount,
-      if (stability != null) 'stability': stability,
-      if (difficulty != null) 'difficulty': difficulty,
       if (updatedAt != null) 'updated_at': updatedAt,
       if (deletedAt != null) 'deleted_at': deletedAt,
       if (needsSync != null) 'needs_sync': needsSync,
@@ -899,10 +727,6 @@ class SavedVersesCompanion extends UpdateCompanion<SavedVerse> {
     Value<DateTime?>? lastReviewDate,
     Value<double>? easeFactor,
     Value<double>? baseComplexity,
-    Value<int>? correctCount,
-    Value<int>? incorrectCount,
-    Value<double>? stability,
-    Value<double>? difficulty,
     Value<DateTime>? updatedAt,
     Value<DateTime?>? deletedAt,
     Value<bool>? needsSync,
@@ -920,10 +744,6 @@ class SavedVersesCompanion extends UpdateCompanion<SavedVerse> {
       lastReviewDate: lastReviewDate ?? this.lastReviewDate,
       easeFactor: easeFactor ?? this.easeFactor,
       baseComplexity: baseComplexity ?? this.baseComplexity,
-      correctCount: correctCount ?? this.correctCount,
-      incorrectCount: incorrectCount ?? this.incorrectCount,
-      stability: stability ?? this.stability,
-      difficulty: difficulty ?? this.difficulty,
       updatedAt: updatedAt ?? this.updatedAt,
       deletedAt: deletedAt ?? this.deletedAt,
       needsSync: needsSync ?? this.needsSync,
@@ -967,18 +787,6 @@ class SavedVersesCompanion extends UpdateCompanion<SavedVerse> {
     if (baseComplexity.present) {
       map['base_complexity'] = Variable<double>(baseComplexity.value);
     }
-    if (correctCount.present) {
-      map['correct_count'] = Variable<int>(correctCount.value);
-    }
-    if (incorrectCount.present) {
-      map['incorrect_count'] = Variable<int>(incorrectCount.value);
-    }
-    if (stability.present) {
-      map['stability'] = Variable<double>(stability.value);
-    }
-    if (difficulty.present) {
-      map['difficulty'] = Variable<double>(difficulty.value);
-    }
     if (updatedAt.present) {
       map['updated_at'] = Variable<DateTime>(updatedAt.value);
     }
@@ -1008,10 +816,6 @@ class SavedVersesCompanion extends UpdateCompanion<SavedVerse> {
           ..write('lastReviewDate: $lastReviewDate, ')
           ..write('easeFactor: $easeFactor, ')
           ..write('baseComplexity: $baseComplexity, ')
-          ..write('correctCount: $correctCount, ')
-          ..write('incorrectCount: $incorrectCount, ')
-          ..write('stability: $stability, ')
-          ..write('difficulty: $difficulty, ')
           ..write('updatedAt: $updatedAt, ')
           ..write('deletedAt: $deletedAt, ')
           ..write('needsSync: $needsSync, ')
@@ -1663,18 +1467,6 @@ class $FriendshipsTable extends Friendships
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _createdAtMeta = const VerificationMeta(
-    'createdAt',
-  );
-  @override
-  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
-    'created_at',
-    aliasedName,
-    false,
-    type: DriftSqlType.dateTime,
-    requiredDuringInsert: false,
-    defaultValue: currentDateAndTime,
-  );
   static const VerificationMeta _updatedAtMeta = const VerificationMeta(
     'updatedAt',
   );
@@ -1721,7 +1513,6 @@ class $FriendshipsTable extends Friendships
     friendFirstName,
     friendLastName,
     status,
-    createdAt,
     updatedAt,
     deletedAt,
     needsSync,
@@ -1789,12 +1580,6 @@ class $FriendshipsTable extends Friendships
     } else if (isInserting) {
       context.missing(_statusMeta);
     }
-    if (data.containsKey('created_at')) {
-      context.handle(
-        _createdAtMeta,
-        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
-      );
-    }
     if (data.containsKey('updated_at')) {
       context.handle(
         _updatedAtMeta,
@@ -1850,10 +1635,6 @@ class $FriendshipsTable extends Friendships
         DriftSqlType.string,
         data['${effectivePrefix}status'],
       )!,
-      createdAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}created_at'],
-      )!,
       updatedAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}updated_at'],
@@ -1882,7 +1663,6 @@ class Friendship extends DataClass implements Insertable<Friendship> {
   final String friendFirstName;
   final String friendLastName;
   final String status;
-  final DateTime createdAt;
   final DateTime updatedAt;
   final DateTime? deletedAt;
   final bool needsSync;
@@ -1893,7 +1673,6 @@ class Friendship extends DataClass implements Insertable<Friendship> {
     required this.friendFirstName,
     required this.friendLastName,
     required this.status,
-    required this.createdAt,
     required this.updatedAt,
     this.deletedAt,
     required this.needsSync,
@@ -1907,7 +1686,6 @@ class Friendship extends DataClass implements Insertable<Friendship> {
     map['friend_first_name'] = Variable<String>(friendFirstName);
     map['friend_last_name'] = Variable<String>(friendLastName);
     map['status'] = Variable<String>(status);
-    map['created_at'] = Variable<DateTime>(createdAt);
     map['updated_at'] = Variable<DateTime>(updatedAt);
     if (!nullToAbsent || deletedAt != null) {
       map['deleted_at'] = Variable<DateTime>(deletedAt);
@@ -1924,7 +1702,6 @@ class Friendship extends DataClass implements Insertable<Friendship> {
       friendFirstName: Value(friendFirstName),
       friendLastName: Value(friendLastName),
       status: Value(status),
-      createdAt: Value(createdAt),
       updatedAt: Value(updatedAt),
       deletedAt: deletedAt == null && nullToAbsent
           ? const Value.absent()
@@ -1945,7 +1722,6 @@ class Friendship extends DataClass implements Insertable<Friendship> {
       friendFirstName: serializer.fromJson<String>(json['friendFirstName']),
       friendLastName: serializer.fromJson<String>(json['friendLastName']),
       status: serializer.fromJson<String>(json['status']),
-      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
       deletedAt: serializer.fromJson<DateTime?>(json['deletedAt']),
       needsSync: serializer.fromJson<bool>(json['needsSync']),
@@ -1961,7 +1737,6 @@ class Friendship extends DataClass implements Insertable<Friendship> {
       'friendFirstName': serializer.toJson<String>(friendFirstName),
       'friendLastName': serializer.toJson<String>(friendLastName),
       'status': serializer.toJson<String>(status),
-      'createdAt': serializer.toJson<DateTime>(createdAt),
       'updatedAt': serializer.toJson<DateTime>(updatedAt),
       'deletedAt': serializer.toJson<DateTime?>(deletedAt),
       'needsSync': serializer.toJson<bool>(needsSync),
@@ -1975,7 +1750,6 @@ class Friendship extends DataClass implements Insertable<Friendship> {
     String? friendFirstName,
     String? friendLastName,
     String? status,
-    DateTime? createdAt,
     DateTime? updatedAt,
     Value<DateTime?> deletedAt = const Value.absent(),
     bool? needsSync,
@@ -1986,7 +1760,6 @@ class Friendship extends DataClass implements Insertable<Friendship> {
     friendFirstName: friendFirstName ?? this.friendFirstName,
     friendLastName: friendLastName ?? this.friendLastName,
     status: status ?? this.status,
-    createdAt: createdAt ?? this.createdAt,
     updatedAt: updatedAt ?? this.updatedAt,
     deletedAt: deletedAt.present ? deletedAt.value : this.deletedAt,
     needsSync: needsSync ?? this.needsSync,
@@ -2003,7 +1776,6 @@ class Friendship extends DataClass implements Insertable<Friendship> {
           ? data.friendLastName.value
           : this.friendLastName,
       status: data.status.present ? data.status.value : this.status,
-      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
       deletedAt: data.deletedAt.present ? data.deletedAt.value : this.deletedAt,
       needsSync: data.needsSync.present ? data.needsSync.value : this.needsSync,
@@ -2019,7 +1791,6 @@ class Friendship extends DataClass implements Insertable<Friendship> {
           ..write('friendFirstName: $friendFirstName, ')
           ..write('friendLastName: $friendLastName, ')
           ..write('status: $status, ')
-          ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt, ')
           ..write('deletedAt: $deletedAt, ')
           ..write('needsSync: $needsSync')
@@ -2035,7 +1806,6 @@ class Friendship extends DataClass implements Insertable<Friendship> {
     friendFirstName,
     friendLastName,
     status,
-    createdAt,
     updatedAt,
     deletedAt,
     needsSync,
@@ -2050,7 +1820,6 @@ class Friendship extends DataClass implements Insertable<Friendship> {
           other.friendFirstName == this.friendFirstName &&
           other.friendLastName == this.friendLastName &&
           other.status == this.status &&
-          other.createdAt == this.createdAt &&
           other.updatedAt == this.updatedAt &&
           other.deletedAt == this.deletedAt &&
           other.needsSync == this.needsSync);
@@ -2063,7 +1832,6 @@ class FriendshipsCompanion extends UpdateCompanion<Friendship> {
   final Value<String> friendFirstName;
   final Value<String> friendLastName;
   final Value<String> status;
-  final Value<DateTime> createdAt;
   final Value<DateTime> updatedAt;
   final Value<DateTime?> deletedAt;
   final Value<bool> needsSync;
@@ -2075,7 +1843,6 @@ class FriendshipsCompanion extends UpdateCompanion<Friendship> {
     this.friendFirstName = const Value.absent(),
     this.friendLastName = const Value.absent(),
     this.status = const Value.absent(),
-    this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
     this.deletedAt = const Value.absent(),
     this.needsSync = const Value.absent(),
@@ -2088,7 +1855,6 @@ class FriendshipsCompanion extends UpdateCompanion<Friendship> {
     required String friendFirstName,
     required String friendLastName,
     required String status,
-    this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
     this.deletedAt = const Value.absent(),
     this.needsSync = const Value.absent(),
@@ -2106,7 +1872,6 @@ class FriendshipsCompanion extends UpdateCompanion<Friendship> {
     Expression<String>? friendFirstName,
     Expression<String>? friendLastName,
     Expression<String>? status,
-    Expression<DateTime>? createdAt,
     Expression<DateTime>? updatedAt,
     Expression<DateTime>? deletedAt,
     Expression<bool>? needsSync,
@@ -2119,7 +1884,6 @@ class FriendshipsCompanion extends UpdateCompanion<Friendship> {
       if (friendFirstName != null) 'friend_first_name': friendFirstName,
       if (friendLastName != null) 'friend_last_name': friendLastName,
       if (status != null) 'status': status,
-      if (createdAt != null) 'created_at': createdAt,
       if (updatedAt != null) 'updated_at': updatedAt,
       if (deletedAt != null) 'deleted_at': deletedAt,
       if (needsSync != null) 'needs_sync': needsSync,
@@ -2134,7 +1898,6 @@ class FriendshipsCompanion extends UpdateCompanion<Friendship> {
     Value<String>? friendFirstName,
     Value<String>? friendLastName,
     Value<String>? status,
-    Value<DateTime>? createdAt,
     Value<DateTime>? updatedAt,
     Value<DateTime?>? deletedAt,
     Value<bool>? needsSync,
@@ -2147,7 +1910,6 @@ class FriendshipsCompanion extends UpdateCompanion<Friendship> {
       friendFirstName: friendFirstName ?? this.friendFirstName,
       friendLastName: friendLastName ?? this.friendLastName,
       status: status ?? this.status,
-      createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       deletedAt: deletedAt ?? this.deletedAt,
       needsSync: needsSync ?? this.needsSync,
@@ -2176,9 +1938,6 @@ class FriendshipsCompanion extends UpdateCompanion<Friendship> {
     if (status.present) {
       map['status'] = Variable<String>(status.value);
     }
-    if (createdAt.present) {
-      map['created_at'] = Variable<DateTime>(createdAt.value);
-    }
     if (updatedAt.present) {
       map['updated_at'] = Variable<DateTime>(updatedAt.value);
     }
@@ -2203,7 +1962,6 @@ class FriendshipsCompanion extends UpdateCompanion<Friendship> {
           ..write('friendFirstName: $friendFirstName, ')
           ..write('friendLastName: $friendLastName, ')
           ..write('status: $status, ')
-          ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt, ')
           ..write('deletedAt: $deletedAt, ')
           ..write('needsSync: $needsSync, ')
@@ -2270,18 +2028,6 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
     requiredDuringInsert: false,
     defaultValue: const Constant('en'),
   );
-  static const VerificationMeta _createdAtMeta = const VerificationMeta(
-    'createdAt',
-  );
-  @override
-  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
-    'created_at',
-    aliasedName,
-    false,
-    type: DriftSqlType.dateTime,
-    requiredDuringInsert: false,
-    defaultValue: currentDateAndTime,
-  );
   static const VerificationMeta _updatedAtMeta = const VerificationMeta(
     'updatedAt',
   );
@@ -2316,7 +2062,6 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
     firstName,
     lastName,
     language,
-    createdAt,
     updatedAt,
     needsSync,
   ];
@@ -2367,12 +2112,6 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
         language.isAcceptableOrUnknown(data['language']!, _languageMeta),
       );
     }
-    if (data.containsKey('created_at')) {
-      context.handle(
-        _createdAtMeta,
-        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
-      );
-    }
     if (data.containsKey('updated_at')) {
       context.handle(
         _updatedAtMeta,
@@ -2414,10 +2153,6 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
         DriftSqlType.string,
         data['${effectivePrefix}language'],
       )!,
-      createdAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}created_at'],
-      )!,
       updatedAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}updated_at'],
@@ -2441,7 +2176,6 @@ class User extends DataClass implements Insertable<User> {
   final String firstName;
   final String lastName;
   final String language;
-  final DateTime createdAt;
   final DateTime updatedAt;
   final bool needsSync;
   const User({
@@ -2450,7 +2184,6 @@ class User extends DataClass implements Insertable<User> {
     required this.firstName,
     required this.lastName,
     required this.language,
-    required this.createdAt,
     required this.updatedAt,
     required this.needsSync,
   });
@@ -2462,7 +2195,6 @@ class User extends DataClass implements Insertable<User> {
     map['first_name'] = Variable<String>(firstName);
     map['last_name'] = Variable<String>(lastName);
     map['language'] = Variable<String>(language);
-    map['created_at'] = Variable<DateTime>(createdAt);
     map['updated_at'] = Variable<DateTime>(updatedAt);
     map['needs_sync'] = Variable<bool>(needsSync);
     return map;
@@ -2475,7 +2207,6 @@ class User extends DataClass implements Insertable<User> {
       firstName: Value(firstName),
       lastName: Value(lastName),
       language: Value(language),
-      createdAt: Value(createdAt),
       updatedAt: Value(updatedAt),
       needsSync: Value(needsSync),
     );
@@ -2492,7 +2223,6 @@ class User extends DataClass implements Insertable<User> {
       firstName: serializer.fromJson<String>(json['firstName']),
       lastName: serializer.fromJson<String>(json['lastName']),
       language: serializer.fromJson<String>(json['language']),
-      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
       needsSync: serializer.fromJson<bool>(json['needsSync']),
     );
@@ -2506,7 +2236,6 @@ class User extends DataClass implements Insertable<User> {
       'firstName': serializer.toJson<String>(firstName),
       'lastName': serializer.toJson<String>(lastName),
       'language': serializer.toJson<String>(language),
-      'createdAt': serializer.toJson<DateTime>(createdAt),
       'updatedAt': serializer.toJson<DateTime>(updatedAt),
       'needsSync': serializer.toJson<bool>(needsSync),
     };
@@ -2518,7 +2247,6 @@ class User extends DataClass implements Insertable<User> {
     String? firstName,
     String? lastName,
     String? language,
-    DateTime? createdAt,
     DateTime? updatedAt,
     bool? needsSync,
   }) => User(
@@ -2527,7 +2255,6 @@ class User extends DataClass implements Insertable<User> {
     firstName: firstName ?? this.firstName,
     lastName: lastName ?? this.lastName,
     language: language ?? this.language,
-    createdAt: createdAt ?? this.createdAt,
     updatedAt: updatedAt ?? this.updatedAt,
     needsSync: needsSync ?? this.needsSync,
   );
@@ -2538,7 +2265,6 @@ class User extends DataClass implements Insertable<User> {
       firstName: data.firstName.present ? data.firstName.value : this.firstName,
       lastName: data.lastName.present ? data.lastName.value : this.lastName,
       language: data.language.present ? data.language.value : this.language,
-      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
       needsSync: data.needsSync.present ? data.needsSync.value : this.needsSync,
     );
@@ -2552,7 +2278,6 @@ class User extends DataClass implements Insertable<User> {
           ..write('firstName: $firstName, ')
           ..write('lastName: $lastName, ')
           ..write('language: $language, ')
-          ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt, ')
           ..write('needsSync: $needsSync')
           ..write(')'))
@@ -2566,7 +2291,6 @@ class User extends DataClass implements Insertable<User> {
     firstName,
     lastName,
     language,
-    createdAt,
     updatedAt,
     needsSync,
   );
@@ -2579,7 +2303,6 @@ class User extends DataClass implements Insertable<User> {
           other.firstName == this.firstName &&
           other.lastName == this.lastName &&
           other.language == this.language &&
-          other.createdAt == this.createdAt &&
           other.updatedAt == this.updatedAt &&
           other.needsSync == this.needsSync);
 }
@@ -2590,7 +2313,6 @@ class UsersCompanion extends UpdateCompanion<User> {
   final Value<String> firstName;
   final Value<String> lastName;
   final Value<String> language;
-  final Value<DateTime> createdAt;
   final Value<DateTime> updatedAt;
   final Value<bool> needsSync;
   final Value<int> rowid;
@@ -2600,7 +2322,6 @@ class UsersCompanion extends UpdateCompanion<User> {
     this.firstName = const Value.absent(),
     this.lastName = const Value.absent(),
     this.language = const Value.absent(),
-    this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
     this.needsSync = const Value.absent(),
     this.rowid = const Value.absent(),
@@ -2611,7 +2332,6 @@ class UsersCompanion extends UpdateCompanion<User> {
     required String firstName,
     required String lastName,
     this.language = const Value.absent(),
-    this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
     this.needsSync = const Value.absent(),
     this.rowid = const Value.absent(),
@@ -2625,7 +2345,6 @@ class UsersCompanion extends UpdateCompanion<User> {
     Expression<String>? firstName,
     Expression<String>? lastName,
     Expression<String>? language,
-    Expression<DateTime>? createdAt,
     Expression<DateTime>? updatedAt,
     Expression<bool>? needsSync,
     Expression<int>? rowid,
@@ -2636,7 +2355,6 @@ class UsersCompanion extends UpdateCompanion<User> {
       if (firstName != null) 'first_name': firstName,
       if (lastName != null) 'last_name': lastName,
       if (language != null) 'language': language,
-      if (createdAt != null) 'created_at': createdAt,
       if (updatedAt != null) 'updated_at': updatedAt,
       if (needsSync != null) 'needs_sync': needsSync,
       if (rowid != null) 'rowid': rowid,
@@ -2649,7 +2367,6 @@ class UsersCompanion extends UpdateCompanion<User> {
     Value<String>? firstName,
     Value<String>? lastName,
     Value<String>? language,
-    Value<DateTime>? createdAt,
     Value<DateTime>? updatedAt,
     Value<bool>? needsSync,
     Value<int>? rowid,
@@ -2660,7 +2377,6 @@ class UsersCompanion extends UpdateCompanion<User> {
       firstName: firstName ?? this.firstName,
       lastName: lastName ?? this.lastName,
       language: language ?? this.language,
-      createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       needsSync: needsSync ?? this.needsSync,
       rowid: rowid ?? this.rowid,
@@ -2685,9 +2401,6 @@ class UsersCompanion extends UpdateCompanion<User> {
     if (language.present) {
       map['language'] = Variable<String>(language.value);
     }
-    if (createdAt.present) {
-      map['created_at'] = Variable<DateTime>(createdAt.value);
-    }
     if (updatedAt.present) {
       map['updated_at'] = Variable<DateTime>(updatedAt.value);
     }
@@ -2708,7 +2421,6 @@ class UsersCompanion extends UpdateCompanion<User> {
           ..write('firstName: $firstName, ')
           ..write('lastName: $lastName, ')
           ..write('language: $language, ')
-          ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt, ')
           ..write('needsSync: $needsSync, ')
           ..write('rowid: $rowid')
@@ -2749,10 +2461,6 @@ typedef $$SavedVersesTableCreateCompanionBuilder =
       Value<DateTime?> lastReviewDate,
       Value<double> easeFactor,
       Value<double> baseComplexity,
-      Value<int> correctCount,
-      Value<int> incorrectCount,
-      Value<double> stability,
-      Value<double> difficulty,
       Value<DateTime> updatedAt,
       Value<DateTime?> deletedAt,
       Value<bool> needsSync,
@@ -2771,10 +2479,6 @@ typedef $$SavedVersesTableUpdateCompanionBuilder =
       Value<DateTime?> lastReviewDate,
       Value<double> easeFactor,
       Value<double> baseComplexity,
-      Value<int> correctCount,
-      Value<int> incorrectCount,
-      Value<double> stability,
-      Value<double> difficulty,
       Value<DateTime> updatedAt,
       Value<DateTime?> deletedAt,
       Value<bool> needsSync,
@@ -2865,26 +2569,6 @@ class $$SavedVersesTableFilterComposer
 
   ColumnFilters<double> get baseComplexity => $composableBuilder(
     column: $table.baseComplexity,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<int> get correctCount => $composableBuilder(
-    column: $table.correctCount,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<int> get incorrectCount => $composableBuilder(
-    column: $table.incorrectCount,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<double> get stability => $composableBuilder(
-    column: $table.stability,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<double> get difficulty => $composableBuilder(
-    column: $table.difficulty,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -2993,26 +2677,6 @@ class $$SavedVersesTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<int> get correctCount => $composableBuilder(
-    column: $table.correctCount,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<int> get incorrectCount => $composableBuilder(
-    column: $table.incorrectCount,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<double> get stability => $composableBuilder(
-    column: $table.stability,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<double> get difficulty => $composableBuilder(
-    column: $table.difficulty,
-    builder: (column) => ColumnOrderings(column),
-  );
-
   ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
     column: $table.updatedAt,
     builder: (column) => ColumnOrderings(column),
@@ -3080,24 +2744,6 @@ class $$SavedVersesTableAnnotationComposer
 
   GeneratedColumn<double> get baseComplexity => $composableBuilder(
     column: $table.baseComplexity,
-    builder: (column) => column,
-  );
-
-  GeneratedColumn<int> get correctCount => $composableBuilder(
-    column: $table.correctCount,
-    builder: (column) => column,
-  );
-
-  GeneratedColumn<int> get incorrectCount => $composableBuilder(
-    column: $table.incorrectCount,
-    builder: (column) => column,
-  );
-
-  GeneratedColumn<double> get stability =>
-      $composableBuilder(column: $table.stability, builder: (column) => column);
-
-  GeneratedColumn<double> get difficulty => $composableBuilder(
-    column: $table.difficulty,
     builder: (column) => column,
   );
 
@@ -3175,10 +2821,6 @@ class $$SavedVersesTableTableManager
                 Value<DateTime?> lastReviewDate = const Value.absent(),
                 Value<double> easeFactor = const Value.absent(),
                 Value<double> baseComplexity = const Value.absent(),
-                Value<int> correctCount = const Value.absent(),
-                Value<int> incorrectCount = const Value.absent(),
-                Value<double> stability = const Value.absent(),
-                Value<double> difficulty = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
                 Value<DateTime?> deletedAt = const Value.absent(),
                 Value<bool> needsSync = const Value.absent(),
@@ -3195,10 +2837,6 @@ class $$SavedVersesTableTableManager
                 lastReviewDate: lastReviewDate,
                 easeFactor: easeFactor,
                 baseComplexity: baseComplexity,
-                correctCount: correctCount,
-                incorrectCount: incorrectCount,
-                stability: stability,
-                difficulty: difficulty,
                 updatedAt: updatedAt,
                 deletedAt: deletedAt,
                 needsSync: needsSync,
@@ -3217,10 +2855,6 @@ class $$SavedVersesTableTableManager
                 Value<DateTime?> lastReviewDate = const Value.absent(),
                 Value<double> easeFactor = const Value.absent(),
                 Value<double> baseComplexity = const Value.absent(),
-                Value<int> correctCount = const Value.absent(),
-                Value<int> incorrectCount = const Value.absent(),
-                Value<double> stability = const Value.absent(),
-                Value<double> difficulty = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
                 Value<DateTime?> deletedAt = const Value.absent(),
                 Value<bool> needsSync = const Value.absent(),
@@ -3237,10 +2871,6 @@ class $$SavedVersesTableTableManager
                 lastReviewDate: lastReviewDate,
                 easeFactor: easeFactor,
                 baseComplexity: baseComplexity,
-                correctCount: correctCount,
-                incorrectCount: incorrectCount,
-                stability: stability,
-                difficulty: difficulty,
                 updatedAt: updatedAt,
                 deletedAt: deletedAt,
                 needsSync: needsSync,
@@ -3713,7 +3343,6 @@ typedef $$FriendshipsTableCreateCompanionBuilder =
       required String friendFirstName,
       required String friendLastName,
       required String status,
-      Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
       Value<DateTime?> deletedAt,
       Value<bool> needsSync,
@@ -3727,7 +3356,6 @@ typedef $$FriendshipsTableUpdateCompanionBuilder =
       Value<String> friendFirstName,
       Value<String> friendLastName,
       Value<String> status,
-      Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
       Value<DateTime?> deletedAt,
       Value<bool> needsSync,
@@ -3770,11 +3398,6 @@ class $$FriendshipsTableFilterComposer
 
   ColumnFilters<String> get status => $composableBuilder(
     column: $table.status,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<DateTime> get createdAt => $composableBuilder(
-    column: $table.createdAt,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -3833,11 +3456,6 @@ class $$FriendshipsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
-    column: $table.createdAt,
-    builder: (column) => ColumnOrderings(column),
-  );
-
   ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
     column: $table.updatedAt,
     builder: (column) => ColumnOrderings(column),
@@ -3884,9 +3502,6 @@ class $$FriendshipsTableAnnotationComposer
 
   GeneratedColumn<String> get status =>
       $composableBuilder(column: $table.status, builder: (column) => column);
-
-  GeneratedColumn<DateTime> get createdAt =>
-      $composableBuilder(column: $table.createdAt, builder: (column) => column);
 
   GeneratedColumn<DateTime> get updatedAt =>
       $composableBuilder(column: $table.updatedAt, builder: (column) => column);
@@ -3935,7 +3550,6 @@ class $$FriendshipsTableTableManager
                 Value<String> friendFirstName = const Value.absent(),
                 Value<String> friendLastName = const Value.absent(),
                 Value<String> status = const Value.absent(),
-                Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
                 Value<DateTime?> deletedAt = const Value.absent(),
                 Value<bool> needsSync = const Value.absent(),
@@ -3947,7 +3561,6 @@ class $$FriendshipsTableTableManager
                 friendFirstName: friendFirstName,
                 friendLastName: friendLastName,
                 status: status,
-                createdAt: createdAt,
                 updatedAt: updatedAt,
                 deletedAt: deletedAt,
                 needsSync: needsSync,
@@ -3961,7 +3574,6 @@ class $$FriendshipsTableTableManager
                 required String friendFirstName,
                 required String friendLastName,
                 required String status,
-                Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
                 Value<DateTime?> deletedAt = const Value.absent(),
                 Value<bool> needsSync = const Value.absent(),
@@ -3973,7 +3585,6 @@ class $$FriendshipsTableTableManager
                 friendFirstName: friendFirstName,
                 friendLastName: friendLastName,
                 status: status,
-                createdAt: createdAt,
                 updatedAt: updatedAt,
                 deletedAt: deletedAt,
                 needsSync: needsSync,
@@ -4011,7 +3622,6 @@ typedef $$UsersTableCreateCompanionBuilder =
       required String firstName,
       required String lastName,
       Value<String> language,
-      Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
       Value<bool> needsSync,
       Value<int> rowid,
@@ -4023,7 +3633,6 @@ typedef $$UsersTableUpdateCompanionBuilder =
       Value<String> firstName,
       Value<String> lastName,
       Value<String> language,
-      Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
       Value<bool> needsSync,
       Value<int> rowid,
@@ -4059,11 +3668,6 @@ class $$UsersTableFilterComposer extends Composer<_$AppDatabase, $UsersTable> {
 
   ColumnFilters<String> get language => $composableBuilder(
     column: $table.language,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<DateTime> get createdAt => $composableBuilder(
-    column: $table.createdAt,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -4112,11 +3716,6 @@ class $$UsersTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
-    column: $table.createdAt,
-    builder: (column) => ColumnOrderings(column),
-  );
-
   ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
     column: $table.updatedAt,
     builder: (column) => ColumnOrderings(column),
@@ -4151,9 +3750,6 @@ class $$UsersTableAnnotationComposer
 
   GeneratedColumn<String> get language =>
       $composableBuilder(column: $table.language, builder: (column) => column);
-
-  GeneratedColumn<DateTime> get createdAt =>
-      $composableBuilder(column: $table.createdAt, builder: (column) => column);
 
   GeneratedColumn<DateTime> get updatedAt =>
       $composableBuilder(column: $table.updatedAt, builder: (column) => column);
@@ -4195,7 +3791,6 @@ class $$UsersTableTableManager
                 Value<String> firstName = const Value.absent(),
                 Value<String> lastName = const Value.absent(),
                 Value<String> language = const Value.absent(),
-                Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
                 Value<bool> needsSync = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
@@ -4205,7 +3800,6 @@ class $$UsersTableTableManager
                 firstName: firstName,
                 lastName: lastName,
                 language: language,
-                createdAt: createdAt,
                 updatedAt: updatedAt,
                 needsSync: needsSync,
                 rowid: rowid,
@@ -4217,7 +3811,6 @@ class $$UsersTableTableManager
                 required String firstName,
                 required String lastName,
                 Value<String> language = const Value.absent(),
-                Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
                 Value<bool> needsSync = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
@@ -4227,7 +3820,6 @@ class $$UsersTableTableManager
                 firstName: firstName,
                 lastName: lastName,
                 language: language,
-                createdAt: createdAt,
                 updatedAt: updatedAt,
                 needsSync: needsSync,
                 rowid: rowid,

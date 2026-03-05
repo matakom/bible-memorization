@@ -13,4 +13,4 @@ import { UserModule } from 'src/user/user.module';
         UserModule
     ],
 })
-export class PracticeModule { }
+export class ExerciseModule { }

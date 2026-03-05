@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/l10n/l10n_extension.dart';
+import 'package:flutter_app/presentation/widgets/social/leaderboard_widget.dart';
 import 'package:flutter_app/providers/friendships/friendships_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -144,6 +145,7 @@ class _FriendsListWidgetState extends ConsumerState<FriendsListWidget> {
         children: [
           if (receivedRequests.isNotEmpty)
             _buildSection(context.l10n.social_friendRequest, receivedRequests),
+          LeaderboardWidget(),
           if (acceptedFriends.isNotEmpty)
             _buildSection(context.l10n.social_friends, acceptedFriends),
           if (sentRequests.isNotEmpty)

@@ -20,13 +20,6 @@ class SavedVerses extends Table {
   RealColumn get easeFactor => real().withDefault(const Constant(2.5))();
   RealColumn get baseComplexity => real().withDefault(const Constant(0.0))();
 
-  // HLR Stats
-  IntColumn get correctCount => integer().withDefault(const Constant(0))();
-  IntColumn get incorrectCount => integer().withDefault(const Constant(0))();
-  RealColumn get stability => real().withDefault(const Constant(0.0))(); 
-  RealColumn get difficulty => real().withDefault(const Constant(0.0))();
-
-
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)(); 
   DateTimeColumn get deletedAt => dateTime().nullable()(); 
   BoolColumn get needsSync => boolean().withDefault(const Constant(false))();
@@ -45,6 +38,7 @@ class Exercises extends Table {
   IntColumn get durationSeconds => integer()();
 
   DateTimeColumn get performedAt => dateTime().withDefault(currentDateAndTime)();
+
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
   DateTimeColumn get deletedAt => dateTime().nullable()();
   BoolColumn get needsSync => boolean().withDefault(const Constant(false))();
@@ -62,7 +56,6 @@ class Friendships extends Table {
   TextColumn get friendLastName => text()();
 
   TextColumn get status => text()();
-  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
   DateTimeColumn get deletedAt => dateTime().nullable()();
   BoolColumn get needsSync => boolean().withDefault(const Constant(false))();
@@ -83,7 +76,6 @@ class Users extends Table {
   
   TextColumn get language => text().withDefault(const Constant('en'))(); 
 
-  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
   
   BoolColumn get needsSync => boolean().withDefault(const Constant(false))();

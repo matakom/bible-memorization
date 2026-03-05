@@ -39,9 +39,6 @@ export class Friendship {
     @Column({ name: 'friend_id' })
     friendId: string;
 
-    @Column({ name: 'created_at', type: 'timestamp' })
-    createdAt: Date;
-
     // Fields for sync
     @UpdateDateColumn({ name: 'updated_at', type: 'timestamp' })
     updatedAt: Date;

@@ -51,10 +51,6 @@ class PracticeRepository {
           currentNextReviewDate: verseRow.nextReviewDate,
         );
 
-        // 4. Update the new History Counts for HLR future-proofing
-        final newCorrect = feedback.grade >= 3 ? verseRow.correctCount + 1 : verseRow.correctCount;
-        final newIncorrect = feedback.grade < 3 ? verseRow.incorrectCount + 1 : verseRow.incorrectCount;
-
         // 5. Save everything back to SQLite
         await (_db.update(_db.savedVerses)..where((t) => t.id.equals(feedback.verseId)))
             .write(
@@ -63,8 +59,6 @@ class PracticeRepository {
             repetitionCount: Value(srsResult.repetitionCount),
             nextReviewDate: Value(srsResult.nextReviewDate),
             lastReviewDate: Value(now),
-            correctCount: Value(newCorrect),
-            incorrectCount: Value(newIncorrect),
             updatedAt: Value(now),
             needsSync: const Value(true),
           ),

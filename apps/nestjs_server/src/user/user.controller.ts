@@ -24,7 +24,10 @@ export class UserController {
             throw new NotFoundException("Friend code is required");
         }
 
+        console.log('code ', friendCode);
+
         const user = await this.userService.findByFriendCode(friendCode);
+        console.log('user ', user.email);
 
         if (!user) {
             throw new NotFoundException('User not found');
@@ -46,8 +49,7 @@ export class UserController {
     }
 
     @Get(':id/stats')
-    @UseGuards(AuthGuard('jwt'))
-    async getFriendStats(@Param('id') friendId: string, @GetUser() user: User): Promise<UserStatsDto> {
-        return this.userService.getFriendStats(user.id, friendId);
+    async getUserStats(@Param('id') id: string) {
+        return this.userService.getUserStats(id);
     }
 }
