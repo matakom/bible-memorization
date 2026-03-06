@@ -1,12 +1,13 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_app/api/dio_client.dart';
-import 'package:flutter_app/providers/core/security_context_provider.dart';
 import 'package:flutter_app/data/models/user_stats.dart';
 import 'package:flutter_app/data/models/user.dart';
 import 'package:flutter_app/data/local/app_database.dart' as db;
+
+import '../../providers/core/dio_provider.dart';
 
 class StatsRepository {
   final Dio _dio;
@@ -16,15 +17,31 @@ class StatsRepository {
   StatsRepository(this._dio, this._db, this._prefs);
 
   Future<UserStats> getMyStats() async {
-    // 1. Get Name from Local Cache
-    String fullName = "Me";
-    final cachedUser = _prefs.getString('cached_user_profile');
-    if (cachedUser != null) {
-      try {
-        final user = AppUser.fromJson(json.decode(cachedUser));
-        fullName = "${user.firstName} ${user.lastName}";
-      } catch (_) {}
+    String? fullName;
+
+    // Check SQLite
+    final dbUser = await (_db.select(_db.users)..limit(1)).getSingleOrNull();
+    if (dbUser != null) {
+      fullName = "${dbUser.firstName} ${dbUser.lastName}";
     }
+
+    // Check SharedPreferences Cache
+    if (fullName == null) {
+      final cachedUser = _prefs.getString('cached_user_profile');
+      if (cachedUser != null) {
+        try {
+          final user = AppUser.fromJson(json.decode(cachedUser));
+          fullName = "${user.firstName} ${user.lastName}";
+        } catch (_) {}
+      }
+    }
+
+    // NEW: Check Firebase Auth (Ultimate fallback if logged in but DB is empty)
+    fullName ??= FirebaseAuth.instance.currentUser?.displayName;
+
+    // If all else fails (e.g. not logged in), use a generic string.
+    // We handle the localization of "User" in the UI layer.
+    fullName ??= "User";
 
     // 2. Aggregate Query: Total Practices, Time Spent, and Score
     // SQLite's DATE(..., 'localtime') handles the midnight-to-midnight timezone requirement perfectly.
@@ -104,7 +121,7 @@ class StatsRepository {
 
     // 5. Return the updated model
     return UserStats(
-      userId: 'me',
+      userId: dbUser?.id ?? FirebaseAuth.instance.currentUser?.uid ?? 'me',
       fullName: fullName,
       streak: currentStreak,
       totalPractices: totalPractices,
@@ -135,8 +152,7 @@ class StatsRepository {
 
 // Updated Provider
 final statsRepositoryProvider = FutureProvider((ref) async {
-  final securityContext = await ref.watch(securityContextFutureProvider.future);
-  final dio = createDioClient(securityContext, ref);
+  final dio = await ref.watch(dioProvider.future);
 
   final database = ref.watch(db.databaseProvider);
   final prefs = await SharedPreferences.getInstance();

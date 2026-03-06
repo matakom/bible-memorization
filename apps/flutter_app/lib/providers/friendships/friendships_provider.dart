@@ -1,31 +1,36 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_app/data/models/friendship.dart';
 import 'package:flutter_app/data/repositories/friendships_repository.dart';
+import 'package:flutter_app/data/local/app_database.dart' as db;
 
 class FriendshipsNotifier extends AsyncNotifier<List<Friendship>> {
   @override
   Future<List<Friendship>> build() async {
-    final repository = await ref.watch(friendshipsRepositoryProvider.future);
-    return repository.getFriendships();
+    // MUST bypass the network-dependent repository here!
+    final database = ref.watch(db.databaseProvider);
+    
+    try {
+      final rows = await (database.select(database.friendships)
+            ..where((t) => t.deletedAt.isNull()))
+          .get();
+      return rows.map((row) => Friendship.fromEntity(row)).toList();
+    } catch (e) {
+      throw Exception('Failed to load local friendships: $e');
+    }
   }
 
-  /// Adds a friend and then automatically refetches the list.
   Future<void> addFriendship(String friendCode) async {
     final repository = await ref.read(friendshipsRepositoryProvider.future);
     await repository.sendFriendshipRequest(friendCode);
-    
-    // If successful, invalidate this provider to refetch the list
     ref.invalidateSelf();
   }
 
-  /// Accepts a friend request and then automatically refetches the list.
   Future<void> acceptFriendship(String friendshipId) async {
     final repository = await ref.read(friendshipsRepositoryProvider.future);
     await repository.acceptFriendship(friendshipId);
     ref.invalidateSelf();
   }
 
-  /// Deletes a friend and then automatically refetches the list.
   Future<void> deleteFriendship(String friendshipId) async {
     final repository = await ref.read(friendshipsRepositoryProvider.future);
     await repository.deleteFriendship(friendshipId);
@@ -33,7 +38,6 @@ class FriendshipsNotifier extends AsyncNotifier<List<Friendship>> {
   }
 }
 
-final friendshipsProvider =
-    AsyncNotifierProvider<FriendshipsNotifier, List<Friendship>>(() {
+final friendshipsProvider = AsyncNotifierProvider<FriendshipsNotifier, List<Friendship>>(() {
   return FriendshipsNotifier();
 });

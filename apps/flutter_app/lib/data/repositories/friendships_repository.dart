@@ -2,11 +2,10 @@ import 'package:dio/dio.dart';
 import 'package:drift/drift.dart';
 import 'package:flutter_app/services/sync_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_app/api/dio_client.dart';
-import 'package:flutter_app/providers/core/security_context_provider.dart';
 import 'package:flutter_app/data/models/friendship.dart';
 import 'package:flutter_app/data/local/app_database.dart' as db;
 import 'package:uuid/uuid.dart';
+import '../../providers/core/dio_provider.dart';
 import '../../utils/debugger.dart';
 
 class FriendshipsException implements Exception {
@@ -20,9 +19,8 @@ class FriendshipsRepository {
   final Dio _dio;
   final db.AppDatabase _db;
   final Ref _ref;
-  final SyncService _syncService;
 
-  FriendshipsRepository(this._dio, this._db, this._ref, this._syncService);
+  FriendshipsRepository(this._dio, this._db, this._ref);
 
   Future<List<Friendship>> getFriendships() async {
     try {
@@ -91,7 +89,9 @@ class FriendshipsRepository {
             mode: InsertMode.insertOrReplace,
           );
 
-      _syncService.runSync();
+
+      final syncService = await _ref.read(syncServiceProvider.future);
+      syncService.runSync();
     } on DioException catch (e) {
       if (e.response?.statusCode == 404) {
         throw FriendshipsException("User with this code not found.");
@@ -132,19 +132,14 @@ class FriendshipsRepository {
   }
 
   void _triggerSync() {
-    _ref
-        .read(syncServiceProvider.future)
-        .then((s) => s.runSync())
-        .catchError((_) {});
+    _ref.read(syncServiceProvider.future).then((s) => s.runSync());
   }
 }
 
-final friendshipsRepositoryProvider = FutureProvider<FriendshipsRepository>((
-  ref,
-) async {
-  final securityContext = await ref.watch(securityContextFutureProvider.future);
-  final dio = createDioClient(securityContext, ref);
+final friendshipsRepositoryProvider = FutureProvider<FriendshipsRepository>((ref) async {
+  // THE FIX: Watch the centralized dioProvider!
+  final dio = await ref.watch(dioProvider.future);
+  
   final database = ref.watch(db.databaseProvider);
-  final syncService = await ref.watch(syncServiceProvider.future);
-  return FriendshipsRepository(dio, database, ref, syncService);
+  return FriendshipsRepository(dio, database, ref);
 });

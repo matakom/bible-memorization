@@ -31,19 +31,18 @@ class SettingsScreen extends ConsumerWidget {
         children: [
           // Dynamic Account Header
           const _AccountSection(),
-          
+
           const SizedBox(height: 16),
           const Divider(),
-          
-          LocaleSelect(),
-          ThemeSelect(),
-          
+
+          Column(children: [LocaleSelect(), ThemeSelect()]),
+
           // Only show Delete Account if they are actually logged in
           if (currentUser != null) ...[
             const SizedBox(height: 8),
             const DeleteAccountButton(),
           ],
-          
+
           const SizedBox(height: 16),
           const Divider(),
           Padding(
@@ -54,7 +53,7 @@ class SettingsScreen extends ConsumerWidget {
               textAlign: TextAlign.center,
             ),
           ),
-          
+
           GetTokenButton(),
           ElevatedButton(
             child: Text(context.l10n.settings_debugDb),
@@ -67,7 +66,7 @@ class SettingsScreen extends ConsumerWidget {
               );
             },
           ),
-          
+
           ElevatedButton.icon(
             icon: const Icon(Icons.timer),
             label: Text(context.l10n.settings_testNotification),
@@ -75,12 +74,14 @@ class SettingsScreen extends ConsumerWidget {
               await NotificationService.scheduleTestNotification();
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(context.l10n.settings_notificationScheduled)),
+                  SnackBar(
+                    content: Text(context.l10n.settings_notificationScheduled),
+                  ),
                 );
               }
             },
           ),
-          
+
           ListTile(
             leading: const Icon(Icons.sync),
             title: Text(context.l10n.settings_forceSync),
@@ -88,22 +89,38 @@ class SettingsScreen extends ConsumerWidget {
             onTap: () async {
               try {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(context.l10n.settings_syncing))
+                  SnackBar(
+                    content: Text(context.l10n.settings_syncing),
+                    duration: const Duration(seconds: 1),
+                  ),
                 );
+
                 final syncService = await ref.read(syncServiceProvider.future);
-                await syncService.runSync();
+                // Capture the result
+                final isFullSuccess = await syncService.runSync();
+
                 if (context.mounted) {
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(context.l10n.settings_syncSuccess)),
+                    SnackBar(
+                      content: Text(
+                        isFullSuccess
+                            ? context.l10n.settings_syncSuccess
+                            : context.l10n.settings_syncPartialSuccess,
+                      ),
+                      backgroundColor: isFullSuccess ? null : Colors.orange,
+                    ),
                   );
                 }
               } catch (e) {
                 Debugger.log("MANUAL SYNC ERROR: $e");
                 if (context.mounted) {
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text(context.l10n.settings_syncError(e.toString())), 
-                      backgroundColor: Colors.red
+                      content: Text(context.l10n.settings_syncFailed),
+                      backgroundColor: Colors.red,
                     ),
                   );
                 }
@@ -129,18 +146,23 @@ class _AccountSection extends ConsumerWidget {
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (err, _) => Card(
         child: Padding(
-          padding: const EdgeInsets.all(16), 
-          child: Text(context.l10n.settings_errorLoadingProfile(err.toString()))
-        )
+          padding: const EdgeInsets.all(16),
+          child: Text(
+            context.l10n.settings_errorLoadingProfile(err.toString()),
+          ),
+        ),
       ),
       data: (currentUser) {
-        
         // --- GUEST CARD ---
         if (currentUser == null) {
           return Card(
             elevation: 0,
-            color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            color: theme.colorScheme.surfaceContainerHighest.withValues(
+              alpha: 0.5,
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Row(
@@ -148,15 +170,30 @@ class _AccountSection extends ConsumerWidget {
                   CircleAvatar(
                     radius: 30,
                     backgroundColor: Colors.grey.shade400,
-                    child: const Icon(Icons.person, size: 32, color: Colors.white),
+                    child: const Icon(
+                      Icons.person,
+                      size: 32,
+                      color: Colors.white,
+                    ),
                   ),
                   const SizedBox(width: 16),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(context.l10n.settings_guestUser, style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
-                        Text(context.l10n.settings_guestProgressSavedLocally, style: const TextStyle(color: Colors.grey, fontSize: 12)),
+                        Text(
+                          context.l10n.settings_guestUser,
+                          style: theme.textTheme.titleLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          context.l10n.settings_guestProgressSavedLocally,
+                          style: const TextStyle(
+                            color: Colors.grey,
+                            fontSize: 12,
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -171,7 +208,9 @@ class _AccountSection extends ConsumerWidget {
         return Card(
           elevation: 0,
           color: theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Row(
@@ -180,8 +219,14 @@ class _AccountSection extends ConsumerWidget {
                   radius: 30,
                   backgroundColor: theme.colorScheme.primary,
                   child: Text(
-                    currentUser.firstName.isNotEmpty ? currentUser.firstName[0].toUpperCase() : '?', 
-                    style: const TextStyle(fontSize: 24, color: Colors.white, fontWeight: FontWeight.bold)
+                    currentUser.firstName.isNotEmpty
+                        ? currentUser.firstName[0].toUpperCase()
+                        : '?',
+                    style: const TextStyle(
+                      fontSize: 24,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
                 const SizedBox(width: 16),
@@ -189,9 +234,19 @@ class _AccountSection extends ConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("${currentUser.firstName} ${currentUser.lastName}", 
-                        style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
-                      Text(currentUser.email, style: const TextStyle(color: Colors.grey, fontSize: 12)),
+                      Text(
+                        "${currentUser.firstName} ${currentUser.lastName}",
+                        style: theme.textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        currentUser.email,
+                        style: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 12,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -200,7 +255,7 @@ class _AccountSection extends ConsumerWidget {
             ),
           ),
         );
-      }
+      },
     );
   }
 }

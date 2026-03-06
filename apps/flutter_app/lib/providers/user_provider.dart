@@ -3,47 +3,43 @@ import 'package:flutter_app/data/models/user.dart';
 import 'package:flutter_app/data/repositories/user_repository.dart';
 import 'package:flutter_app/providers/auth_provider.dart';
 
-final userDataProvider = FutureProvider<AppUser?>((ref) async {
-  
-  // 1. Check Firebase Auth stream first
-  final firebaseUser = ref.watch(authStreamProvider).value;
-  
-  if (firebaseUser == null) {
-    return null; // Instantly return Guest state!
-  }
+class UserDataNotifier extends AsyncNotifier<AppUser?> {
+  @override
+  Future<AppUser?> build() async {
+    // 1. Watch the actual Firebase User object
+    final authUser = ref.watch(authStreamProvider).value;
 
-  final repo = await ref.watch(userRepositoryProvider.future);
-  
-  // 2. Try local database cache
-  try {
-    final localUser = await repo.getLocalUser(); 
-    if (localUser != null) {
-      return localUser;
+    // 2. If no Firebase user, we are definitely a Guest
+    if (authUser == null) {
+      return null; 
     }
-  } catch (_) {}
 
-  // 3. Try to fetch from server with a 5-second timeout
-  try {
-    return await repo.getUserData().timeout(const Duration(seconds: 5));
-  } catch (e) {
-    // 4. OFFLINE FALLBACK: 
-    // Create a temporary AppUser using Google's data matching YOUR exact model!
+    // 3. Try to get the saved profile from SQLite
+    final repo = await ref.watch(userRepositoryProvider.future);
+    final localUser = await repo.getLocalUser();
+
+    if (localUser != null) {
+      return localUser; // Normal flow
+    }
+
+    // 4. OFFLINE FALLBACK: We are logged into Firebase, but the server 
+    // was down during the initial fetch. Create a temporary profile!
+    final nameParts = (authUser.displayName ?? 'Offline User').split(' ');
     
-    final displayName = firebaseUser.displayName ?? 'Offline User';
-    final nameParts = displayName.split(' ');
-    final firstName = nameParts.isNotEmpty ? nameParts.first : 'Offline';
-    final lastName = nameParts.length > 1 ? nameParts.skip(1).join(' ') : '';
-
     return AppUser(
-      id: firebaseUser.uid,
-      language: 'en', // Default fallback language
-      friendCode: 'OFFLINE', // This triggers your offline Social Screen UI!
-      email: firebaseUser.email ?? '',
-      firstName: firstName,
-      lastName: lastName,
-      registeredAt: DateTime.now(), 
+      id: authUser.uid,
+      email: authUser.email ?? '',
+      firstName: nameParts.isNotEmpty ? nameParts.first : 'Offline',
+      lastName: nameParts.length > 1 ? nameParts.sublist(1).join(' ') : '',
+      language: 'cz', // Default fallback
+      friendCode: '', // Leave empty so SocialScreen knows we haven't fully synced
+      registeredAt: DateTime.now(),
     );
   }
+}
+
+final userDataProvider = AsyncNotifierProvider<UserDataNotifier, AppUser?>(() {
+  return UserDataNotifier();
 });
 
 final currentUserIdProvider = Provider<String?>((ref) {

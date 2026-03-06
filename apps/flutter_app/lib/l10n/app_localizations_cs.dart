@@ -164,7 +164,7 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get reader_noSavedVersesYet =>
-      'Zatím nemáš žádné uložené verše.\nBěž do Bible a nějaké si přidej!';
+      'Zatím nemáš žádné uložené verše v tomto překladu.\nBěž do Bible a nějaké si přidej!';
 
   @override
   String get practice_title => 'Procvičování';
@@ -496,4 +496,102 @@ class AppLocalizationsCs extends AppLocalizations {
   String stats_timeHoursMinutes(int hours, int minutes) {
     return '${hours}h ${minutes}m';
   }
+
+  @override
+  String get game_title_flashcards => 'Kartičky';
+
+  @override
+  String get game_desc_flashcards => 'Klasické oboustranné kartičky';
+
+  @override
+  String get game_title_typing => 'První písmena';
+
+  @override
+  String get game_desc_typing => 'Piš první písmena slov';
+
+  @override
+  String get game_title_builder => 'Skládání';
+
+  @override
+  String get game_desc_builder => 'Sestav verš ze zásoby slov';
+
+  @override
+  String get game_title_reference => 'Odkazy';
+
+  @override
+  String get game_desc_reference => 'Přiřaď správný biblický odkaz';
+
+  @override
+  String get game_title_choice => 'Výběr slov';
+
+  @override
+  String get game_desc_choice => 'Doplňuj chybějící slova do verše';
+
+  @override
+  String get practice_emptyLibraryTitle => 'Tvá knihovna je prázdná';
+
+  @override
+  String get practice_emptyLibraryBody =>
+      'Ulož si nějaké verše z Bible, abys mohl začít s procvičováním.';
+
+  @override
+  String get practice_emptyLibraryAction => 'Přejít do Bible';
+
+  @override
+  String get settings_deleteAccountOfflineTitle => 'Vyžadováno připojení';
+
+  @override
+  String get settings_deleteAccountOfflineBody =>
+      'Pro bezpečné smazání účtu z našich serverů musíš být online. Připoj se prosím a zkuste to znovu.';
+
+  @override
+  String get settings_deleteAccountGeneralError =>
+      'Při mazání účtu došlo k chybě. Zkuste to prosím později.';
+
+  @override
+  String get settings_deleteAccountErrorTitle => 'Chyba při mazání účtu!';
+
+  @override
+  String get stats_defaultUserName => 'Uživatel';
+
+  @override
+  String get settings_syncPartialSuccess =>
+      'Synchronizace dokončena, ale některá data se nepodařilo odeslat.';
+
+  @override
+  String get settings_syncFailed =>
+      'Synchronizace se nezdařila. Zkontrolujte připojení.';
+
+  @override
+  String get sync_reconnecting => 'Připojení obnoveno. Synchronizuji data...';
+
+  @override
+  String get sync_offlineMode => 'Režim offline. Změny se ukládají lokálně.';
+
+  @override
+  String get friends_serverOffline =>
+      'Server je nedostupný. Aktualizace přátel jsou pozastaveny.';
+
+  @override
+  String get friends_tryAgain => 'Zkusit znovu';
+
+  @override
+  String get social_phoneOffline => 'Nemáš připojení k internetu.';
+
+  @override
+  String get social_serverOffline => 'Server je momentálně nedostupný.';
+
+  @override
+  String get social_connectButton => 'Připojit k serveru';
+
+  @override
+  String get social_serverUnreachableTitle => 'Server je nedostupný';
+
+  @override
+  String get social_serverUnreachableDescription =>
+      'Naše servery si dávají krátkou pauzu. Zkuste to prosím později.';
+
+  @override
+  String get social_unavailableServerOfflineDescription =>
+      'Nepodařilo se nám připojit k serveru pro načtení vašeho sociálního profilu. Zkuste to prosím později.';
 }

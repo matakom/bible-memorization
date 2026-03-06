@@ -1,45 +1,60 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/providers/user_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'dart:ui';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_app/data/local/app_database.dart' as db;
 import 'package:flutter_app/services/sync_service.dart';
 import 'package:flutter_app/utils/debugger.dart';
+import 'package:drift/drift.dart';
 
-class LanguageNotifier extends Notifier<Locale> {
+class LanguageNotifier extends AsyncNotifier<Locale> {
+  static const _kLangKey = 'language_code';
+
   @override
-  Locale build() {
-    final asyncUser = ref.watch(userDataProvider);
+  Future<Locale> build() async {
+    // 1. Check SharedPreferences first (Fastest/Reliable for boot)
+    final prefs = await SharedPreferences.getInstance();
+    final savedCode = prefs.getString(_kLangKey);
+    
+    if (savedCode != null) {
+      return Locale(savedCode);
+    }
 
-    // Set the initial language based on the user data,
-    // or return 'en' as a default if the user is loading or has an error.
-    return asyncUser.when(
-      data: (user) => Locale(user?.language ?? 'en'),
-      loading: () => const Locale('en'),
-      error: (e, st) => const Locale('en'),
-    );
+    // 2. If no SharedPreferences, try to peek at the SQLite User table
+    final database = ref.read(db.databaseProvider);
+    final localUser = await (database.select(database.users)..limit(1)).getSingleOrNull();
+    
+    if (localUser != null) {
+      // Save it to prefs so next time it's even faster
+      await prefs.setString(_kLangKey, localUser.language);
+      return Locale(localUser.language);
+    }
+
+    // 3. Fallback to system default or English
+    return const Locale('en');
   }
 
-  /// This method updates the state and persists it to the backend.
   Future<void> setLanguage(Locale newLanguage) async {
-    if (state == newLanguage) return;
-
-    state = newLanguage;
+    // Update local state immediately for the UI
+    state = AsyncData(newLanguage);
 
     try {
+      // 1. Persist to SharedPreferences (for next app launch)
       final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('language_code', newLanguage.languageCode);
+      await prefs.setString(_kLangKey, newLanguage.languageCode);
+
+      // 2. Persist to SQLite (for data integrity)
       final database = ref.read(db.databaseProvider);
-      
-      final localUser = await (database.select(database.users)).getSingleOrNull();
+      final localUser = await (database.select(database.users)..limit(1)).getSingleOrNull();
 
       if (localUser != null) {
-        await database.updateUserLanguage(localUser.id, newLanguage.languageCode);
+        await (database.update(database.users)
+          ..where((t) => t.id.equals(localUser.id)))
+          .write(db.UsersCompanion(
+            language: Value(newLanguage.languageCode),
+          ));
 
+        // 3. Trigger background sync to inform the NestJS server
         ref.read(syncServiceProvider.future).then((s) => s.runSync());
-      } else {
-        Debugger.log("No local user found. Data will sync on next login.");
       }
     } catch (e) {
       Debugger.log('Failed to save language: $e');
@@ -47,7 +62,6 @@ class LanguageNotifier extends Notifier<Locale> {
   }
 }
 
-/// NotifierProvider for language.
-final languageProvider = NotifierProvider<LanguageNotifier, Locale>(() {
+final languageProvider = AsyncNotifierProvider<LanguageNotifier, Locale>(() {
   return LanguageNotifier();
 });

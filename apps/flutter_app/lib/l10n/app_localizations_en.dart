@@ -165,7 +165,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reader_noSavedVersesYet =>
-      'No verses saved yet.\nGo to the Bible to add some!';
+      'No verses saved in this translation yet.\nGo to the Bible to add some!';
 
   @override
   String get practice_title => 'Practice';
@@ -496,4 +496,102 @@ class AppLocalizationsEn extends AppLocalizations {
   String stats_timeHoursMinutes(int hours, int minutes) {
     return '${hours}h ${minutes}m';
   }
+
+  @override
+  String get game_title_flashcards => 'Flashcards';
+
+  @override
+  String get game_desc_flashcards => 'Classic flip cards for active recall';
+
+  @override
+  String get game_title_typing => 'First Letter';
+
+  @override
+  String get game_desc_typing => 'Type the first letter of each word';
+
+  @override
+  String get game_title_builder => 'Verse Builder';
+
+  @override
+  String get game_desc_builder => 'Assemble the verse from a word bank';
+
+  @override
+  String get game_title_reference => 'Reference Match';
+
+  @override
+  String get game_desc_reference => 'Match the text to the correct reference';
+
+  @override
+  String get game_title_choice => 'Word Choice';
+
+  @override
+  String get game_desc_choice => 'Pick the correct word for the blanks';
+
+  @override
+  String get practice_emptyLibraryTitle => 'Your Library is Empty';
+
+  @override
+  String get practice_emptyLibraryBody =>
+      'Save some verses from the Bible tab to start your memorization journey.';
+
+  @override
+  String get practice_emptyLibraryAction => 'Go to Bible';
+
+  @override
+  String get settings_deleteAccountOfflineTitle => 'Connection Required';
+
+  @override
+  String get settings_deleteAccountOfflineBody =>
+      'To safely delete your account from our servers, you need to be online. Please connect and try again.';
+
+  @override
+  String get settings_deleteAccountGeneralError =>
+      'Something went wrong while deleting your account. Please try again later.';
+
+  @override
+  String get settings_deleteAccountErrorTitle => 'Error deleting account!';
+
+  @override
+  String get stats_defaultUserName => 'User';
+
+  @override
+  String get settings_syncPartialSuccess =>
+      'Sync finished, but some data couldn\'t be sent.';
+
+  @override
+  String get settings_syncFailed =>
+      'Sync failed. Please check your connection.';
+
+  @override
+  String get sync_reconnecting => 'Connection restored. Syncing data...';
+
+  @override
+  String get sync_offlineMode => 'Offline mode. Changes will save locally.';
+
+  @override
+  String get friends_serverOffline =>
+      'Server unreachable. Friend updates are paused.';
+
+  @override
+  String get friends_tryAgain => 'Retry Connection';
+
+  @override
+  String get social_phoneOffline => 'Your phone has no internet connection.';
+
+  @override
+  String get social_serverOffline => 'The server is currently unreachable.';
+
+  @override
+  String get social_connectButton => 'Connect to Server';
+
+  @override
+  String get social_serverUnreachableTitle => 'Server Unreachable';
+
+  @override
+  String get social_serverUnreachableDescription =>
+      'Our servers are taking a brief rest. Please try again later.';
+
+  @override
+  String get social_unavailableServerOfflineDescription =>
+      'We couldn\'t reach the server to load your social profile. Please try again later.';
 }

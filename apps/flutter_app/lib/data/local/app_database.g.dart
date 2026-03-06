@@ -2016,6 +2016,17 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _friendCodeMeta = const VerificationMeta(
+    'friendCode',
+  );
+  @override
+  late final GeneratedColumn<String> friendCode = GeneratedColumn<String>(
+    'friend_code',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _languageMeta = const VerificationMeta(
     'language',
   );
@@ -2061,6 +2072,7 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
     email,
     firstName,
     lastName,
+    friendCode,
     language,
     updatedAt,
     needsSync,
@@ -2106,6 +2118,12 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
     } else if (isInserting) {
       context.missing(_lastNameMeta);
     }
+    if (data.containsKey('friend_code')) {
+      context.handle(
+        _friendCodeMeta,
+        friendCode.isAcceptableOrUnknown(data['friend_code']!, _friendCodeMeta),
+      );
+    }
     if (data.containsKey('language')) {
       context.handle(
         _languageMeta,
@@ -2149,6 +2167,10 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
         DriftSqlType.string,
         data['${effectivePrefix}last_name'],
       )!,
+      friendCode: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}friend_code'],
+      ),
       language: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}language'],
@@ -2175,6 +2197,7 @@ class User extends DataClass implements Insertable<User> {
   final String email;
   final String firstName;
   final String lastName;
+  final String? friendCode;
   final String language;
   final DateTime updatedAt;
   final bool needsSync;
@@ -2183,6 +2206,7 @@ class User extends DataClass implements Insertable<User> {
     required this.email,
     required this.firstName,
     required this.lastName,
+    this.friendCode,
     required this.language,
     required this.updatedAt,
     required this.needsSync,
@@ -2194,6 +2218,9 @@ class User extends DataClass implements Insertable<User> {
     map['email'] = Variable<String>(email);
     map['first_name'] = Variable<String>(firstName);
     map['last_name'] = Variable<String>(lastName);
+    if (!nullToAbsent || friendCode != null) {
+      map['friend_code'] = Variable<String>(friendCode);
+    }
     map['language'] = Variable<String>(language);
     map['updated_at'] = Variable<DateTime>(updatedAt);
     map['needs_sync'] = Variable<bool>(needsSync);
@@ -2206,6 +2233,9 @@ class User extends DataClass implements Insertable<User> {
       email: Value(email),
       firstName: Value(firstName),
       lastName: Value(lastName),
+      friendCode: friendCode == null && nullToAbsent
+          ? const Value.absent()
+          : Value(friendCode),
       language: Value(language),
       updatedAt: Value(updatedAt),
       needsSync: Value(needsSync),
@@ -2222,6 +2252,7 @@ class User extends DataClass implements Insertable<User> {
       email: serializer.fromJson<String>(json['email']),
       firstName: serializer.fromJson<String>(json['firstName']),
       lastName: serializer.fromJson<String>(json['lastName']),
+      friendCode: serializer.fromJson<String?>(json['friendCode']),
       language: serializer.fromJson<String>(json['language']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
       needsSync: serializer.fromJson<bool>(json['needsSync']),
@@ -2235,6 +2266,7 @@ class User extends DataClass implements Insertable<User> {
       'email': serializer.toJson<String>(email),
       'firstName': serializer.toJson<String>(firstName),
       'lastName': serializer.toJson<String>(lastName),
+      'friendCode': serializer.toJson<String?>(friendCode),
       'language': serializer.toJson<String>(language),
       'updatedAt': serializer.toJson<DateTime>(updatedAt),
       'needsSync': serializer.toJson<bool>(needsSync),
@@ -2246,6 +2278,7 @@ class User extends DataClass implements Insertable<User> {
     String? email,
     String? firstName,
     String? lastName,
+    Value<String?> friendCode = const Value.absent(),
     String? language,
     DateTime? updatedAt,
     bool? needsSync,
@@ -2254,6 +2287,7 @@ class User extends DataClass implements Insertable<User> {
     email: email ?? this.email,
     firstName: firstName ?? this.firstName,
     lastName: lastName ?? this.lastName,
+    friendCode: friendCode.present ? friendCode.value : this.friendCode,
     language: language ?? this.language,
     updatedAt: updatedAt ?? this.updatedAt,
     needsSync: needsSync ?? this.needsSync,
@@ -2264,6 +2298,9 @@ class User extends DataClass implements Insertable<User> {
       email: data.email.present ? data.email.value : this.email,
       firstName: data.firstName.present ? data.firstName.value : this.firstName,
       lastName: data.lastName.present ? data.lastName.value : this.lastName,
+      friendCode: data.friendCode.present
+          ? data.friendCode.value
+          : this.friendCode,
       language: data.language.present ? data.language.value : this.language,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
       needsSync: data.needsSync.present ? data.needsSync.value : this.needsSync,
@@ -2277,6 +2314,7 @@ class User extends DataClass implements Insertable<User> {
           ..write('email: $email, ')
           ..write('firstName: $firstName, ')
           ..write('lastName: $lastName, ')
+          ..write('friendCode: $friendCode, ')
           ..write('language: $language, ')
           ..write('updatedAt: $updatedAt, ')
           ..write('needsSync: $needsSync')
@@ -2290,6 +2328,7 @@ class User extends DataClass implements Insertable<User> {
     email,
     firstName,
     lastName,
+    friendCode,
     language,
     updatedAt,
     needsSync,
@@ -2302,6 +2341,7 @@ class User extends DataClass implements Insertable<User> {
           other.email == this.email &&
           other.firstName == this.firstName &&
           other.lastName == this.lastName &&
+          other.friendCode == this.friendCode &&
           other.language == this.language &&
           other.updatedAt == this.updatedAt &&
           other.needsSync == this.needsSync);
@@ -2312,6 +2352,7 @@ class UsersCompanion extends UpdateCompanion<User> {
   final Value<String> email;
   final Value<String> firstName;
   final Value<String> lastName;
+  final Value<String?> friendCode;
   final Value<String> language;
   final Value<DateTime> updatedAt;
   final Value<bool> needsSync;
@@ -2321,6 +2362,7 @@ class UsersCompanion extends UpdateCompanion<User> {
     this.email = const Value.absent(),
     this.firstName = const Value.absent(),
     this.lastName = const Value.absent(),
+    this.friendCode = const Value.absent(),
     this.language = const Value.absent(),
     this.updatedAt = const Value.absent(),
     this.needsSync = const Value.absent(),
@@ -2331,6 +2373,7 @@ class UsersCompanion extends UpdateCompanion<User> {
     required String email,
     required String firstName,
     required String lastName,
+    this.friendCode = const Value.absent(),
     this.language = const Value.absent(),
     this.updatedAt = const Value.absent(),
     this.needsSync = const Value.absent(),
@@ -2344,6 +2387,7 @@ class UsersCompanion extends UpdateCompanion<User> {
     Expression<String>? email,
     Expression<String>? firstName,
     Expression<String>? lastName,
+    Expression<String>? friendCode,
     Expression<String>? language,
     Expression<DateTime>? updatedAt,
     Expression<bool>? needsSync,
@@ -2354,6 +2398,7 @@ class UsersCompanion extends UpdateCompanion<User> {
       if (email != null) 'email': email,
       if (firstName != null) 'first_name': firstName,
       if (lastName != null) 'last_name': lastName,
+      if (friendCode != null) 'friend_code': friendCode,
       if (language != null) 'language': language,
       if (updatedAt != null) 'updated_at': updatedAt,
       if (needsSync != null) 'needs_sync': needsSync,
@@ -2366,6 +2411,7 @@ class UsersCompanion extends UpdateCompanion<User> {
     Value<String>? email,
     Value<String>? firstName,
     Value<String>? lastName,
+    Value<String?>? friendCode,
     Value<String>? language,
     Value<DateTime>? updatedAt,
     Value<bool>? needsSync,
@@ -2376,6 +2422,7 @@ class UsersCompanion extends UpdateCompanion<User> {
       email: email ?? this.email,
       firstName: firstName ?? this.firstName,
       lastName: lastName ?? this.lastName,
+      friendCode: friendCode ?? this.friendCode,
       language: language ?? this.language,
       updatedAt: updatedAt ?? this.updatedAt,
       needsSync: needsSync ?? this.needsSync,
@@ -2397,6 +2444,9 @@ class UsersCompanion extends UpdateCompanion<User> {
     }
     if (lastName.present) {
       map['last_name'] = Variable<String>(lastName.value);
+    }
+    if (friendCode.present) {
+      map['friend_code'] = Variable<String>(friendCode.value);
     }
     if (language.present) {
       map['language'] = Variable<String>(language.value);
@@ -2420,6 +2470,7 @@ class UsersCompanion extends UpdateCompanion<User> {
           ..write('email: $email, ')
           ..write('firstName: $firstName, ')
           ..write('lastName: $lastName, ')
+          ..write('friendCode: $friendCode, ')
           ..write('language: $language, ')
           ..write('updatedAt: $updatedAt, ')
           ..write('needsSync: $needsSync, ')
@@ -3621,6 +3672,7 @@ typedef $$UsersTableCreateCompanionBuilder =
       required String email,
       required String firstName,
       required String lastName,
+      Value<String?> friendCode,
       Value<String> language,
       Value<DateTime> updatedAt,
       Value<bool> needsSync,
@@ -3632,6 +3684,7 @@ typedef $$UsersTableUpdateCompanionBuilder =
       Value<String> email,
       Value<String> firstName,
       Value<String> lastName,
+      Value<String?> friendCode,
       Value<String> language,
       Value<DateTime> updatedAt,
       Value<bool> needsSync,
@@ -3663,6 +3716,11 @@ class $$UsersTableFilterComposer extends Composer<_$AppDatabase, $UsersTable> {
 
   ColumnFilters<String> get lastName => $composableBuilder(
     column: $table.lastName,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get friendCode => $composableBuilder(
+    column: $table.friendCode,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -3711,6 +3769,11 @@ class $$UsersTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get friendCode => $composableBuilder(
+    column: $table.friendCode,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get language => $composableBuilder(
     column: $table.language,
     builder: (column) => ColumnOrderings(column),
@@ -3747,6 +3810,11 @@ class $$UsersTableAnnotationComposer
 
   GeneratedColumn<String> get lastName =>
       $composableBuilder(column: $table.lastName, builder: (column) => column);
+
+  GeneratedColumn<String> get friendCode => $composableBuilder(
+    column: $table.friendCode,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get language =>
       $composableBuilder(column: $table.language, builder: (column) => column);
@@ -3790,6 +3858,7 @@ class $$UsersTableTableManager
                 Value<String> email = const Value.absent(),
                 Value<String> firstName = const Value.absent(),
                 Value<String> lastName = const Value.absent(),
+                Value<String?> friendCode = const Value.absent(),
                 Value<String> language = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
                 Value<bool> needsSync = const Value.absent(),
@@ -3799,6 +3868,7 @@ class $$UsersTableTableManager
                 email: email,
                 firstName: firstName,
                 lastName: lastName,
+                friendCode: friendCode,
                 language: language,
                 updatedAt: updatedAt,
                 needsSync: needsSync,
@@ -3810,6 +3880,7 @@ class $$UsersTableTableManager
                 required String email,
                 required String firstName,
                 required String lastName,
+                Value<String?> friendCode = const Value.absent(),
                 Value<String> language = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
                 Value<bool> needsSync = const Value.absent(),
@@ -3819,6 +3890,7 @@ class $$UsersTableTableManager
                 email: email,
                 firstName: firstName,
                 lastName: lastName,
+                friendCode: friendCode,
                 language: language,
                 updatedAt: updatedAt,
                 needsSync: needsSync,

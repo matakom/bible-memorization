@@ -18,7 +18,7 @@ class ThemeNotifier extends AsyncNotifier<ThemeMode> {
         return ThemeMode.dark;
       case 'system':
       default:
-        return ThemeMode.system;
+        return ThemeMode.light;
     }
   }
 

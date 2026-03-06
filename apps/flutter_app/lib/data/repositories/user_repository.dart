@@ -1,13 +1,14 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:drift/drift.dart';
 import 'package:flutter_app/data/local/app_database.dart' as db;
 import 'package:flutter_app/data/models/user.dart';
+import 'package:flutter_app/utils/network_exceptions.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_app/api/dio_client.dart';
-import 'package:flutter_app/providers/core/security_context_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_app/utils/debugger.dart';
+import '../../providers/core/dio_provider.dart';
 
 class UserRepository {
   final Dio _dio;
@@ -18,22 +19,17 @@ class UserRepository {
 
   UserRepository(this._dio, this._prefs, this._db);
 
-  /// Fetches user data from the server, updates local caches, and saves to SQLite.
-  /// Falls back to local storage if the network request fails.
   Future<AppUser> getUserData({String? manualToken}) async {
     try {
       final options = manualToken != null 
           ? Options(headers: {'Authorization': 'Bearer $manualToken'}) 
           : null;
 
-      // 1. Attempt Network Fetch
       final response = await _dio.get('/user', options: options);
       final user = AppUser.fromJson(response.data as Map<String, dynamic>);
       
-      // 2. Update SharedPreferences Cache (for legacy/quick access)
       await _prefs.setString(_kCachedUserKey, json.encode(response.data));
 
-      // 3. Update SQLite (The Single Source of Truth)
       await _db.into(_db.users).insert(
         db.UsersCompanion.insert(
           id: user.id,
@@ -41,6 +37,7 @@ class UserRepository {
           firstName: user.firstName,
           lastName: user.lastName,
           language: Value(user.language), 
+          friendCode: Value(user.friendCode),
           needsSync: const Value(false),
           updatedAt: Value(DateTime.now()), 
         ),
@@ -49,23 +46,31 @@ class UserRepository {
 
       return user;
       
-    } catch (e) {
+    } on DioException catch (e) {
       Debugger.log("UserRepository: Network fetch failed. $e");
 
-      // 4. Offline Fallback: Check local sources
+      // Check for specific network vs server errors
+      final isOffline = e.type == DioExceptionType.connectionTimeout || 
+                        e.type == DioExceptionType.receiveTimeout ||
+                        e.error is SocketException;
+      
+      final isServerDown = e.response?.statusCode != null && e.response!.statusCode! >= 500;
+
+      // Offline Fallback: Check local sources
       final localUser = await getLocalUser();
       if (localUser != null) {
         return localUser;
       }
 
-      // 5. Critical Fail (usually on very first login with no internet)
+      // If we have no local user and the fetch failed, throw the specific UI exception
+      if (isServerDown) throw ServerDownException();
+      if (isOffline) throw OfflineException();
+      
       throw Exception("Connection required for initial login.");
     }
   }
 
-  /// Retrieves the user from SQLite or SharedPreferences without hitting the network.
   Future<AppUser?> getLocalUser() async {
-    // Priority 1: SQLite (Most up-to-date)
     final dbUser = await (_db.select(_db.users)..limit(1)).getSingleOrNull();
     if (dbUser != null) {
       return AppUser(
@@ -74,12 +79,11 @@ class UserRepository {
         firstName: dbUser.firstName,
         lastName: dbUser.lastName,
         language: dbUser.language,
-        friendCode: 'OFFLINE', // Mark as offline until next successful sync
+        friendCode: dbUser.friendCode ?? '', 
         registeredAt: dbUser.updatedAt
       );
     }
 
-    // Priority 2: SharedPreferences JSON string
     final cachedString = _prefs.getString(_kCachedUserKey);
     if (cachedString != null) {
       try {
@@ -131,8 +135,8 @@ class UserRepository {
 
 // --- Provider ---
 final userRepositoryProvider = FutureProvider<UserRepository>((ref) async {
-  final securityContext = await ref.watch(securityContextFutureProvider.future);
-  final dio = createDioClient(securityContext, ref);
+  final dio = await ref.watch(dioProvider.future);
+  
   final prefs = await SharedPreferences.getInstance();
   final database = ref.watch(db.databaseProvider); 
   

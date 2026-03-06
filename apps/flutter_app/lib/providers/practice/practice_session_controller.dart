@@ -57,11 +57,15 @@ class PracticeSessionController extends Notifier<PracticeSessionState> {
     return availableGames[_random.nextInt(availableGames.length)];
   }
 
-  void startSession(List<SavedVerse> verses) {
-    // Map each verse to a random game turn
+  void startSession(List<SavedVerse> verses, {GameType? forcedGameType}) {
+    // Map each verse to either the forced game or a random one
     final initialQueue = verses.map((v) {
-      return PracticeTurn(verse: v, gameType: _getRandomGame());
-    }).toList();
+      return PracticeTurn(
+        verse: v, 
+        // Use the selected game if provided, otherwise randomize
+        gameType: forcedGameType ?? _getRandomGame(),
+      );
+    }).toList()..shuffle(); // Shuffling the queue makes the session feel more dynamic
 
     state = PracticeSessionState(queue: initialQueue);
   }

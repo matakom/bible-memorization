@@ -107,7 +107,7 @@ class _SavedVerseTile extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // HEADER: Reference + Badge
+              // HEADER: Reference
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -132,7 +132,6 @@ class _SavedVerseTile extends ConsumerWidget {
                     ),
                   ),
                   const SizedBox(width: 8),
-                  _DifficultyBadge(difficulty: _calculateDifficultyLevel(verse.easeFactor)),
                 ],
               ),
               const SizedBox(height: 12),
@@ -146,56 +145,6 @@ class _SavedVerseTile extends ConsumerWidget {
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-  int _calculateDifficultyLevel(double easeFactor) {
-    if (easeFactor > 2.8) return 1; // Very Easy
-    if (easeFactor > 2.5) return 2; // Easy
-    if (easeFactor > 2.2) return 3; // Medium
-    if (easeFactor > 1.9) return 4; // Hard
-    return 5; // Very Hard
-  }
-}
-
-class _DifficultyBadge extends StatelessWidget {
-  final int difficulty;
-
-  const _DifficultyBadge({required this.difficulty});
-
-  @override
-  Widget build(BuildContext context) {
-    final color = switch (difficulty) {
-      1 => Colors.green,       // Easy
-      2 => Colors.lightGreen,
-      3 => Colors.orange,      // Medium
-      4 => Colors.deepOrange,
-      _ => Colors.red,         // Hard
-    };
-    
-    // Localize the labels using the BuildContext
-    final label = switch (difficulty) {
-      1 => context.l10n.savedVerses_difficultyEasy,
-      2 => context.l10n.savedVerses_difficultyNormal,
-      3 => context.l10n.savedVerses_difficultyModerate,
-      4 => context.l10n.savedVerses_difficultyHard,
-      _ => context.l10n.savedVerses_difficultyElite,
-    };
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha:0.1),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: color.withValues(alpha:0.3)),
-      ),
-      child: Text(
-        label,
-        style: TextStyle(
-          color: color,
-          fontSize: 11,
-          fontWeight: FontWeight.bold,
         ),
       ),
     );

@@ -15,6 +15,8 @@ class ThemeSelect extends ConsumerWidget {
       // Only show the dropdown once we know the current theme
       data: (currentTheme) => DropdownButton<ThemeMode>(
         value: currentTheme,
+        isExpanded: true,
+        alignment: AlignmentGeometry.center,
         onChanged: (ThemeMode? newTheme) {
           if (newTheme != null) {
             ref.read(themeProvider.notifier).setTheme(newTheme);
@@ -23,15 +25,15 @@ class ThemeSelect extends ConsumerWidget {
         items: [
           DropdownMenuItem(
             value: ThemeMode.light,
-            child: Text(context.l10n.settings_themeLight),
+            child: Center(child: Text(context.l10n.settings_themeLight)),
           ),
           DropdownMenuItem(
             value: ThemeMode.dark,
-            child: Text(context.l10n.settings_themeDark),
+            child: Center(child: Text(context.l10n.settings_themeDark)),
           ),
           DropdownMenuItem(
             value: ThemeMode.system,
-            child: Text(context.l10n.settings_themeSystem),
+            child: Center(child: Text(context.l10n.settings_themeSystem)),
           ),
         ],
       ),

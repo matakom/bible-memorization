@@ -27,10 +27,11 @@ Future<void> main() async {
   final database = AppDatabase();
   final now = DateTime.now();
   final startOfDay = DateTime(now.year, now.month, now.day);
-  final todayPractices = await (database.select(database.exercises)
-        ..where((e) => e.performedAt.isBiggerOrEqualValue(startOfDay))
-        ..limit(1))
-      .get();
+  final todayPractices =
+      await (database.select(database.exercises)
+            ..where((e) => e.performedAt.isBiggerOrEqualValue(startOfDay))
+            ..limit(1))
+          .get();
   final hasPracticedToday = todayPractices.isNotEmpty;
   await NotificationService.scheduleDailyReminder(hasPracticedToday);
 
@@ -66,8 +67,6 @@ class _MyAppState extends ConsumerState<MyApp> {
   @override
   Widget build(BuildContext context) {
     final router = ref.watch(goRouterProvider);
-    final Locale currentLocale = ref.watch(languageProvider);
-    
     // 1. Watch the AsyncValue
     final themeAsync = ref.watch(themeProvider);
 
@@ -78,9 +77,14 @@ class _MyAppState extends ConsumerState<MyApp> {
       // 2. Safely extract the data
       themeMode: themeAsync.maybeWhen(
         data: (mode) => mode,
-        orElse: () => ThemeMode.system,
+        orElse: () => ThemeMode.light,
       ),
-      locale: currentLocale,
+      locale: ref
+          .watch(languageProvider)
+          .maybeWhen(
+            data: (locale) => locale,
+            orElse: () => const Locale('cz'),
+          ),
       supportedLocales: AppLocalizations.supportedLocales,
       localizationsDelegates: const [
         AppLocalizations.delegate,

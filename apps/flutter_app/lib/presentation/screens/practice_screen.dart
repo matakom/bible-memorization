@@ -4,6 +4,7 @@ import 'package:flutter_app/l10n/l10n_extension.dart';
 import 'package:flutter_app/providers/reader/saved_verses_controller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_app/data/models/saved_verse.dart';
+import 'package:flutter_app/data/models/practice_feedback.dart'; // Import for GameType
 import 'package:flutter_app/providers/practice/practice_session_controller.dart';
 import 'package:go_router/go_router.dart';
 
@@ -16,19 +17,20 @@ class PracticeScreen extends ConsumerWidget {
     ref.read(myStatsProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(context.l10n.practice_title),
-      ),
+      appBar: AppBar(title: Text(context.l10n.practice_title)),
       body: versesState.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (err, _) => Center(child: Text(context.l10n.practice_error(err.toString()))),
+        error: (err, _) =>
+            Center(child: Text(context.l10n.practice_error(err.toString()))),
         data: (allVerses) {
-          // Find verses due for review
+          if (allVerses.isEmpty) {
+            return _EmptyLibraryView();
+          }
           final now = DateTime.now();
           final dueVerses = allVerses.where((v) {
             final reviewDate = DateUtils.dateOnly(v.nextReviewDate);
             final today = DateUtils.dateOnly(now);
-            return !reviewDate.isAfter(today); 
+            return !reviewDate.isAfter(today);
           }).toList();
 
           return SingleChildScrollView(
@@ -36,7 +38,6 @@ class PracticeScreen extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // --- SECTION 1: DAILY DASHBOARD ---
                 _DailyStatusCard(
                   dueCount: dueVerses.length,
                   totalCount: allVerses.length,
@@ -45,33 +46,92 @@ class PracticeScreen extends ConsumerWidget {
                       _launchPracticeSession(context, ref, dueVerses);
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(context.l10n.practice_completedForToday)),
+                        SnackBar(
+                          content: Text(
+                            context.l10n.practice_completedForToday,
+                          ),
+                        ),
                       );
                     }
                   },
                 ),
-                
+
                 const SizedBox(height: 32),
                 Text(
                   context.l10n.practice_modes,
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 16),
 
-                // --- SECTION 2: GAME MODES ---
                 GridView.count(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   crossAxisCount: 2,
                   crossAxisSpacing: 16,
                   mainAxisSpacing: 16,
+                  childAspectRatio: 0.85, // Adjusted to fit text better
                   children: [
                     _GameCard(
-                      title: context.l10n.practice_flashcards,
+                      title: context.l10n.game_title_flashcards,
+                      description: context.l10n.game_desc_flashcards,
                       icon: Icons.style,
                       color: Colors.blue,
-                      onTap: () => _launchPracticeSession(context, ref, allVerses), 
-                      description: context.l10n.practice_flashcardsDescription,
+                      onTap: () => _launchPracticeSession(
+                        context,
+                        ref,
+                        allVerses,
+                        forcedType: GameType.flashcard,
+                      ),
+                    ),
+                    _GameCard(
+                      title: context.l10n.game_title_typing,
+                      description: context.l10n.game_desc_typing,
+                      icon: Icons.keyboard_alt_outlined,
+                      color: Colors.orange,
+                      onTap: () => _launchPracticeSession(
+                        context,
+                        ref,
+                        allVerses,
+                        forcedType: GameType.firstLetterTyping,
+                      ),
+                    ),
+                    _GameCard(
+                      title: context.l10n.game_title_builder,
+                      description: context.l10n.game_desc_builder,
+                      icon: Icons.extension_outlined,
+                      color: Colors.purple,
+                      onTap: () => _launchPracticeSession(
+                        context,
+                        ref,
+                        allVerses,
+                        forcedType: GameType.verseBuilder,
+                      ),
+                    ),
+                    _GameCard(
+                      title: context.l10n.game_title_reference,
+                      description: context.l10n.game_desc_reference,
+                      icon: Icons.menu_book_outlined,
+                      color: Colors.green,
+                      onTap: () => _launchPracticeSession(
+                        context,
+                        ref,
+                        allVerses,
+                        forcedType: GameType.referenceMatch,
+                      ),
+                    ),
+                    _GameCard(
+                      title: context.l10n.game_title_choice,
+                      description: context.l10n.game_desc_choice,
+                      icon: Icons.checklist_rtl_outlined,
+                      color: Colors.teal,
+                      onTap: () => _launchPracticeSession(
+                        context,
+                        ref,
+                        allVerses,
+                        forcedType: GameType.wordChoice,
+                      ),
                     ),
                   ],
                 ),
@@ -83,18 +143,24 @@ class PracticeScreen extends ConsumerWidget {
     );
   }
 
-  void _launchPracticeSession(BuildContext context, WidgetRef ref, List<SavedVerse> verses) {
+  void _launchPracticeSession(
+    BuildContext context,
+    WidgetRef ref,
+    List<SavedVerse> verses, {
+    GameType? forcedType,
+  }) {
     if (verses.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.l10n.practice_noVerses)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(context.l10n.practice_noVerses)));
       return;
     }
-    
-    // 1. Initialize the session state with the selected verses
-    ref.read(practiceSessionProvider.notifier).startSession(verses);
-    
-    // 2. Navigate to the generic Practice Shell
+
+    // Pass the forcedType to the controller
+    ref
+        .read(practiceSessionProvider.notifier)
+        .startSession(verses, forcedGameType: forcedType);
+
     context.push('/practice_shell');
   }
 }
@@ -120,7 +186,7 @@ class _DailyStatusCard extends StatelessWidget {
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: isAllDone 
+          colors: isAllDone
               ? [Colors.green.shade400, Colors.green.shade700]
               : [theme.colorScheme.primary, theme.colorScheme.tertiary],
           begin: Alignment.topLeft,
@@ -129,7 +195,8 @@ class _DailyStatusCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: (isAllDone ? Colors.green : theme.colorScheme.primary).withValues(alpha: 0.3),
+            color: (isAllDone ? Colors.green : theme.colorScheme.primary)
+                .withValues(alpha: 0.3),
             blurRadius: 12,
             offset: const Offset(0, 6),
           ),
@@ -139,12 +206,18 @@ class _DailyStatusCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            isAllDone ? context.l10n.practice_completedForToday : context.l10n.practice_readeToReview,
-            style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+            isAllDone
+                ? context.l10n.practice_completedForToday
+                : context.l10n.practice_readeToReview,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           const SizedBox(height: 8),
           Text(
-            isAllDone 
+            isAllDone
                 ? context.l10n.practice_allVersesReviewed(totalCount)
                 : context.l10n.practice_versesScheduled(dueCount),
             style: const TextStyle(color: Colors.white70, fontSize: 16),
@@ -156,14 +229,23 @@ class _DailyStatusCard extends StatelessWidget {
               onPressed: onStart,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,
-                foregroundColor: isAllDone ? Colors.green.shade700 : theme.colorScheme.primary,
+                foregroundColor: isAllDone
+                    ? Colors.green.shade700
+                    : theme.colorScheme.primary,
                 padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
               ),
               icon: Icon(isAllDone ? Icons.check : Icons.play_arrow_rounded),
               label: Text(
-                isAllDone ? context.l10n.practice_practiceAnyway : context.l10n.practice_startSession,
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                isAllDone
+                    ? context.l10n.practice_practiceAnyway
+                    : context.l10n.practice_startSession,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
               ),
             ),
           ),
@@ -212,7 +294,10 @@ class _GameCard extends StatelessWidget {
               const SizedBox(height: 12),
               Text(
                 title,
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
               ),
               const SizedBox(height: 4),
               Text(
@@ -222,6 +307,43 @@ class _GameCard extends StatelessWidget {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+class _EmptyLibraryView extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(32.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.auto_stories_outlined, 
+              size: 80, 
+              color: theme.colorScheme.primary.withValues(alpha: 0.5)
+            ),
+            const SizedBox(height: 24),
+            Text(
+              context.l10n.practice_emptyLibraryTitle,
+              style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              context.l10n.practice_emptyLibraryBody,
+              textAlign: TextAlign.center,
+              style: const TextStyle(color: Colors.grey),
+            ),
+            const SizedBox(height: 32),
+            ElevatedButton(
+              onPressed: () => context.go('/reader'),
+              child: Text(context.l10n.practice_emptyLibraryAction),
+            ),
+          ],
         ),
       ),
     );

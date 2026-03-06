@@ -73,8 +73,10 @@ class Users extends Table {
   TextColumn get email => text()();
   TextColumn get firstName => text()();
   TextColumn get lastName => text()();
+
+  TextColumn get friendCode => text().nullable()();
   
-  TextColumn get language => text().withDefault(const Constant('en'))(); 
+  TextColumn get language => text().withDefault(const Constant('cz'))(); 
 
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
   

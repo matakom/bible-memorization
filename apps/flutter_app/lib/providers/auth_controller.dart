@@ -44,6 +44,8 @@ class AuthController extends AsyncNotifier<void> {
           const Duration(seconds: 5),
         );
 
+        ref.invalidate(userDataProvider);
+
         // Trigger initial sync in the background
         ref.read(syncServiceProvider.future).then((service) => service.runSync());
       } catch (serverError) {

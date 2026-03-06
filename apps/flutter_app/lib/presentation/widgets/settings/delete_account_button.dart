@@ -13,7 +13,10 @@ import 'package:flutter_app/l10n/l10n_extension.dart';
 class DeleteAccountButton extends ConsumerWidget {
   const DeleteAccountButton({super.key});
 
-  Future<void> _showDeleteConfirmation(BuildContext context, WidgetRef ref) async {
+  Future<void> _showDeleteConfirmation(
+    BuildContext context,
+    WidgetRef ref,
+  ) async {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (BuildContext dialogContext) {
@@ -22,12 +25,12 @@ class DeleteAccountButton extends ConsumerWidget {
           content: Text(dialogContext.l10n.settings_deleteAccountDialogBody),
           actions: [
             TextButton(
-              onPressed: () => dialogContext.pop(false), 
+              onPressed: () => dialogContext.pop(false),
               child: Text(dialogContext.l10n.settings_deleteAccountCancel),
             ),
             TextButton(
               style: TextButton.styleFrom(foregroundColor: Colors.red),
-              onPressed: () => dialogContext.pop(true), 
+              onPressed: () => dialogContext.pop(true),
               child: Text(dialogContext.l10n.settings_deleteAccountConfirm),
             ),
           ],
@@ -41,7 +44,8 @@ class DeleteAccountButton extends ConsumerWidget {
         showDialog(
           context: context,
           barrierDismissible: false,
-          builder: (BuildContext loadingContext) => const Center(child: CircularProgressIndicator()),
+          builder: (BuildContext loadingContext) =>
+              const Center(child: CircularProgressIndicator()),
         );
 
         // Wipe local SQLite and SharedPreferences
@@ -59,7 +63,7 @@ class DeleteAccountButton extends ConsumerWidget {
 
         if (context.mounted) {
           // Remove the loading spinner safely
-          Navigator.of(context, rootNavigator: true).pop(); 
+          Navigator.of(context, rootNavigator: true).pop();
 
           // Show a success message
           ScaffoldMessenger.of(context).showSnackBar(
@@ -69,16 +73,41 @@ class DeleteAccountButton extends ConsumerWidget {
             ),
           );
 
-          context.go('/practice'); 
+          context.go('/practice');
         }
       } catch (e) {
         if (context.mounted) {
-          // Remove spinner if there is an error
-          Navigator.of(context, rootNavigator: true).pop(); 
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(context.l10n.settings_deleteAccountError(e.toString())),
-              backgroundColor: Colors.red,
+          // 1. Always close the loading spinner first
+          Navigator.of(context, rootNavigator: true).pop();
+
+          // 2. Determine if it's a network error without showing the raw string
+          final errorString = e.toString().toLowerCase();
+          final isNoInternet =
+              errorString.contains("check your internet") ||
+              errorString.contains("socketexception") ||
+              errorString.contains("network_error");
+
+          showDialog(
+            context: context,
+            builder: (ctx) => AlertDialog(
+              title: Text(
+                isNoInternet
+                    ? context.l10n.settings_deleteAccountOfflineTitle
+                    : context
+                          .l10n
+                          .settings_deleteAccountErrorTitle,
+              ),
+              content: Text(
+                isNoInternet
+                    ? context.l10n.settings_deleteAccountOfflineBody
+                    : context.l10n.settings_deleteAccountGeneralError,
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(ctx),
+                  child: const Text("OK"),
+                ),
+              ],
             ),
           );
         }

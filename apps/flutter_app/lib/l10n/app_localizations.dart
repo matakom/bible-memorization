@@ -395,7 +395,7 @@ abstract class AppLocalizations {
   /// No description provided for @reader_noSavedVersesYet.
   ///
   /// In en, this message translates to:
-  /// **'No verses saved yet.\nGo to the Bible to add some!'**
+  /// **'No verses saved in this translation yet.\nGo to the Bible to add some!'**
   String get reader_noSavedVersesYet;
 
   /// No description provided for @practice_title.
@@ -949,6 +949,186 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{hours}h {minutes}m'**
   String stats_timeHoursMinutes(int hours, int minutes);
+
+  /// No description provided for @game_title_flashcards.
+  ///
+  /// In en, this message translates to:
+  /// **'Flashcards'**
+  String get game_title_flashcards;
+
+  /// No description provided for @game_desc_flashcards.
+  ///
+  /// In en, this message translates to:
+  /// **'Classic flip cards for active recall'**
+  String get game_desc_flashcards;
+
+  /// No description provided for @game_title_typing.
+  ///
+  /// In en, this message translates to:
+  /// **'First Letter'**
+  String get game_title_typing;
+
+  /// No description provided for @game_desc_typing.
+  ///
+  /// In en, this message translates to:
+  /// **'Type the first letter of each word'**
+  String get game_desc_typing;
+
+  /// No description provided for @game_title_builder.
+  ///
+  /// In en, this message translates to:
+  /// **'Verse Builder'**
+  String get game_title_builder;
+
+  /// No description provided for @game_desc_builder.
+  ///
+  /// In en, this message translates to:
+  /// **'Assemble the verse from a word bank'**
+  String get game_desc_builder;
+
+  /// No description provided for @game_title_reference.
+  ///
+  /// In en, this message translates to:
+  /// **'Reference Match'**
+  String get game_title_reference;
+
+  /// No description provided for @game_desc_reference.
+  ///
+  /// In en, this message translates to:
+  /// **'Match the text to the correct reference'**
+  String get game_desc_reference;
+
+  /// No description provided for @game_title_choice.
+  ///
+  /// In en, this message translates to:
+  /// **'Word Choice'**
+  String get game_title_choice;
+
+  /// No description provided for @game_desc_choice.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick the correct word for the blanks'**
+  String get game_desc_choice;
+
+  /// No description provided for @practice_emptyLibraryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Library is Empty'**
+  String get practice_emptyLibraryTitle;
+
+  /// No description provided for @practice_emptyLibraryBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Save some verses from the Bible tab to start your memorization journey.'**
+  String get practice_emptyLibraryBody;
+
+  /// No description provided for @practice_emptyLibraryAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to Bible'**
+  String get practice_emptyLibraryAction;
+
+  /// No description provided for @settings_deleteAccountOfflineTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Connection Required'**
+  String get settings_deleteAccountOfflineTitle;
+
+  /// No description provided for @settings_deleteAccountOfflineBody.
+  ///
+  /// In en, this message translates to:
+  /// **'To safely delete your account from our servers, you need to be online. Please connect and try again.'**
+  String get settings_deleteAccountOfflineBody;
+
+  /// No description provided for @settings_deleteAccountGeneralError.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong while deleting your account. Please try again later.'**
+  String get settings_deleteAccountGeneralError;
+
+  /// No description provided for @settings_deleteAccountErrorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Error deleting account!'**
+  String get settings_deleteAccountErrorTitle;
+
+  /// No description provided for @stats_defaultUserName.
+  ///
+  /// In en, this message translates to:
+  /// **'User'**
+  String get stats_defaultUserName;
+
+  /// No description provided for @settings_syncPartialSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync finished, but some data couldn\'t be sent.'**
+  String get settings_syncPartialSuccess;
+
+  /// No description provided for @settings_syncFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync failed. Please check your connection.'**
+  String get settings_syncFailed;
+
+  /// No description provided for @sync_reconnecting.
+  ///
+  /// In en, this message translates to:
+  /// **'Connection restored. Syncing data...'**
+  String get sync_reconnecting;
+
+  /// No description provided for @sync_offlineMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Offline mode. Changes will save locally.'**
+  String get sync_offlineMode;
+
+  /// No description provided for @friends_serverOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Server unreachable. Friend updates are paused.'**
+  String get friends_serverOffline;
+
+  /// No description provided for @friends_tryAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry Connection'**
+  String get friends_tryAgain;
+
+  /// No description provided for @social_phoneOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Your phone has no internet connection.'**
+  String get social_phoneOffline;
+
+  /// No description provided for @social_serverOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'The server is currently unreachable.'**
+  String get social_serverOffline;
+
+  /// No description provided for @social_connectButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect to Server'**
+  String get social_connectButton;
+
+  /// No description provided for @social_serverUnreachableTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Server Unreachable'**
+  String get social_serverUnreachableTitle;
+
+  /// No description provided for @social_serverUnreachableDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Our servers are taking a brief rest. Please try again later.'**
+  String get social_serverUnreachableDescription;
+
+  /// No description provided for @social_unavailableServerOfflineDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t reach the server to load your social profile. Please try again later.'**
+  String get social_unavailableServerOfflineDescription;
 }
 
 class _AppLocalizationsDelegate
