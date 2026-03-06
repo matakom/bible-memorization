@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_app/config/bible_translations.dart';
 import 'package:flutter_app/providers/reader/bible_provider.dart';
 
+/// Popup button widget for switching between different Bible translations.
 class BibleTranslationSelector extends ConsumerWidget {
   const BibleTranslationSelector({super.key});
 

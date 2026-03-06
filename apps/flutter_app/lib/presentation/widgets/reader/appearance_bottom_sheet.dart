@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_app/providers/reader/reader_settings_controller.dart';
 import 'package:flutter_app/l10n/l10n_extension.dart';
 
+/// Modal bottom sheet allowing users to customize text appearance in the Bible reader.
 class AppearanceBottomSheet extends ConsumerWidget {
   const AppearanceBottomSheet({super.key});
 
@@ -33,7 +34,6 @@ class AppearanceBottomSheet extends ConsumerWidget {
               ),
               const SizedBox(height: 20),
               
-              // Font Size Slider
               Row(
                 children: [
                   const Icon(Icons.text_fields, size: 16),
@@ -58,10 +58,10 @@ class AppearanceBottomSheet extends ConsumerWidget {
                 children: [
                   _OptionButton(
                     label: settings.fontFamily == 'Sans' 
-                        ? context.l10n.reader_appearanceSansSerif 
-                        : context.l10n.reader_appearanceSerif,
+                        ? context.l10n.reader_appearanceSerif 
+                        : context.l10n.reader_appearanceSansSerif,
                     icon: Icons.font_download_outlined,
-                    isSelected: settings.fontFamily == 'Serif', // Fixed selection logic
+                    isSelected: settings.fontFamily == 'Serif',
                     onTap: () => controller.toggleFontFamily(),
                   ),
                   _OptionButton(
@@ -79,6 +79,7 @@ class AppearanceBottomSheet extends ConsumerWidget {
     );
   }
 }
+
 class _OptionButton extends StatelessWidget {
   final String label;
   final IconData icon;

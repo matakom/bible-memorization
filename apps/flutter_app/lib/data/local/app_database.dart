@@ -5,11 +5,11 @@ import 'package:flutter_app/data/models/practice_feedback.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'db_tables.dart';
 
 part 'app_database.g.dart';
 
+/// Drift database implementation managing local storage for users, verses, exercises, and friends.
 @DriftDatabase(tables: [SavedVerses, Exercises, Friendships, Users])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
@@ -17,7 +17,6 @@ class AppDatabase extends _$AppDatabase {
   @override
   int get schemaVersion => 1;
 
-  // QUERIES
   Future<List<SavedVerse>> getAllVerses() {
     return (select(savedVerses)
           ..where((t) => t.deletedAt.isNull())
@@ -71,12 +70,10 @@ class AppDatabase extends _$AppDatabase {
     if (history.isEmpty) return 0;
 
     int streak = 0;
-    
     DateTime toDate(DateTime d) => DateTime(d.year, d.month, d.day);
 
     final today = toDate(DateTime.now());
     final yesterday = today.subtract(const Duration(days: 1));
-    
     final practiceDates = history.map((e) => toDate(e.performedAt)).toSet();
 
     if (!practiceDates.contains(today) && !practiceDates.contains(yesterday)) {
@@ -94,6 +91,7 @@ class AppDatabase extends _$AppDatabase {
   }
 }
 
+/// Helper function to initialize the SQLite connection.
 LazyDatabase _openConnection() {
   return LazyDatabase(() async {
     final dbFolder = await getApplicationDocumentsDirectory();
@@ -102,6 +100,7 @@ LazyDatabase _openConnection() {
   });
 }
 
+/// Riverpod provider for the application database.
 final databaseProvider = Provider<AppDatabase>((ref) {
   final db = AppDatabase();
   ref.onDispose(db.close);

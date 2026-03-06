@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/data/models/practice_feedback.dart';
-import 'package:flutter_app/l10n/l10n_extension.dart'; // Added localization import
+import 'package:flutter_app/l10n/l10n_extension.dart'; 
 import 'package:flutter_app/presentation/widgets/games/first_letter_typing_game_widget.dart';
 import 'package:flutter_app/presentation/widgets/games/reference_match_game_widget.dart';
 import 'package:flutter_app/presentation/widgets/games/verse_builder_game_widget.dart';
@@ -10,6 +10,7 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_app/providers/practice/practice_session_controller.dart';
 import 'package:flutter_app/presentation/widgets/games/flashcard_game_widget.dart';
 
+/// The active gameplay container that renders specific exercise widgets and handles session completion.
 class PracticeShellScreen extends ConsumerWidget {
   const PracticeShellScreen({super.key});
 
@@ -17,12 +18,10 @@ class PracticeShellScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final sessionState = ref.watch(practiceSessionProvider);
 
-    // 1. Handle Loading/Empty Start
     if (sessionState.queue.isEmpty && !sessionState.isFinished) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
-    // 2. Handle Session Complete
     if (sessionState.isFinished) {
       return Scaffold(
         body: Center(
@@ -39,7 +38,7 @@ class PracticeShellScreen extends ConsumerWidget {
               Text(context.l10n.practiceShell_versesMastered(sessionState.completedCount)),
               const SizedBox(height: 30),
               ElevatedButton(
-                onPressed: () => context.pop(), // Go back to dashboard
+                onPressed: () => context.pop(),
                 child: Text(context.l10n.practiceShell_finish),
               )
             ],
@@ -48,12 +47,8 @@ class PracticeShellScreen extends ConsumerWidget {
       );
     }
 
-    // 3. Handle Active Gameplay
     final currentTurn = sessionState.queue.first;
     final currentVerse = currentTurn.verse;
-    
-    // In the future, you will dynamically choose the GameType here based on verse maturity.
-    // For now, we default to Flashcard.
     
     Widget gameWidget;
     switch (currentTurn.gameType) {

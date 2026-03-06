@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+/// Manages the application's theme mode, handling persistence via SharedPreferences 
+/// and providing optimistic UI updates.
 class ThemeNotifier extends AsyncNotifier<ThemeMode> {
   static const _kThemePrefKey = 'selected_theme_mode';
 
@@ -10,7 +12,6 @@ class ThemeNotifier extends AsyncNotifier<ThemeMode> {
     final prefs = await SharedPreferences.getInstance();
     final savedTheme = prefs.getString(_kThemePrefKey);
 
-    // Map the string back to the Enum, defaulting to system
     switch (savedTheme) {
       case 'light':
         return ThemeMode.light;
@@ -23,12 +24,11 @@ class ThemeNotifier extends AsyncNotifier<ThemeMode> {
   }
 
   Future<void> setTheme(ThemeMode newTheme) async {
-    // 1. Update UI immediately (Optimistic)
     state = AsyncData(newTheme);
 
-    // 2. Save to disk
     final prefs = await SharedPreferences.getInstance();
     String themeString;
+    
     switch (newTheme) {
       case ThemeMode.light:
         themeString = 'light';
@@ -44,6 +44,4 @@ class ThemeNotifier extends AsyncNotifier<ThemeMode> {
   }
 }
 
-final themeProvider = AsyncNotifierProvider<ThemeNotifier, ThemeMode>(() {
-  return ThemeNotifier();
-});
+final themeProvider = AsyncNotifierProvider<ThemeNotifier, ThemeMode>(ThemeNotifier.new);

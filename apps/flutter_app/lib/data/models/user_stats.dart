@@ -1,3 +1,4 @@
+/// Aggregated user metrics including streaks, scores, and learning progress.
 class UserStats {
   final String userId;
   final String fullName;
@@ -18,7 +19,6 @@ class UserStats {
   });
 
   factory UserStats.fromJson(Map<String, dynamic> json) {
-    // Helper function to safely parse ints even if the server sends a String
     int parseInt(dynamic value) {
       if (value == null) return 0;
       if (value is int) return value;

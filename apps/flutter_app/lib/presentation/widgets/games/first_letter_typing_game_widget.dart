@@ -6,12 +6,11 @@ import 'package:flutter_app/providers/practice/practice_session_controller.dart'
 import 'package:flutter_app/providers/reader/bible_provider.dart';
 import 'package:flutter_app/l10n/l10n_extension.dart';
 
+/// Internal model representing a word target within the typing game.
 class _WordTarget {
   final String originalText; 
   final String? targetLetter; 
   final int length; 
-  
-  // FIX: Assigned directly here instead of in the constructor
   bool isRevealed = false; 
 
   _WordTarget({
@@ -21,6 +20,7 @@ class _WordTarget {
   });
 }
 
+/// A practice game where users must type the first letter of each word in a verse.
 class FirstLetterTypingGameWidget extends ConsumerStatefulWidget {
   final SavedVerse verse;
 
@@ -37,7 +37,6 @@ class _FirstLetterTypingGameWidgetState extends ConsumerState<FirstLetterTypingG
 
   late List<_WordTarget> _words;
   int _currentIndex = 0;
-  
   int _mistakes = 0;
   int _hintsUsed = 0;
   late bool _isHardMode;
@@ -45,7 +44,7 @@ class _FirstLetterTypingGameWidgetState extends ConsumerState<FirstLetterTypingG
   @override
   void initState() {
     super.initState();
-    _isHardMode = widget.verse.correctCount >= 3; 
+    _isHardMode = widget.verse.repetitionCount >= 10; 
     _setupGame();
     
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -62,7 +61,6 @@ class _FirstLetterTypingGameWidgetState extends ConsumerState<FirstLetterTypingG
     super.dispose();
   }
 
-  // Maps Czech/international diacritics to their base characters
   String _normalizeChar(String input) {
     const withDia = 'áäčďéěíňóöřšťúůüýž';
     const withoutDia = 'aacdeeinoorstuuuyz';
@@ -82,9 +80,7 @@ class _FirstLetterTypingGameWidgetState extends ConsumerState<FirstLetterTypingG
 
     for (var w in rawWords) {
       final match = letterRegExp.firstMatch(w);
-      // NORMALIZE THE TARGET LETTER:
       final target = match != null ? _normalizeChar(match.group(0)!) : null;
-      
       final letterLength = w.replaceAll(RegExp(r'[^\w]'), '').length;
 
       _words.add(_WordTarget(
@@ -112,7 +108,6 @@ class _FirstLetterTypingGameWidgetState extends ConsumerState<FirstLetterTypingG
   void _handleInput(String input) {
     if (input.isEmpty || _currentIndex >= _words.length) return;
 
-    // NORMALIZE THE TYPED LETTER:
     final typedChar = _normalizeChar(input.substring(input.length - 1));
     _textController.clear(); 
 
@@ -170,13 +165,10 @@ class _FirstLetterTypingGameWidgetState extends ConsumerState<FirstLetterTypingG
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
-    // FETCH THE BOOK NAME
     final bookNameAsync = ref.watch(bookNameProvider(widget.verse.book));
 
     return Column(
       children: [
-        // --- HEADER INFO ---
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
           child: Row(
@@ -196,8 +188,6 @@ class _FirstLetterTypingGameWidgetState extends ConsumerState<FirstLetterTypingG
             ],
           ),
         ),
-
-        // --- VERSE REFERENCE DISPLAY ---
         bookNameAsync.when(
           data: (name) => Text(
             "$name ${widget.verse.chapter}:${widget.verse.verse}",
@@ -210,10 +200,7 @@ class _FirstLetterTypingGameWidgetState extends ConsumerState<FirstLetterTypingG
           loading: () => const SizedBox(height: 24, width: 24, child: CircularProgressIndicator(strokeWidth: 2)),
           error: (_, __) => const SizedBox.shrink(),
         ),
-        
         const SizedBox(height: 16),
-
-        // --- VERSE TEXT RENDERING ---
         Expanded(
           child: GestureDetector(
             onTap: () => _focusNode.requestFocus(),
@@ -253,8 +240,6 @@ class _FirstLetterTypingGameWidgetState extends ConsumerState<FirstLetterTypingG
             ),
           ),
         ),
-
-        // --- CONTROLS & HIDDEN INPUT ---
         Padding(
           padding: const EdgeInsets.all(16.0),
           child: Row(

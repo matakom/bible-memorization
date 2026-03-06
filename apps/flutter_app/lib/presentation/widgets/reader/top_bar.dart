@@ -4,6 +4,7 @@ import 'package:flutter_app/providers/reader/bible_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_app/providers/reader/reader_state_provider.dart';
 
+/// Navigation header for the reader screen containing dropdown selectors for Bible books and chapters.
 class TopBar extends ConsumerWidget {
   const TopBar({super.key});
 
@@ -25,7 +26,6 @@ class TopBar extends ConsumerWidget {
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: Row(
             children: [
-              // BOOK SELECTOR
               Expanded(
                 flex: 5,
                 child: _StyledDropdown(
@@ -42,7 +42,6 @@ class TopBar extends ConsumerWidget {
               
               const SizedBox(width: 12),
               
-              // CHAPTER SELECTOR
               Expanded(
                 flex: 3,
                 child: _StyledDropdown(
@@ -50,7 +49,6 @@ class TopBar extends ConsumerWidget {
                   items: List.generate(currentBook.chapters.length, (i) {
                     return DropdownMenuItem(
                       value: i + 1,
-                      // Simple number or "Ch. 1" format
                       child: Center(child: Text("${i + 1}")), 
                     );
                   }),
@@ -67,8 +65,6 @@ class TopBar extends ConsumerWidget {
   }
 }
 
-
-// Internal widget to make dropdowns look fancy
 class _StyledDropdown<T> extends StatelessWidget {
   final T value;
   final List<DropdownMenuItem<T>> items;
@@ -85,7 +81,6 @@ class _StyledDropdown<T> extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
-        // Uses the 'Surface Container High' color for a subtle standout
         color: Theme.of(context).colorScheme.surfaceContainerHigh, 
         borderRadius: BorderRadius.circular(12),
       ),

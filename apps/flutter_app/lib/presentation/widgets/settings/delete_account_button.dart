@@ -10,13 +10,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_app/l10n/l10n_extension.dart';
 
+/// Button that handles the multi-step process of remote account deletion and local data wiping.
 class DeleteAccountButton extends ConsumerWidget {
   const DeleteAccountButton({super.key});
 
-  Future<void> _showDeleteConfirmation(
-    BuildContext context,
-    WidgetRef ref,
-  ) async {
+  Future<void> _showDeleteConfirmation(BuildContext context, WidgetRef ref) async {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (BuildContext dialogContext) {
@@ -40,19 +38,15 @@ class DeleteAccountButton extends ConsumerWidget {
 
     if (confirmed == true && context.mounted) {
       try {
-        // Show a loading indicator
         showDialog(
           context: context,
           barrierDismissible: false,
-          builder: (BuildContext loadingContext) =>
-              const Center(child: CircularProgressIndicator()),
+          builder: (BuildContext loadingContext) => const Center(child: CircularProgressIndicator()),
         );
 
-        // Wipe local SQLite and SharedPreferences
         final repo = await ref.read(userRepositoryProvider.future);
         await repo.deleteAccountLocally();
 
-        // Tell Riverpod to refresh the UI with the now-empty database
         ref.invalidate(userDataProvider);
         ref.invalidate(userRepositoryProvider);
         ref.invalidate(friendshipsProvider);
@@ -62,46 +56,29 @@ class DeleteAccountButton extends ConsumerWidget {
         ref.invalidate(syncServiceProvider);
 
         if (context.mounted) {
-          // Remove the loading spinner safely
           Navigator.of(context, rootNavigator: true).pop();
-
-          // Show a success message
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(context.l10n.settings_deleteAccountSuccess),
               backgroundColor: Colors.green,
             ),
           );
-
           context.go('/practice');
         }
       } catch (e) {
         if (context.mounted) {
-          // 1. Always close the loading spinner first
           Navigator.of(context, rootNavigator: true).pop();
 
-          // 2. Determine if it's a network error without showing the raw string
           final errorString = e.toString().toLowerCase();
-          final isNoInternet =
-              errorString.contains("check your internet") ||
+          final isNoInternet = errorString.contains("check your internet") ||
               errorString.contains("socketexception") ||
               errorString.contains("network_error");
 
           showDialog(
             context: context,
             builder: (ctx) => AlertDialog(
-              title: Text(
-                isNoInternet
-                    ? context.l10n.settings_deleteAccountOfflineTitle
-                    : context
-                          .l10n
-                          .settings_deleteAccountErrorTitle,
-              ),
-              content: Text(
-                isNoInternet
-                    ? context.l10n.settings_deleteAccountOfflineBody
-                    : context.l10n.settings_deleteAccountGeneralError,
-              ),
+              title: Text(isNoInternet ? context.l10n.settings_deleteAccountOfflineTitle : context.l10n.settings_deleteAccountErrorTitle),
+              content: Text(isNoInternet ? context.l10n.settings_deleteAccountOfflineBody : context.l10n.settings_deleteAccountGeneralError),
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(ctx),

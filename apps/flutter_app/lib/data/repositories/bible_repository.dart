@@ -4,15 +4,13 @@ import 'package:flutter_app/data/models/book.dart';
 import 'package:flutter_app/data/models/chapter.dart';
 import 'package:flutter_app/data/models/verse.dart';
 
+/// Repository for loading and accessing Bible text from local JSON assets.
 class BibleRepository {
   final String assetPath;
-  
-  // In-memory cache to avoid re-parsing JSON every time
   List<Book>? _cachedBooks;
 
   BibleRepository({required this.assetPath});
 
-  /// Loads and parses the Bible data. 
   Future<List<Book>> getAllBooks() async {
     if (_cachedBooks != null) return _cachedBooks!;
 
@@ -26,10 +24,8 @@ class BibleRepository {
     }
   }
 
-  /// Fetches a specific chapter.
   Future<Chapter> getChapter(int bookId, int chapterNumber) async {
     final books = await getAllBooks();
-    
     final book = books.firstWhere(
       (b) => b.bookId == bookId,
       orElse: () => throw Exception('Book ID $bookId not found'),
@@ -41,16 +37,13 @@ class BibleRepository {
     );
   }
 
-  /// Fetches a specific verse.
   Future<Verse> getVerse(int bookId, int chapterNumber, int verseNumber) async {
     final chapter = await getChapter(bookId, chapterNumber);
     return chapter.verses[verseNumber - 1];
   }
 
-  /// Fetches the name of a book by its ID.
   Future<String> getBookName(int bookId) async {
     final books = await getAllBooks();
-    
     final book = books.firstWhere(
       (b) => b.bookId == bookId,
       orElse: () => throw Exception('Book ID $bookId not found'),

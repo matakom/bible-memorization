@@ -3,12 +3,12 @@ import 'package:flutter_app/providers/auth_controller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '/l10n/l10n_extension.dart';
 
+/// A button that handles Google Sign-In and displays a loading indicator during the authentication process.
 class SignInButton extends ConsumerWidget {
   const SignInButton({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // FIX: Watch the AuthController directly for its loading state!
     final authState = ref.watch(authControllerProvider);
     final isLoading = authState.isLoading;
 
@@ -25,7 +25,6 @@ class SignInButton extends ConsumerWidget {
               try {
                 await ref.read(authControllerProvider.notifier).signInWithGoogle();
               } catch (e) {
-                // NOW THIS WILL ACTUALLY FIRE!
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(

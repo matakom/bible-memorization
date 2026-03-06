@@ -1,12 +1,12 @@
 import 'package:flutter_app/data/models/verse.dart';
 
+/// Data model representing a biblical chapter containing a list of verses.
 class Chapter {
   final int chapterNumber;
   final List<Verse> verses;
 
   Chapter({required this.chapterNumber, required this.verses});
 
-  // Factory constructor to create a Chapter object from a JSON map
   factory Chapter.fromJson(Map<String, dynamic> json) {
     var versesList = json['verses'] as List;
     List<Verse> chapterVerses = versesList.map((i) => Verse.fromJson(i)).toList();

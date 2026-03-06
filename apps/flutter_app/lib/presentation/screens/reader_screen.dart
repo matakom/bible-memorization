@@ -12,6 +12,7 @@ import 'package:flutter_app/presentation/widgets/reader/top_bar.dart';
 import 'package:flutter_app/presentation/widgets/reader/verse_view.dart';
 import 'package:flutter_app/presentation/widgets/reader/translation_selector.dart'; 
 
+/// Main Bible reading interface with verse selection and bookmarking capabilities.
 class ReaderScreen extends ConsumerWidget {
   const ReaderScreen({super.key});
 
@@ -19,7 +20,6 @@ class ReaderScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedVerses = ref.watch(verseSelectionProvider);
 
-    // Clear selection if the user navigates to a different book/chapter
     ref.listen(readerProvider, (prev, next) {
       if (prev?.bookId != next.bookId || prev?.chapterNum != next.chapterNum) {
         ref.read(verseSelectionProvider.notifier).clear();
@@ -81,11 +81,7 @@ class ReaderScreen extends ConsumerWidget {
     );
   }
 
-  void _showSaveDialog(
-    BuildContext context,
-    WidgetRef ref,
-    Set<int> selectedVerses,
-  ) {
+  void _showSaveDialog(BuildContext context, WidgetRef ref, Set<int> selectedVerses) {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -127,16 +123,12 @@ class ReaderScreen extends ConsumerWidget {
               ref.read(verseSelectionProvider.notifier).clear();
 
               try {
-                await ref
-                    .read(savedVersesControllerProvider.notifier)
-                    .addVerses(versesToSave);
+                await ref.read(savedVersesControllerProvider.notifier).addVerses(versesToSave);
 
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text(
-                        context.l10n.reader_savedVerses(versesToSave.length),
-                      ),
+                      content: Text(context.l10n.reader_savedVerses(versesToSave.length)),
                       behavior: SnackBarBehavior.floating,
                     ),
                   );

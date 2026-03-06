@@ -4,6 +4,7 @@ import 'package:flutter_app/providers/settings/settings_loading_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '/l10n/l10n_extension.dart';
 
+/// A button that handles the sign-out process with integrated loading state.
 class SignOutButton extends ConsumerWidget {
   const SignOutButton({super.key});
 

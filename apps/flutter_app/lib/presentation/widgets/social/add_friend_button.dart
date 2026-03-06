@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/l10n/l10n_extension.dart';
 
+/// Simple button widget that triggers the friend request flow.
 class AddFriendButton extends StatelessWidget {
   final VoidCallback? onPressed;
 

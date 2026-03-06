@@ -5,6 +5,7 @@ import 'package:flutter_app/providers/friendships/friendships_provider.dart';
 import 'package:flutter_app/data/repositories/stats_repository.dart';
 import 'package:flutter_app/l10n/l10n_extension.dart';
 
+/// Model representing a single user entry on the friend leaderboard.
 class LeaderboardEntry {
   final String id;
   final String name;
@@ -19,31 +20,33 @@ class LeaderboardEntry {
   });
 }
 
-final leaderboardProvider = FutureProvider.autoDispose<List<LeaderboardEntry>>((ref) async {
+/// Fetches the current user's score and their friends' scores to generate a ranked list.
+final leaderboardProvider = FutureProvider.autoDispose<List<LeaderboardEntry>>((
+  ref,
+) async {
   final currentUser = ref.watch(userDataProvider).value;
   final myStats = await ref.watch(myStatsProvider.future);
   final friendships = ref.watch(friendshipsProvider).value ?? [];
 
   if (currentUser == null) return [];
 
-  // 1. Add yourself (Translation logic moved to the UI)
   List<LeaderboardEntry> entries = [
     LeaderboardEntry(
       id: currentUser.id,
       name: "${currentUser.firstName} ${currentUser.lastName}",
       score: myStats.score,
       isMe: true,
-    )
+    ),
   ];
 
-  // 2. Fetch all accepted friends' stats
-  final acceptedFriends = friendships.where((f) => f.status == 'accepted').toList();
+  final acceptedFriends = friendships
+      .where((f) => f.status == 'accepted')
+      .toList();
   final friendFutures = acceptedFriends.map((f) async {
     final otherId = f.userId == currentUser.id ? f.friendId : f.userId;
     try {
       final repo = await ref.read(statsRepositoryProvider.future);
       final stats = await repo.getFriendStats(otherId);
-      
       return LeaderboardEntry(
         id: otherId,
         name: "${f.friendFirstName} ${f.friendLastName}",
@@ -62,12 +65,11 @@ final leaderboardProvider = FutureProvider.autoDispose<List<LeaderboardEntry>>((
 
   final friendEntries = await Future.wait(friendFutures);
   entries.addAll(friendEntries);
-
-  // 3. Sort by highest score
   entries.sort((a, b) => b.score.compareTo(a.score));
   return entries;
 });
 
+/// UI component that displays a ranked list of friends based on their memorization scores.
 class LeaderboardWidget extends ConsumerWidget {
   const LeaderboardWidget({super.key});
 
@@ -90,18 +92,19 @@ class LeaderboardWidget extends ConsumerWidget {
             ),
           ),
         ),
-        
         leaderboardAsync.when(
           loading: () => const Center(child: CircularProgressIndicator()),
           error: (err, _) => Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Text("Error: $err"), // Raw error output, no translation needed
+            child: Text("Error: $err"),
           ),
           data: (entries) {
             return Card(
               margin: const EdgeInsets.symmetric(horizontal: 16.0),
               elevation: 2,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
               child: ListView.separated(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
@@ -110,45 +113,65 @@ class LeaderboardWidget extends ConsumerWidget {
                 itemBuilder: (context, index) {
                   final entry = entries[index];
                   final rank = index + 1;
-
                   Widget? leadingWidget;
+
                   if (rank == 1) {
-                    leadingWidget = const Icon(Icons.workspace_premium, color: Colors.amber, size: 32);
-                  } else if (rank == 2) {
-                    leadingWidget = const Icon(Icons.workspace_premium, color: Colors.grey, size: 32);
-                  } else if (rank == 3) {
-                    leadingWidget = const Icon(Icons.workspace_premium, color: Colors.deepOrange, size: 32);
-                  } else {
+                    leadingWidget = const Icon(
+                      Icons.workspace_premium,
+                      color: Colors.amber,
+                      size: 32,
+                    );
+                  } else if (rank == 2)
+                    leadingWidget = const Icon(
+                      Icons.workspace_premium,
+                      color: Colors.grey,
+                      size: 32,
+                    );
+                  else if (rank == 3)
+                    leadingWidget = const Icon(
+                      Icons.workspace_premium,
+                      color: Colors.deepOrange,
+                      size: 32,
+                    );
+                  else
                     leadingWidget = SizedBox(
                       width: 32,
                       child: Center(
                         child: Text(
                           "#$rank",
-                          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey.shade600),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey.shade600,
+                          ),
                         ),
                       ),
                     );
-                  }
-
-                  // Determine display name (e.g., "John Doe (You)" vs "Jane Doe")
-                  final displayName = entry.isMe 
-                      ? context.l10n.leaderboard_you(entry.name) 
-                      : entry.name;
 
                   return ListTile(
                     leading: leadingWidget,
                     title: Text(
-                      displayName,
+                      entry.isMe
+                          ? context.l10n.leaderboard_you(entry.name)
+                          : entry.name,
                       style: TextStyle(
-                        fontWeight: entry.isMe ? FontWeight.bold : FontWeight.normal,
+                        fontWeight: entry.isMe
+                            ? FontWeight.bold
+                            : FontWeight.normal,
                         color: entry.isMe ? theme.colorScheme.primary : null,
                       ),
                     ),
                     trailing: Text(
                       context.l10n.leaderboard_points(entry.score),
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
                     ),
-                    tileColor: entry.isMe ? theme.colorScheme.primaryContainer.withValues(alpha: 0.2) : null,
+                    tileColor: entry.isMe
+                        ? theme.colorScheme.primaryContainer.withValues(
+                            alpha: 0.2,
+                          )
+                        : null,
                   );
                 },
               ),

@@ -1,3 +1,4 @@
+/// Core application user profile data.
 class AppUser {
   final String id;
   final String language;
@@ -6,7 +7,6 @@ class AppUser {
   final String firstName;
   final String lastName;
   final DateTime registeredAt;
-
 
   AppUser({
     required this.id,

@@ -13,23 +13,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_app/services/sync_service.dart';
 import 'package:flutter_app/providers/user_provider.dart';
 
-import '../../utils/debugger.dart';
-
+/// Screen for application settings, including profile management, localization, themes, and debug tools.
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Watch user state to conditionally render the Delete Account button
     final currentUser = ref.watch(userDataProvider).value;
 
     return Scaffold(
       appBar: AppBar(title: Text(context.l10n.settings_screenTitle)),
-      // Using ListView so it's scrollable if the debug tools get too long
       body: ListView(
         padding: const EdgeInsets.all(16.0),
         children: [
-          // Dynamic Account Header
           const _AccountSection(),
 
           const SizedBox(height: 16),
@@ -37,7 +33,6 @@ class SettingsScreen extends ConsumerWidget {
 
           Column(children: [LocaleSelect(), ThemeSelect()]),
 
-          // Only show Delete Account if they are actually logged in
           if (currentUser != null) ...[
             const SizedBox(height: 8),
             const DeleteAccountButton(),
@@ -96,7 +91,6 @@ class SettingsScreen extends ConsumerWidget {
                 );
 
                 final syncService = await ref.read(syncServiceProvider.future);
-                // Capture the result
                 final isFullSuccess = await syncService.runSync();
 
                 if (context.mounted) {
@@ -114,7 +108,6 @@ class SettingsScreen extends ConsumerWidget {
                   );
                 }
               } catch (e) {
-                Debugger.log("MANUAL SYNC ERROR: $e");
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).hideCurrentSnackBar();
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -133,7 +126,7 @@ class SettingsScreen extends ConsumerWidget {
   }
 }
 
-// --- DYNAMIC ACCOUNT CARD WIDGET ---
+/// Dynamic section displaying either guest information or the logged-in user profile.
 class _AccountSection extends ConsumerWidget {
   const _AccountSection();
 
@@ -153,7 +146,6 @@ class _AccountSection extends ConsumerWidget {
         ),
       ),
       data: (currentUser) {
-        // --- GUEST CARD ---
         if (currentUser == null) {
           return Card(
             elevation: 0,
@@ -197,14 +189,13 @@ class _AccountSection extends ConsumerWidget {
                       ],
                     ),
                   ),
-                  const SignInButton(), // Your custom button
+                  const SignInButton(),
                 ],
               ),
             ),
           );
         }
 
-        // --- LOGGED IN CARD ---
         return Card(
           elevation: 0,
           color: theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
@@ -250,7 +241,7 @@ class _AccountSection extends ConsumerWidget {
                     ],
                   ),
                 ),
-                const SignOutButton(), // Your custom button
+                const SignOutButton(),
               ],
             ),
           ),

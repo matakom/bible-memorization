@@ -4,9 +4,9 @@ import 'package:flutter_app/data/local/app_database.dart' as db;
 import 'package:flutter_app/providers/reader/bible_provider.dart';
 import 'package:flutter_app/data/models/saved_verse.dart';
 
+/// Provides an auto-updating stream of saved verses filtered by the currently active translation.
 final currentSavedVersesProvider = StreamProvider.autoDispose<List<SavedVerse>>((ref) {
   final database = ref.watch(db.databaseProvider);
-  
   final currentTranslation = ref.watch(currentBibleTranslationProvider).value;
 
   if (currentTranslation == null) return const Stream.empty();

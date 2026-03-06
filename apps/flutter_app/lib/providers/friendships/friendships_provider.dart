@@ -3,10 +3,11 @@ import 'package:flutter_app/data/models/friendship.dart';
 import 'package:flutter_app/data/repositories/friendships_repository.dart';
 import 'package:flutter_app/data/local/app_database.dart' as db;
 
+/// Manages the local state of friendships by reading directly from the database and 
+/// delegating actions to the repository.
 class FriendshipsNotifier extends AsyncNotifier<List<Friendship>> {
   @override
   Future<List<Friendship>> build() async {
-    // MUST bypass the network-dependent repository here!
     final database = ref.watch(db.databaseProvider);
     
     try {

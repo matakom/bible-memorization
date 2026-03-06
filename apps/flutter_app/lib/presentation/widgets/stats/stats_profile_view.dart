@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/data/models/user_stats.dart';
 import 'package:flutter_app/l10n/l10n_extension.dart';
 
+/// A comprehensive view for displaying user performance metrics, streaks, and engagement time.
 class StatsProfileView extends StatelessWidget {
   final UserStats stats;
 
   const StatsProfileView({super.key, required this.stats});
 
-  // Passed context in so we can localize the time formats!
   String _formatTime(BuildContext context, int totalSeconds) {
     if (totalSeconds < 60) return context.l10n.stats_timeSeconds(totalSeconds);
     final minutes = totalSeconds ~/ 60;
@@ -23,13 +23,8 @@ class StatsProfileView extends StatelessWidget {
       padding: const EdgeInsets.all(24),
       child: Column(
         children: [
-          _StatsHeader(
-            name: stats.fullName, // Swapped out your hardcoded name!
-          ),
-          
+          _StatsHeader(name: stats.fullName),
           const SizedBox(height: 32),
-
-          // 1st Row: Score (Width 2)
           SizedBox(
             width: double.infinity,
             child: _StatCard(
@@ -40,10 +35,7 @@ class StatsProfileView extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
             ),
           ),
-
           const SizedBox(height: 16),
-
-          // 2nd Row: Streak and Memorized Verses
           Row(
             children: [
               Expanded(
@@ -65,10 +57,7 @@ class StatsProfileView extends StatelessWidget {
               ),
             ],
           ),
-
           const SizedBox(height: 16),
-
-          // 3rd Row: Time Spent and Total Practices
           Row(
             children: [
               Expanded(
@@ -98,13 +87,11 @@ class StatsProfileView extends StatelessWidget {
 
 class _StatsHeader extends StatelessWidget {
   final String name;
-
   const _StatsHeader({required this.name});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
     return Column(
       children: [
         CircleAvatar(
@@ -116,8 +103,6 @@ class _StatsHeader extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 16),
-        
-        // Name
         Text(
           name,
           style: theme.textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),

@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_app/providers/reader/reader_state_provider.dart';
 import 'package:flutter_app/providers/reader/verse_selection_provider.dart';
 
+/// The main scrollable view of Bible verses with support for selection and saving status indicators.
 class ReaderContentView extends ConsumerWidget {
   const ReaderContentView({super.key});
 
@@ -15,8 +16,6 @@ class ReaderContentView extends ConsumerWidget {
     final readerState = ref.watch(readerProvider);
     final currentTranslation = ref.watch(currentBibleTranslationProvider).value;
     final savedVersesState = ref.watch(savedVersesControllerProvider);
-    
-    // Watch the Async settings
     final settingsAsync = ref.watch(readerSettingsProvider);
 
     final chapterAsync = ref.watch(
@@ -33,15 +32,13 @@ class ReaderContentView extends ConsumerWidget {
             .map((v) => v.verse)
             .toSet() ?? {};
 
-    // We combine the two AsyncValues (Chapter + Settings)
     return chapterAsync.when(
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (err, _) => Center(child: Text('${context.l10n.reader_error}: $err')),
       data: (chapter) {
-        // Now handle the Settings AsyncValue
         return settingsAsync.when(
           loading: () => const Center(child: CircularProgressIndicator()),
-          error: (err, _) => const SizedBox.shrink(), // Or fallback settings
+          error: (err, _) => const SizedBox.shrink(),
           data: (settings) {
             return ListView.builder(
               padding: const EdgeInsets.fromLTRB(0, 8, 0, 100),
@@ -71,6 +68,7 @@ class ReaderContentView extends ConsumerWidget {
   }
 }
 
+/// A single row in the reader representing a verse with its number, text, and state-based styling.
 class _VerseItem extends StatelessWidget {
   final int verseNum;
   final String text;

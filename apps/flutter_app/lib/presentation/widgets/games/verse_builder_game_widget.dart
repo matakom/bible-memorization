@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_app/data/models/saved_verse.dart';
 import 'package:flutter_app/data/models/practice_feedback.dart';
 import 'package:flutter_app/providers/practice/practice_session_controller.dart';
 import 'package:flutter_app/providers/reader/bible_provider.dart';
 import 'package:flutter_app/providers/reader/saved_verses_controller.dart';
 import 'package:flutter_app/l10n/l10n_extension.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class _WordOption {
   final String id; 
@@ -14,6 +14,7 @@ class _WordOption {
   _WordOption({required this.id, required this.text});
 }
 
+/// Interactive game where users reconstruct a verse by selecting the correct words from a word bank.
 class VerseBuilderGameWidget extends ConsumerStatefulWidget {
   final SavedVerse verse;
 
@@ -37,7 +38,6 @@ class _VerseBuilderGameWidgetState extends ConsumerState<VerseBuilderGameWidget>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // Using didChangeDependencies to safely access context.l10n for fallback words
     if (!_isInitialized) {
       _setupGame();
       _stopwatch.start();
@@ -52,18 +52,13 @@ class _VerseBuilderGameWidgetState extends ConsumerState<VerseBuilderGameWidget>
     _targetWords = [];
     final List<_WordOption> correctOptions = [];
 
-    // 1. Process actual words
     for (int i = 0; i < _rawWords.length; i++) {
       final cleanWord = _rawWords[i].replaceAll(RegExp(r'[.,;!?":\(\)\[\]]'), '');
       _targetWords.add(cleanWord);
-      
       correctOptions.add(_WordOption(id: 'correct_$i', text: cleanWord));
     }
 
-    // 2. Add some "dummy" words
     final dummyOptions = _getDummyWords(count: 4);
-    
-    // 3. Combine and shuffle the word bank
     _wordBank = [...correctOptions, ...dummyOptions];
     _wordBank.shuffle();
   }
@@ -87,7 +82,6 @@ class _VerseBuilderGameWidgetState extends ConsumerState<VerseBuilderGameWidget>
     final dummyList = uniqueDummies.toList()..shuffle();
     final selectedDummies = dummyList.take(count).toList();
     
-    // Localized fallbacks if user has no other verses
     if (selectedDummies.isEmpty) {
       selectedDummies.addAll([
         context.l10n.game_builder_dummyLord, 
@@ -107,7 +101,6 @@ class _VerseBuilderGameWidgetState extends ConsumerState<VerseBuilderGameWidget>
     final expectedWord = _targetWords[_currentIndex].toLowerCase();
     
     if (option.text.toLowerCase() == expectedWord) {
-      // SUCCESS
       setState(() {
         _wordBank.removeWhere((w) => w.id == option.id);
         _currentIndex++;
@@ -117,7 +110,6 @@ class _VerseBuilderGameWidgetState extends ConsumerState<VerseBuilderGameWidget>
         _finishSession();
       }
     } else {
-      // MISTAKE
       setState(() {
         _mistakes++;
       });
@@ -170,7 +162,6 @@ class _VerseBuilderGameWidgetState extends ConsumerState<VerseBuilderGameWidget>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // --- HEADER & REFERENCE ---
             bookNameAsync.when(
               data: (name) => Text(
                 "$name ${widget.verse.chapter}:${widget.verse.verse}",
@@ -192,7 +183,6 @@ class _VerseBuilderGameWidgetState extends ConsumerState<VerseBuilderGameWidget>
             ),
             const SizedBox(height: 24),
       
-            // --- BUILT SENTENCE AREA ---
             Expanded(
               flex: 3,
               child: Container(
@@ -234,7 +224,6 @@ class _VerseBuilderGameWidgetState extends ConsumerState<VerseBuilderGameWidget>
             
             const SizedBox(height: 24),
       
-            // --- WORD BANK (BUTTONS) ---
             Expanded(
               flex: 2,
               child: SingleChildScrollView(

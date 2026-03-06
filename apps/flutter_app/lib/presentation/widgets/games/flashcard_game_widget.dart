@@ -7,6 +7,7 @@ import 'package:flutter_app/providers/reader/bible_provider.dart';
 import 'package:flutter_app/providers/reader/verse_text_provider.dart';
 import 'package:flutter_app/l10n/l10n_extension.dart';
 
+/// A flashcard-style practice widget that reveals verse text on tap and allows user self-grading.
 class FlashcardGameWidget extends ConsumerStatefulWidget {
   final SavedVerse verse;
 
@@ -45,7 +46,6 @@ class _FlashcardGameWidgetState extends ConsumerState<FlashcardGameWidget> {
       );
     }
 
-    // Send the data back up to the shell controller
     ref.read(practiceSessionProvider.notifier).submitFeedback(feedback);
 
     setState(() {
@@ -134,7 +134,6 @@ class _FrontSide extends ConsumerWidget {
       children: [
         const Icon(Icons.help_outline, size: 48, color: Colors.grey),
         const SizedBox(height: 20),
-        
         bookNameAsync.when(
           data: (name) => Text(
             "$name ${verse.chapter}:${verse.verse}",
@@ -144,7 +143,6 @@ class _FrontSide extends ConsumerWidget {
           loading: () => const CircularProgressIndicator(),
           error: (_, __) => Text(context.l10n.game_flashcard_errorBookName),
         ),
-        
         const SizedBox(height: 10),
         Text(verse.translation, style: Theme.of(context).textTheme.bodySmall),
       ],
@@ -159,12 +157,7 @@ class _BackSide extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final bookId = verse.book;
-    
-    final verseRef = VerseRef(
-      bookId: bookId,
-      chapter: verse.chapter,
-      verse: verse.verse,
-    );
+    final verseRef = VerseRef(bookId: bookId, chapter: verse.chapter, verse: verse.verse);
     final textAsync = ref.watch(verseTextProvider(verseRef));
     final bookNameAsync = ref.watch(bookNameProvider(bookId));
 
@@ -179,9 +172,7 @@ class _BackSide extends ConsumerWidget {
           loading: () => const SizedBox.shrink(),
           error: (_, __) => const SizedBox.shrink(),
         ),
-
         const SizedBox(height: 20),
-        
         Expanded(
           child: Center(
             child: SingleChildScrollView(

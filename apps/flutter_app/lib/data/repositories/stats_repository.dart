@@ -6,9 +6,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_app/data/models/user_stats.dart';
 import 'package:flutter_app/data/models/user.dart';
 import 'package:flutter_app/data/local/app_database.dart' as db;
-
 import '../../providers/core/dio_provider.dart';
 
+/// Aggregates learning metrics and streaks from local and remote data sources.
 class StatsRepository {
   final Dio _dio;
   final db.AppDatabase _db;
@@ -19,13 +19,11 @@ class StatsRepository {
   Future<UserStats> getMyStats() async {
     String? fullName;
 
-    // Check SQLite
     final dbUser = await (_db.select(_db.users)..limit(1)).getSingleOrNull();
     if (dbUser != null) {
       fullName = "${dbUser.firstName} ${dbUser.lastName}";
     }
 
-    // Check SharedPreferences Cache
     if (fullName == null) {
       final cachedUser = _prefs.getString('cached_user_profile');
       if (cachedUser != null) {
@@ -36,15 +34,9 @@ class StatsRepository {
       }
     }
 
-    // NEW: Check Firebase Auth (Ultimate fallback if logged in but DB is empty)
     fullName ??= FirebaseAuth.instance.currentUser?.displayName;
-
-    // If all else fails (e.g. not logged in), use a generic string.
-    // We handle the localization of "User" in the UI layer.
     fullName ??= "User";
 
-    // 2. Aggregate Query: Total Practices, Time Spent, and Score
-    // SQLite's DATE(..., 'localtime') handles the midnight-to-midnight timezone requirement perfectly.
     final aggregateQuery = await _db.customSelect('''
       SELECT 
         COUNT(id) AS total_practices,
@@ -58,7 +50,6 @@ class StatsRepository {
     final timeSpentSeconds = aggregateQuery.read<int>('time_spent');
     final score = aggregateQuery.read<int>('score');
 
-    // 3. Memorized Verses (Only counts if the *latest* practice was successful)
     final memorizedQuery = await _db.customSelect('''
       SELECT COUNT(*) as memorized_count FROM (
         SELECT verse_id, grade
@@ -73,7 +64,6 @@ class StatsRepository {
     
     final memorizedVerses = memorizedQuery.read<int>('memorized_count');
 
-    // 4. Daily Streak Calculation (Local Time)
     final datesQuery = await _db.customSelect('''
       SELECT DISTINCT DATE(performed_at, 'unixepoch', 'localtime') as practice_date
       FROM exercises
@@ -83,43 +73,32 @@ class StatsRepository {
 
     int currentStreak = 0;
     DateTime now = DateTime.now();
-    // These are initialized in Local time
     DateTime today = DateTime(now.year, now.month, now.day);
     DateTime yesterday = today.subtract(const Duration(days: 1));
 
     List<DateTime> practiceDates = [];
-    
-    // Safely parse the YYYY-MM-DD string into a Local DateTime
     for (var row in datesQuery) {
       final dateStr = row.read<String?>('practice_date');
       if (dateStr != null && dateStr.contains('-')) {
         final parts = dateStr.split('-');
-        practiceDates.add(DateTime(
-          int.parse(parts[0]), // year
-          int.parse(parts[1]), // month
-          int.parse(parts[2]), // day
-        ));
+        practiceDates.add(DateTime(int.parse(parts[0]), int.parse(parts[1]), int.parse(parts[2])));
       }
     }
 
     if (practiceDates.isNotEmpty) {
       if (practiceDates.contains(today) || practiceDates.contains(yesterday)) {
         DateTime checkDate = practiceDates.contains(today) ? today : yesterday;
-        
         for (var date in practiceDates) {
           if (date == checkDate) {
             currentStreak++;
-            // Move our check date back exactly 1 day
             checkDate = checkDate.subtract(const Duration(days: 1));
           } else if (date.isBefore(checkDate)) {
-            // As soon as we miss a day, the streak is broken
             break; 
           }
         }
       }
     }
 
-    // 5. Return the updated model
     return UserStats(
       userId: dbUser?.id ?? FirebaseAuth.instance.currentUser?.uid ?? 'me',
       fullName: fullName,
@@ -132,12 +111,7 @@ class StatsRepository {
   }
 
   Stream<UserStats> watchMyStats() {
-    return _db.customSelect(
-      'SELECT 1',
-      readsFrom: {_db.savedVerses, _db.exercises},
-    ).watch().asyncMap((_) async {
-      return await getMyStats();
-    });
+    return _db.customSelect('SELECT 1', readsFrom: {_db.savedVerses, _db.exercises}).watch().asyncMap((_) => getMyStats());
   }
 
   Future<UserStats> getFriendStats(String userId) async {
@@ -150,28 +124,19 @@ class StatsRepository {
   }
 }
 
-// Updated Provider
 final statsRepositoryProvider = FutureProvider((ref) async {
   final dio = await ref.watch(dioProvider.future);
-
   final database = ref.watch(db.databaseProvider);
   final prefs = await SharedPreferences.getInstance();
-
   return StatsRepository(dio, database, prefs);
 });
 
 final myStatsProvider = StreamProvider<UserStats>((ref) async* {
-  // Wait for the repository to be fully initialized
   final repo = await ref.watch(statsRepositoryProvider.future);
-  
-  // Yield all events from the repository's stream
   yield* repo.watchMyStats();
 });
 
-final friendStatsProvider = FutureProvider.family<UserStats, String>((
-  ref,
-  friendId,
-) async {
+final friendStatsProvider = FutureProvider.family<UserStats, String>((ref, friendId) async {
   final repo = await ref.watch(statsRepositoryProvider.future);
   return repo.getFriendStats(friendId);
 });

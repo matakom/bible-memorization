@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../utils/debugger.dart';
 import '/l10n/l10n_extension.dart';
 
+/// Debug utility button to retrieve and log the current Firebase Auth ID token.
 class GetTokenButton extends ConsumerStatefulWidget {
   const GetTokenButton({super.key});
 
@@ -12,20 +13,19 @@ class GetTokenButton extends ConsumerStatefulWidget {
 }
 
 class _GetTokenButtonState extends ConsumerState<GetTokenButton> {
-
   Future<void> _printToken() async {
     final authRepo = ref.read(authRepositoryProvider);
-        final String? token = await authRepo.getAuthToken();
-        Debugger.log(token?.length.toString() ?? '');
-        Debugger.log('$token');
+    final String? token = await authRepo.getAuthToken();
+    Debugger.log(token?.length.toString() ?? '0');
+    Debugger.log('$token');
   }
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton.icon(
-            icon: const Icon(Icons.token),
-            label: Text(context.l10n.settings_tokenButton),
-            onPressed: _printToken,
-          );
+      icon: const Icon(Icons.token),
+      label: Text(context.l10n.settings_tokenButton),
+      onPressed: _printToken,
+    );
   }
 }

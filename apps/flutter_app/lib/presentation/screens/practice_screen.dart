@@ -4,10 +4,11 @@ import 'package:flutter_app/l10n/l10n_extension.dart';
 import 'package:flutter_app/providers/reader/saved_verses_controller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_app/data/models/saved_verse.dart';
-import 'package:flutter_app/data/models/practice_feedback.dart'; // Import for GameType
+import 'package:flutter_app/data/models/practice_feedback.dart'; 
 import 'package:flutter_app/providers/practice/practice_session_controller.dart';
 import 'package:go_router/go_router.dart';
 
+/// Screen providing access to daily verse reviews and specific gamified practice modes.
 class PracticeScreen extends ConsumerWidget {
   const PracticeScreen({super.key});
 
@@ -55,7 +56,6 @@ class PracticeScreen extends ConsumerWidget {
                     }
                   },
                 ),
-
                 const SizedBox(height: 32),
                 Text(
                   context.l10n.practice_modes,
@@ -64,14 +64,13 @@ class PracticeScreen extends ConsumerWidget {
                   ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 16),
-
                 GridView.count(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   crossAxisCount: 2,
                   crossAxisSpacing: 16,
                   mainAxisSpacing: 16,
-                  childAspectRatio: 0.85, // Adjusted to fit text better
+                  childAspectRatio: 0.85,
                   children: [
                     _GameCard(
                       title: context.l10n.game_title_flashcards,
@@ -156,7 +155,6 @@ class PracticeScreen extends ConsumerWidget {
       return;
     }
 
-    // Pass the forcedType to the controller
     ref
         .read(practiceSessionProvider.notifier)
         .startSession(verses, forcedGameType: forcedType);
@@ -165,7 +163,6 @@ class PracticeScreen extends ConsumerWidget {
   }
 }
 
-// --- WIDGETS ---
 class _DailyStatusCard extends StatelessWidget {
   final int dueCount;
   final int totalCount;
@@ -312,6 +309,7 @@ class _GameCard extends StatelessWidget {
     );
   }
 }
+
 class _EmptyLibraryView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

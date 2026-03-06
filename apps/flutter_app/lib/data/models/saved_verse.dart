@@ -1,3 +1,4 @@
+/// Model for a verse saved by the user, containing Spaced Repetition statistics.
 class SavedVerse {
   final String id;
   final int book;
@@ -8,13 +9,8 @@ class SavedVerse {
   final double easeFactor;
   final DateTime nextReviewDate;
   final DateTime? lastReviewDate;
-
-  // --- NEW: History & HLR Stats ---
   final int repetitionCount;
-  final int correctCount;
-  final int incorrectCount;
-  final double stability;
-  final double difficulty;
+
 
   SavedVerse({
     required this.id,
@@ -26,15 +22,11 @@ class SavedVerse {
     required this.easeFactor,
     required this.nextReviewDate,
     this.lastReviewDate,
-    // Add defaults so you don't have to rewrite all your tests/mocks
     this.repetitionCount = 0,
-    this.correctCount = 0,
-    this.incorrectCount = 0,
-    this.stability = 0.0,
-    this.difficulty = 0.0,
   });
 }
 
+/// Payload used for transmitting new verse data to the backend.
 class VerseCreationPayload {
   final int book;
   final int chapter;

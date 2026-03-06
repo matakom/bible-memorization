@@ -1,3 +1,4 @@
+/// Represents basic profile information for a user within the social system.
 class FriendUser {
   final String id;
   final String firstName;
@@ -18,13 +19,14 @@ class FriendUser {
   }
 }
 
+/// Detailed friendship record including status, request direction, and participant data.
 class FriendshipData {
   final String id;
-  final String status; // 'pending', 'accepted'
-  final String direction; // 'sent', 'received'
+  final String status; 
+  final String direction; 
   final DateTime createdAt;
-  final FriendUser user; // The one who SENT the request
-  final FriendUser friend; // The one who RECEIVED the request
+  final FriendUser user; 
+  final FriendUser friend; 
 
   FriendshipData({
     required this.id,
@@ -39,7 +41,7 @@ class FriendshipData {
     return FriendshipData(
       id: json['id'] as String,
       status: json['status'] as String,
-      direction: json['requestDirection'] as String, // Created on server
+      direction: json['requestDirection'] as String,
       createdAt: DateTime.parse(json['createdAt'] as String),
       user: FriendUser.fromJson(json['user'] as Map<String, dynamic>),
       friend: FriendUser.fromJson(json['friend'] as Map<String, dynamic>),

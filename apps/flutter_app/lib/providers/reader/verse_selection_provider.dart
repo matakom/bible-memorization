@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+/// Notifier that manages the set of selected verse numbers for bookmarking or saving.
 class VerseSelectionNotifier extends Notifier<Set<int>> {
   @override
   Set<int> build() => {};

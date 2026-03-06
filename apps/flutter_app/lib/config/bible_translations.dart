@@ -1,8 +1,9 @@
+/// Model and constant list for supported Bible versions.
 class BibleTranslation {
-  final String id;           // Unique ID
-  final String name;         // Full name
-  final String abbreviation; // For display
-  final String assetPath;    // JSON file location
+  final String id;
+  final String name;
+  final String abbreviation;
+  final String assetPath;
 
   const BibleTranslation({
     required this.id,

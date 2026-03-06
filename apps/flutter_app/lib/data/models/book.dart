@@ -1,5 +1,6 @@
 import 'package:flutter_app/data/models/chapter.dart';
 
+/// Data model representing a biblical book and its collection of chapters.
 class Book {
   final int bookId;
   final String bookName;
@@ -7,7 +8,6 @@ class Book {
 
   Book({required this.bookId, required this.bookName, required this.chapters});
 
-  // Factory constructor to create a Book object from a JSON map
   factory Book.fromJson(Map<String, dynamic> json) {
     var chaptersList = json['chapters'] as List;
     List<Chapter> bookChapters = chaptersList.map((i) => Chapter.fromJson(i)).toList();

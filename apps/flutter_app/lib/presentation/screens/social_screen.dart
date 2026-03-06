@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/l10n/l10n_extension.dart';
@@ -11,10 +10,10 @@ import 'package:flutter_app/presentation/widgets/authentication/sign_in_button.d
 import 'package:flutter_app/providers/friendships/friendships_provider.dart';
 import 'package:flutter_app/providers/user_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../../providers/core/dio_provider.dart';
 import '../../utils/network_exceptions.dart';
 
+/// Screen for social interactions, friends management, and server connectivity checks.
 class SocialScreen extends ConsumerWidget {
   const SocialScreen({super.key});
 
@@ -28,7 +27,6 @@ class SocialScreen extends ConsumerWidget {
       body: asyncUser.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (err, stack) {
-          // --- HANDLE EXPLICIT NETWORK/SERVER ERRORS FOR USER FETCH ---
           if (err is OfflineException) {
             return _buildPlaceholder(
               context,
@@ -49,13 +47,10 @@ class SocialScreen extends ConsumerWidget {
           );
         },
         data: (user) {
-          // 1. --- GUEST VIEW (Not Logged In) ---
-          // Guests don't need the server just to see the login button.
           if (user == null) {
             return _buildGuestView(context);
           }
 
-          // 2. --- OFFLINE FALLBACK VIEW ---
           if (user.friendCode.isEmpty) {
             return _buildPlaceholder(
               context,
@@ -65,14 +60,11 @@ class SocialScreen extends ConsumerWidget {
             );
           }
 
-          // 3. --- LIVE SERVER CHECK ---
-          // Guard the cached SQLite data behind a live server ping.
           final serverHealth = ref.watch(serverHealthCheckProvider);
 
           return serverHealth.when(
             loading: () => const Center(child: CircularProgressIndicator()),
             error: (err, stack) {
-              // Server is down or phone is offline -> Block access to the page!
               if (err is ServerDownException) {
                 return _buildPlaceholder(
                   context,
@@ -89,7 +81,6 @@ class SocialScreen extends ConsumerWidget {
               );
             },
             data: (_) {
-              // 4. --- AUTHENTICATED VIEW (Logged In, Online, Server Alive) ---
               final currentUserId = user.id;
 
               return asyncFriendships.when(
@@ -223,36 +214,33 @@ class SocialScreen extends ConsumerWidget {
     );
   }
 }
+
+/// Auto-disposing provider that performs a race between a network request and a timeout to check server health.
 final serverHealthCheckProvider = FutureProvider.autoDispose<void>((ref) async {
   final dio = await ref.watch(dioProvider.future);
   final cancelToken = CancelToken();
 
-  // 1. Create the Timer Future
   final timerFuture = Future.delayed(const Duration(seconds: 5), () {
     cancelToken.cancel("Authoritative UI Timeout");
     throw ServerDownException();
   });
 
-  // 2. Create the Request Future
   final requestFuture = dio.get('/user', cancelToken: cancelToken);
 
   try {
-    // 3. Race them using Future.wait with a custom "first winner" logic
     await Future.wait([
       Future.any([timerFuture, requestFuture])
     ]);
   } on DioException catch (e) {
-    // This catches the cancellation from our 5s timer
     if (CancelToken.isCancel(e) || (e.response?.statusCode != null && e.response!.statusCode! >= 500)) {
       throw ServerDownException();
     }
     throw OfflineException();
   } on ServerDownException {
-    rethrow; // Timer won
+    rethrow;
   } catch (e) {
     throw OfflineException();
   } finally {
-    // 4. CRITICAL: Cleanup any hanging request if we aren't already cancelled
     if (!cancelToken.isCancelled) cancelToken.cancel();
   }
 });

@@ -6,6 +6,7 @@ import 'package:flutter_app/providers/practice/practice_session_controller.dart'
 import 'package:flutter_app/providers/reader/saved_verses_controller.dart';
 import 'package:flutter_app/l10n/l10n_extension.dart';
 
+/// A practice mode where users must select the missing words from a verse provided as multiple-choice options.
 class WordChoiceGameWidget extends ConsumerStatefulWidget {
   final SavedVerse verse;
 
@@ -47,13 +48,10 @@ class _WordChoiceGameWidgetState extends ConsumerState<WordChoiceGameWidget> {
     }
 
     _blankIndices = [];
-    
-    // Hide every 3rd word
     for (int i = 2; i < _words.length; i += 3) {
       _blankIndices.add(i);
     }
 
-    // Fallbacks for extremely short verses
     if (_blankIndices.isEmpty && _words.length > 1) {
       _blankIndices.add(_words.length - 1);
     } else if (_blankIndices.isEmpty) {
@@ -88,7 +86,6 @@ class _WordChoiceGameWidgetState extends ConsumerState<WordChoiceGameWidget> {
     final targetIndex = _blankIndices[_currentStep];
     final correctWord = _words[targetIndex].replaceAll(RegExp(r'[.,;!?":\(\)\[\]]'), '');
 
-    // 1. Try to get fake words from the CURRENT verse first
     final dummyPool = _words
         .asMap()
         .entries
@@ -101,13 +98,11 @@ class _WordChoiceGameWidgetState extends ConsumerState<WordChoiceGameWidget> {
 
     _currentOptions = [correctWord];
     
-    // 2. Fill options from the current verse
     while (_currentOptions.length < 4 && dummyPool.isNotEmpty) {
       final dummy = dummyPool.removeLast();
       if (!_currentOptions.contains(dummy)) _currentOptions.add(dummy);
     }
 
-    // 3. If the verse is too short, pull from the dynamic global dictionary
     int dictIndex = 0;
     while (_currentOptions.length < 4 && dictIndex < _globalDictionary.length) {
       final fallback = _globalDictionary[dictIndex];
@@ -115,7 +110,6 @@ class _WordChoiceGameWidgetState extends ConsumerState<WordChoiceGameWidget> {
       dictIndex++;
     }
 
-    // Shuffle so the correct answer isn't always top-left
     _currentOptions.shuffle();
   }
 
@@ -131,10 +125,8 @@ class _WordChoiceGameWidgetState extends ConsumerState<WordChoiceGameWidget> {
       if (_currentStep >= _blankIndices.length) {
         _stopwatch.stop();
         final elapsedSeconds = _stopwatch.elapsed.inSeconds;
-        
         final targetPerfectTime = _blankIndices.length * 3;
         final grade = elapsedSeconds <= targetPerfectTime ? 5 : 4;
-
         _finishGame(grade, elapsedSeconds);
       } else {
         setState(() {
@@ -142,9 +134,7 @@ class _WordChoiceGameWidgetState extends ConsumerState<WordChoiceGameWidget> {
         });
       }
     } else {
-      // FAIL
       _stopwatch.stop();
-      
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -154,7 +144,6 @@ class _WordChoiceGameWidgetState extends ConsumerState<WordChoiceGameWidget> {
           ),
         );
       }
-
       _finishGame(0, _stopwatch.elapsed.inSeconds);
     }
   }

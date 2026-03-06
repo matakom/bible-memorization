@@ -6,7 +6,6 @@ import 'package:flutter_app/data/models/friendship.dart';
 import 'package:flutter_app/data/local/app_database.dart' as db;
 import 'package:uuid/uuid.dart';
 import '../../providers/core/dio_provider.dart';
-import '../../utils/debugger.dart';
 
 class FriendshipsException implements Exception {
   final String message;
@@ -15,6 +14,7 @@ class FriendshipsException implements Exception {
   String toString() => message;
 }
 
+/// Handles friend requests and social connections between users.
 class FriendshipsRepository {
   final Dio _dio;
   final db.AppDatabase _db;
@@ -24,8 +24,7 @@ class FriendshipsRepository {
 
   Future<List<Friendship>> getFriendships() async {
     try {
-      final rows =
-          await (_db.select(_db.friendships)
+      final rows = await (_db.select(_db.friendships)
                 ..where((t) => t.deletedAt.isNull()))
               .get();
       return rows.map((row) => Friendship.fromEntity(row)).toList();
@@ -53,42 +52,32 @@ class FriendshipsRepository {
         throw FriendshipsException("You cannot add yourself as a friend.");
       }
 
-      final existingFriendship = await (_db.select(
-        _db.friendships,
-      )..where((t) => t.friendId.equals(friendId))).getSingleOrNull();
+      final existingFriendship = await (_db.select(_db.friendships)
+        ..where((t) => t.friendId.equals(friendId))).getSingleOrNull();
 
       if (existingFriendship != null) {
         if (existingFriendship.status == 'pending') {
-          throw FriendshipsException(
-            "You already sent a request to this person.",
-          );
+          throw FriendshipsException("You already sent a request to this person.");
         } else if (existingFriendship.status == 'accepted') {
-          throw FriendshipsException(
-            "You are already friends with this person.",
-          );
+          throw FriendshipsException("You are already friends with this person.");
         } else {
-          throw FriendshipsException(
-            "Friendship status is already ${existingFriendship.status}.",
-          );
+          throw FriendshipsException("Friendship status is already ${existingFriendship.status}.");
         }
       }
 
-      await _db
-          .into(_db.friendships)
-          .insert(
-            db.FriendshipsCompanion.insert(
-              id: const Uuid().v4(),
-              userId: myId,
-              friendId: friendId,
-              friendFirstName: friendData['firstName'],
-              friendLastName: friendData['lastName'],
-              status: 'pending',
-              needsSync: const Value(true),
-              updatedAt: Value(DateTime.now()),
-            ),
-            mode: InsertMode.insertOrReplace,
-          );
-
+      await _db.into(_db.friendships).insert(
+        db.FriendshipsCompanion.insert(
+          id: const Uuid().v4(),
+          userId: myId,
+          friendId: friendId,
+          friendFirstName: friendData['firstName'],
+          friendLastName: friendData['lastName'],
+          status: 'pending',
+          needsSync: const Value(true),
+          updatedAt: Value(DateTime.now()),
+        ),
+        mode: InsertMode.insertOrReplace,
+      );
 
       final syncService = await _ref.read(syncServiceProvider.future);
       syncService.runSync();
@@ -99,16 +88,12 @@ class FriendshipsRepository {
       throw FriendshipsException("Connection error.");
     } catch (e) {
       if (e is FriendshipsException) rethrow;
-
-      Debugger.log("LOCAL ERROR: $e");
       throw FriendshipsException("Failed to save request locally.");
     }
   }
 
   Future<void> acceptFriendship(String friendshipId) async {
-    await (_db.update(
-      _db.friendships,
-    )..where((t) => t.id.equals(friendshipId))).write(
+    await (_db.update(_db.friendships)..where((t) => t.id.equals(friendshipId))).write(
       db.FriendshipsCompanion(
         status: const Value('accepted'),
         updatedAt: Value(DateTime.now()),
@@ -119,9 +104,7 @@ class FriendshipsRepository {
   }
 
   Future<void> deleteFriendship(String friendshipId) async {
-    await (_db.update(
-      _db.friendships,
-    )..where((t) => t.id.equals(friendshipId))).write(
+    await (_db.update(_db.friendships)..where((t) => t.id.equals(friendshipId))).write(
       db.FriendshipsCompanion(
         deletedAt: Value(DateTime.now()),
         updatedAt: Value(DateTime.now()),
@@ -137,9 +120,7 @@ class FriendshipsRepository {
 }
 
 final friendshipsRepositoryProvider = FutureProvider<FriendshipsRepository>((ref) async {
-  // THE FIX: Watch the centralized dioProvider!
   final dio = await ref.watch(dioProvider.future);
-  
   final database = ref.watch(db.databaseProvider);
   return FriendshipsRepository(dio, database, ref);
 });

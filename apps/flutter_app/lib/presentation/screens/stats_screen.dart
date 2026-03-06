@@ -4,6 +4,7 @@ import 'package:flutter_app/data/repositories/stats_repository.dart';
 import 'package:flutter_app/presentation/widgets/stats/stats_profile_view.dart';
 import 'package:flutter_app/l10n/l10n_extension.dart';
 
+/// Screen displaying the current user's learning stats, streaks, and progress.
 class StatsScreen extends ConsumerWidget {
   const StatsScreen({super.key});
 

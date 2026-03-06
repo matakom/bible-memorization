@@ -1,4 +1,4 @@
-import 'package:drift/drift.dart' as drift;
+import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/data/local/app_database.dart';
 import 'package:flutter_app/l10n/app_localizations.dart';
@@ -14,26 +14,24 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'utils/debugger.dart';
 
 const String environment = String.fromEnvironment('ENV', defaultValue: 'dev');
 
+/// Initializes core services, Firebase, notifications, and runs the Flutter application.
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env.$environment");
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await NotificationService.init();
   await NotificationService.requestPermissions();
+  
   final database = AppDatabase();
-  final now = DateTime.now();
-  final startOfDay = DateTime(now.year, now.month, now.day);
-  final todayPractices =
-      await (database.select(database.exercises)
+  final startOfDay = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+  final todayPractices = await (database.select(database.exercises)
             ..where((e) => e.performedAt.isBiggerOrEqualValue(startOfDay))
-            ..limit(1))
-          .get();
-  final hasPracticedToday = todayPractices.isNotEmpty;
-  await NotificationService.scheduleDailyReminder(hasPracticedToday);
+            ..limit(1)).get();
+            
+  await NotificationService.scheduleDailyReminder(todayPractices.isNotEmpty);
 
   runApp(const ProviderScope(child: MyApp()));
 }
@@ -54,37 +52,20 @@ class _MyAppState extends ConsumerState<MyApp> {
 
   Future<void> _initialSync() async {
     await Future.delayed(Duration.zero);
-
     try {
       final syncService = await ref.read(syncServiceProvider.future);
-
       syncService.runSync();
-    } catch (e) {
-      Debugger.log("Initial sync skipped: $e");
-    }
+    } catch (_) {}
   }
 
   @override
   Widget build(BuildContext context) {
-    final router = ref.watch(goRouterProvider);
-    // 1. Watch the AsyncValue
-    final themeAsync = ref.watch(themeProvider);
-
     return MaterialApp.router(
-      routerConfig: router,
+      routerConfig: ref.watch(goRouterProvider),
       theme: lightTheme,
       darkTheme: darkTheme,
-      // 2. Safely extract the data
-      themeMode: themeAsync.maybeWhen(
-        data: (mode) => mode,
-        orElse: () => ThemeMode.light,
-      ),
-      locale: ref
-          .watch(languageProvider)
-          .maybeWhen(
-            data: (locale) => locale,
-            orElse: () => const Locale('cz'),
-          ),
+      themeMode: ref.watch(themeProvider).maybeWhen(data: (mode) => mode, orElse: () => ThemeMode.light),
+      locale: ref.watch(languageProvider).maybeWhen(data: (locale) => locale, orElse: () => const Locale('cz')),
       supportedLocales: AppLocalizations.supportedLocales,
       localizationsDelegates: const [
         AppLocalizations.delegate,

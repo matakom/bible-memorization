@@ -6,69 +6,73 @@ import 'package:flutter_app/providers/reader/saved_verses_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_app/data/models/saved_verse.dart';
 
+/// Screen displaying all verses currently saved by the user in the selected translation.
 class SavedVersesScreen extends ConsumerWidget {
   const SavedVersesScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final versesAsync = ref.watch(currentSavedVersesProvider);
-    final currentTranslation = ref.watch(currentBibleTranslationProvider).value;
+    return Consumer(
+      builder: (context, ref, _) {
+        final versesAsync = ref.watch(currentSavedVersesProvider);
+        final currentTranslation = ref.watch(currentBibleTranslationProvider).value;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('${context.l10n.reader_savedVersesTitle} (${currentTranslation?.abbreviation ?? ''})'),
-      ),
-      body: versesAsync.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (err, stack) => Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(Icons.error_outline, size: 48, color: Colors.red),
-              const SizedBox(height: 16),
-              Text('${context.l10n.reader_errorLoadingSavedVerses}\n$err', textAlign: TextAlign.center),
-              TextButton(
-                // Invalidate the specific provider to retry
-                onPressed: () => ref.invalidate(currentSavedVersesProvider),
-                child: Text(context.l10n.reader_retrySavedVersesFetch),
-              ),
-            ],
+        return Scaffold(
+          appBar: AppBar(
+            title: Text('${context.l10n.reader_savedVersesTitle} (${currentTranslation?.abbreviation ?? ''})'),
           ),
-        ),
-        data: (verses) {
-          if (verses.isEmpty) {
-            return Center(
+          body: versesAsync.when(
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (err, stack) => Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.bookmarks_outlined, size: 48, color: Colors.grey),
+                  const Icon(Icons.error_outline, size: 48, color: Colors.red),
                   const SizedBox(height: 16),
-                  Text(
-                    context.l10n.reader_noSavedVersesYet,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(color: Colors.grey),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    context.l10n.savedVerses_currentTranslation(currentTranslation?.abbreviation ?? ''),
-                    style: Theme.of(context).textTheme.bodySmall,
+                  Text('${context.l10n.reader_errorLoadingSavedVerses}\n$err', textAlign: TextAlign.center),
+                  TextButton(
+                    onPressed: () => ref.invalidate(currentSavedVersesProvider),
+                    child: Text(context.l10n.reader_retrySavedVersesFetch),
                   ),
                 ],
               ),
-            );
-          }
+            ),
+            data: (verses) {
+              if (verses.isEmpty) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.bookmarks_outlined, size: 48, color: Colors.grey),
+                      const SizedBox(height: 16),
+                      Text(
+                        context.l10n.reader_noSavedVersesYet,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(color: Colors.grey),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        context.l10n.savedVerses_currentTranslation(currentTranslation?.abbreviation ?? ''),
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    ],
+                  ),
+                );
+              }
 
-          return ListView.separated(
-            padding: const EdgeInsets.only(bottom: 24),
-            itemCount: verses.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 4), // Small gap between cards
-            itemBuilder: (context, index) {
-              final verse = verses[index];
-              return _SavedVerseTile(verse: verse);
+              return ListView.separated(
+                padding: const EdgeInsets.only(bottom: 24),
+                itemCount: verses.length,
+                separatorBuilder: (_, __) => const SizedBox(height: 4),
+                itemBuilder: (context, index) {
+                  final verse = verses[index];
+                  return _SavedVerseTile(verse: verse);
+                },
+              );
             },
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }
@@ -107,7 +111,6 @@ class _SavedVerseTile extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // HEADER: Reference
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -123,7 +126,7 @@ class _SavedVerseTile extends ConsumerWidget {
                       loading: () => const SizedBox(
                         width: 80, 
                         height: 16, 
-                        child: LinearProgressIndicator(minHeight: 2), // Subtle loading
+                        child: LinearProgressIndicator(minHeight: 2),
                       ),
                       error: (_, __) => Text(
                         context.l10n.savedVerses_bookFallback(verse.book, verse.chapter, verse.verse),
@@ -135,7 +138,6 @@ class _SavedVerseTile extends ConsumerWidget {
                 ],
               ),
               const SizedBox(height: 12),
-
               Text(
                 verse.verseText,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(

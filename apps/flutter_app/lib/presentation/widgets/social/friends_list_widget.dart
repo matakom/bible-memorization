@@ -7,15 +7,12 @@ import 'package:go_router/go_router.dart';
 import 'user.dart';
 import '../../../data/models/friendship.dart';
 
+/// Organized list of friendships categorized by status (pending, accepted, sent) and includes the leaderboard.
 class FriendsListWidget extends ConsumerStatefulWidget {
   final List<Friendship> friendships;
   final String currentUserId;
 
-  const FriendsListWidget({
-    super.key,
-    required this.friendships,
-    required this.currentUserId,
-  });
+  const FriendsListWidget({super.key, required this.friendships, required this.currentUserId});
 
   @override
   ConsumerState<FriendsListWidget> createState() => _FriendsListWidgetState();
@@ -35,19 +32,10 @@ class _FriendsListWidgetState extends ConsumerState<FriendsListWidget> {
   @override
   void didUpdateWidget(covariant FriendsListWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.friendships != oldWidget.friendships) {
-      _sortFriendships();
-    }
+    if (widget.friendships != oldWidget.friendships) _sortFriendships();
   }
 
-  // Helper to calculate direction based on ID
-  String _getDirection(Friendship f) {
-    if (f.userId == widget.currentUserId) {
-      return 'sent';
-    } else {
-      return 'received';
-    }
-  }
+  String _getDirection(Friendship f) => f.userId == widget.currentUserId ? 'sent' : 'received';
 
   void _sortFriendships() {
     receivedRequests = [];
@@ -56,13 +44,8 @@ class _FriendsListWidgetState extends ConsumerState<FriendsListWidget> {
 
     for (var friendship in widget.friendships) {
       final direction = _getDirection(friendship);
-
       if (friendship.status == 'pending') {
-        if (direction == 'received') {
-          receivedRequests.add(friendship);
-        } else {
-          sentRequests.add(friendship);
-        }
+        direction == 'received' ? receivedRequests.add(friendship) : sentRequests.add(friendship);
       } else if (friendship.status == 'accepted') {
         acceptedFriends.add(friendship);
       }
@@ -77,9 +60,7 @@ class _FriendsListWidgetState extends ConsumerState<FriendsListWidget> {
         await ref.read(friendshipsProvider.notifier).deleteFriendship(friendshipId);
       }
     } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
-      }
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
     }
   }
 
@@ -89,22 +70,12 @@ class _FriendsListWidgetState extends ConsumerState<FriendsListWidget> {
       children: [
         Padding(
           padding: const EdgeInsets.fromLTRB(20.0, 24.0, 20.0, 8.0),
-          child: Text(
-            title.toUpperCase(),
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Theme.of(context).colorScheme.primary,
-              letterSpacing: 0.5,
-            ),
-          ),
+          child: Text(title.toUpperCase(), style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.primary, letterSpacing: 0.5)),
         ),
         if (items.isEmpty)
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-            child: Text(
-              context.l10n.social_nothingHere,
-              style: const TextStyle(fontStyle: FontStyle.italic, color: Colors.grey),
-            ),
+            child: Text(context.l10n.social_nothingHere, style: const TextStyle(fontStyle: FontStyle.italic, color: Colors.grey)),
           )
         else
           ListView.builder(
@@ -114,8 +85,6 @@ class _FriendsListWidgetState extends ConsumerState<FriendsListWidget> {
             itemBuilder: (context, index) {
               final item = items[index];
               final direction = _getDirection(item);
-
-              // Determine the "Other Person's ID"
               final otherPersonId = direction == 'sent' ? item.friendId : item.userId;
 
               return User(
@@ -123,9 +92,7 @@ class _FriendsListWidgetState extends ConsumerState<FriendsListWidget> {
                 lastName: item.friendLastName,
                 status: item.status,
                 direction: direction,
-                onTap: () {
-                  context.go('/social/$otherPersonId/${item.id}');
-                },
+                onTap: () => context.go('/social/$otherPersonId/${item.id}'),
                 onAccept: () => _handleAction(item.id, 'accept'),
                 onDelete: () => _handleAction(item.id, 'delete'),
               );
@@ -143,13 +110,10 @@ class _FriendsListWidgetState extends ConsumerState<FriendsListWidget> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          if (receivedRequests.isNotEmpty)
-            _buildSection(context.l10n.social_friendRequest, receivedRequests),
-          LeaderboardWidget(),
-          if (acceptedFriends.isNotEmpty)
-            _buildSection(context.l10n.social_friends, acceptedFriends),
-          if (sentRequests.isNotEmpty)
-            _buildSection(context.l10n.social_sentRequests, sentRequests),
+          if (receivedRequests.isNotEmpty) _buildSection(context.l10n.social_friendRequest, receivedRequests),
+          const LeaderboardWidget(),
+          if (acceptedFriends.isNotEmpty) _buildSection(context.l10n.social_friends, acceptedFriends),
+          if (sentRequests.isNotEmpty) _buildSection(context.l10n.social_sentRequests, sentRequests),
           const SizedBox(height: 32),
         ],
       ),
