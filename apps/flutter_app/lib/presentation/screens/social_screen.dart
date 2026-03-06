@@ -215,32 +215,20 @@ class SocialScreen extends ConsumerWidget {
   }
 }
 
-/// Auto-disposing provider that performs a race between a network request and a timeout to check server health.
+/// Checks server availability by calling the lightweight health endpoint.
 final serverHealthCheckProvider = FutureProvider.autoDispose<void>((ref) async {
   final dio = await ref.watch(dioProvider.future);
-  final cancelToken = CancelToken();
-
-  final timerFuture = Future.delayed(const Duration(seconds: 5), () {
-    cancelToken.cancel("Authoritative UI Timeout");
-    throw ServerDownException();
-  });
-
-  final requestFuture = dio.get('/user', cancelToken: cancelToken);
 
   try {
-    await Future.wait([
-      Future.any([timerFuture, requestFuture])
-    ]);
+    // Calling the new health endpoint without a manual race-timer
+    await dio.get('/health');
   } on DioException catch (e) {
-    if (CancelToken.isCancel(e) || (e.response?.statusCode != null && e.response!.statusCode! >= 500)) {
+    // If the server returns a 500+ or the request fails (DNS/Connection refused)
+    if (e.response?.statusCode != null && e.response!.statusCode! >= 500) {
       throw ServerDownException();
     }
     throw OfflineException();
-  } on ServerDownException {
-    rethrow;
   } catch (e) {
     throw OfflineException();
-  } finally {
-    if (!cancelToken.isCancelled) cancelToken.cancel();
   }
 });

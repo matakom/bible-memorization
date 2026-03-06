@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/providers/user_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_app/data/repositories/stats_repository.dart';
 import 'package:flutter_app/presentation/widgets/stats/stats_profile_view.dart';
@@ -11,6 +12,7 @@ class StatsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final statsAsync = ref.watch(myStatsProvider);
+    ref.watch(userDataProvider);
 
     return Scaffold(
       appBar: AppBar(title: Text(context.l10n.stats_screenTitle)),

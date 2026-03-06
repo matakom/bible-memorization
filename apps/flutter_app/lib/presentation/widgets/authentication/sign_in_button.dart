@@ -16,7 +16,7 @@ class SignInButton extends ConsumerWidget {
         ? const SizedBox(
             height: 24, 
             width: 24, 
-            child: CircularProgressIndicator(strokeWidth: 2)
+            child: Center(child: CircularProgressIndicator(strokeWidth: 2))
           )
         : ElevatedButton.icon(
             icon: const Icon(Icons.login),

@@ -67,7 +67,7 @@ class Users extends Table {
   TextColumn get firstName => text()();
   TextColumn get lastName => text()();
   TextColumn get friendCode => text().nullable()();
-  TextColumn get language => text().withDefault(const Constant('cz'))(); 
+  TextColumn get language => text().withDefault(const Constant('cs'))(); 
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
   BoolColumn get needsSync => boolean().withDefault(const Constant(false))();
 

@@ -22,7 +22,7 @@ class LanguageNotifier extends AsyncNotifier<Locale> {
       await prefs.setString(_kLangKey, localUser.language);
       return Locale(localUser.language);
     }
-    return const Locale('en');
+    return const Locale('cs');
   }
 
   Future<void> setLanguage(Locale newLanguage) async {

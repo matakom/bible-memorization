@@ -387,18 +387,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get game_builder_incorrect => 'Not quite! Try a different word.';
 
   @override
-  String get game_builder_dummyLord => 'Lord';
-
-  @override
-  String get game_builder_dummyGrace => 'grace';
-
-  @override
-  String get game_builder_dummyFaith => 'faith';
-
-  @override
-  String get game_builder_dummyHoly => 'holy';
-
-  @override
   String game_wordChoice_prompt(int current, int total) {
     return 'Complete the verse ($current / $total):';
   }

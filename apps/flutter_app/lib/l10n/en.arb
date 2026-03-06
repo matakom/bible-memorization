@@ -238,10 +238,6 @@
 
   "game_builder_prompt": "Build the verse:",
   "game_builder_incorrect": "Not quite! Try a different word.",
-  "game_builder_dummyLord": "Lord",
-  "game_builder_dummyGrace": "grace",
-  "game_builder_dummyFaith": "faith",
-  "game_builder_dummyHoly": "holy",
 
   "game_wordChoice_prompt": "Complete the verse ({current} / {total}):",
   "@game_wordChoice_prompt": {

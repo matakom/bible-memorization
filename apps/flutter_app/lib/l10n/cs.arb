@@ -239,10 +239,6 @@
 
   "game_builder_prompt": "Sestav verš:",
   "game_builder_incorrect": "Těsně vedle! Zkus jiné slovo.",
-  "game_builder_dummyLord": "Hospodin",
-  "game_builder_dummyGrace": "milost",
-  "game_builder_dummyFaith": "víra",
-  "game_builder_dummyHoly": "svatý",
 
   "game_wordChoice_prompt": "Doplň verš ({current} / {total}):",
   "@game_wordChoice_prompt": {

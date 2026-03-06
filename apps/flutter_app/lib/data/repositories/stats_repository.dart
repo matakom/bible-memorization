@@ -35,7 +35,7 @@ class StatsRepository {
     }
 
     fullName ??= FirebaseAuth.instance.currentUser?.displayName;
-    fullName ??= "User";
+    fullName ??= "Host";
 
     final aggregateQuery = await _db.customSelect('''
       SELECT 

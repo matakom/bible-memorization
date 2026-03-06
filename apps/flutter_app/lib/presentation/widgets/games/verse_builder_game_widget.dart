@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_app/data/models/saved_verse.dart';
 import 'package:flutter_app/data/models/practice_feedback.dart';
 import 'package:flutter_app/providers/practice/practice_session_controller.dart';
 import 'package:flutter_app/providers/reader/bible_provider.dart';
-import 'package:flutter_app/providers/reader/saved_verses_controller.dart';
 import 'package:flutter_app/l10n/l10n_extension.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+/// Internal model representing a word choice in the game's word bank.
 class _WordOption {
   final String id; 
   final String text;
@@ -14,7 +14,8 @@ class _WordOption {
   _WordOption({required this.id, required this.text});
 }
 
-/// Interactive game where users reconstruct a verse by selecting the correct words from a word bank.
+/// A practice mode where users reconstruct a verse by selecting words in the correct sequence, 
+/// using contextual words from the same chapter as distractors.
 class VerseBuilderGameWidget extends ConsumerStatefulWidget {
   final SavedVerse verse;
 
@@ -27,6 +28,7 @@ class VerseBuilderGameWidget extends ConsumerStatefulWidget {
 class _VerseBuilderGameWidgetState extends ConsumerState<VerseBuilderGameWidget> {
   final Stopwatch _stopwatch = Stopwatch();
   bool _isInitialized = false;
+  bool _isLoading = true;
   
   late List<String> _rawWords;      
   late List<String> _targetWords;   
@@ -40,12 +42,11 @@ class _VerseBuilderGameWidgetState extends ConsumerState<VerseBuilderGameWidget>
     super.didChangeDependencies();
     if (!_isInitialized) {
       _setupGame();
-      _stopwatch.start();
       _isInitialized = true;
     }
   }
 
-  void _setupGame() {
+  Future<void> _setupGame() async {
     _rawWords = widget.verse.verseText.trim().split(RegExp(r'\s+'));
     if (_rawWords.isEmpty) _rawWords = ["Error"];
 
@@ -58,39 +59,44 @@ class _VerseBuilderGameWidgetState extends ConsumerState<VerseBuilderGameWidget>
       correctOptions.add(_WordOption(id: 'correct_$i', text: cleanWord));
     }
 
-    final dummyOptions = _getDummyWords(count: 4);
-    _wordBank = [...correctOptions, ...dummyOptions];
-    _wordBank.shuffle();
+    final dummyOptions = await _getDummyWords(count: 4);
+    
+    if (mounted) {
+      setState(() {
+        _wordBank = [...correctOptions, ...dummyOptions];
+        _wordBank.shuffle();
+        _isLoading = false;
+        _stopwatch.start();
+      });
+    }
   }
 
-  List<_WordOption> _getDummyWords({required int count}) {
-    final allVerses = ref.read(savedVersesControllerProvider).value ?? [];
+  Future<List<_WordOption>> _getDummyWords({required int count}) async {
     final Set<String> uniqueDummies = {};
-
-    for (final v in allVerses) {
-      if (v.id == widget.verse.id) continue;
+    
+    try {
+      final repository = ref.read(bibleRepositoryProvider);
+      final chapter = await repository.getChapter(widget.verse.book, widget.verse.chapter);
       
-      final words = v.verseText.split(RegExp(r'\s+'));
-      for (var w in words) {
-        final clean = w.replaceAll(RegExp(r'[.,;!?":\(\)\[\]]'), '').trim();
-        if (clean.length > 2 && !_targetWords.contains(clean)) {
-          uniqueDummies.add(clean);
+      final targetLower = _targetWords.map((w) => w.toLowerCase()).toSet();
+
+      for (final v in chapter.verses) {
+        if (v.verseNumber == widget.verse.verse) continue;
+        
+        final words = v.text.split(RegExp(r'\s+'));
+        for (var w in words) {
+          final clean = w.replaceAll(RegExp(r'[.,;!?":\(\)\[\]]'), '').trim();
+          if (clean.length > 2 && !targetLower.contains(clean.toLowerCase())) {
+            uniqueDummies.add(clean);
+          }
         }
+        if (uniqueDummies.length >= count + 10) break;
       }
-    }
+    } catch (_) {}
 
     final dummyList = uniqueDummies.toList()..shuffle();
     final selectedDummies = dummyList.take(count).toList();
     
-    if (selectedDummies.isEmpty) {
-      selectedDummies.addAll([
-        context.l10n.game_builder_dummyLord, 
-        context.l10n.game_builder_dummyGrace, 
-        context.l10n.game_builder_dummyFaith, 
-        context.l10n.game_builder_dummyHoly
-      ]);
-    }
-
     return List.generate(
       selectedDummies.length, 
       (i) => _WordOption(id: 'dummy_$i', text: selectedDummies[i])
@@ -153,6 +159,10 @@ class _VerseBuilderGameWidgetState extends ConsumerState<VerseBuilderGameWidget>
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
     final theme = Theme.of(context);
     final bookNameAsync = ref.watch(bookNameProvider(widget.verse.book));
 
@@ -208,7 +218,7 @@ class _VerseBuilderGameWidgetState extends ConsumerState<VerseBuilderGameWidget>
                           decoration: BoxDecoration(
                             border: Border(bottom: BorderSide(color: theme.colorScheme.primary, width: 3)),
                           ),
-                          child: Text(" ", style: theme.textTheme.headlineSmall),
+                          child: const Text(" ", style: TextStyle(fontSize: 24)),
                         );
                       } else {
                         return Text(

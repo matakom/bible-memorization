@@ -20,7 +20,7 @@ class UserDataNotifier extends AsyncNotifier<AppUser?> {
       email: authUser.email ?? '',
       firstName: nameParts.isNotEmpty ? nameParts.first : 'Offline',
       lastName: nameParts.length > 1 ? nameParts.sublist(1).join(' ') : '',
-      language: 'cz',
+      language: 'cs',
       friendCode: '',
       registeredAt: DateTime.now(),
     );

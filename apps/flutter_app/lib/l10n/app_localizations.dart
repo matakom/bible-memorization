@@ -764,30 +764,6 @@ abstract class AppLocalizations {
   /// **'Not quite! Try a different word.'**
   String get game_builder_incorrect;
 
-  /// No description provided for @game_builder_dummyLord.
-  ///
-  /// In en, this message translates to:
-  /// **'Lord'**
-  String get game_builder_dummyLord;
-
-  /// No description provided for @game_builder_dummyGrace.
-  ///
-  /// In en, this message translates to:
-  /// **'grace'**
-  String get game_builder_dummyGrace;
-
-  /// No description provided for @game_builder_dummyFaith.
-  ///
-  /// In en, this message translates to:
-  /// **'faith'**
-  String get game_builder_dummyFaith;
-
-  /// No description provided for @game_builder_dummyHoly.
-  ///
-  /// In en, this message translates to:
-  /// **'holy'**
-  String get game_builder_dummyHoly;
-
   /// No description provided for @game_wordChoice_prompt.
   ///
   /// In en, this message translates to:

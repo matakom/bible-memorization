@@ -387,18 +387,6 @@ class AppLocalizationsCs extends AppLocalizations {
   String get game_builder_incorrect => 'Těsně vedle! Zkus jiné slovo.';
 
   @override
-  String get game_builder_dummyLord => 'Hospodin';
-
-  @override
-  String get game_builder_dummyGrace => 'milost';
-
-  @override
-  String get game_builder_dummyFaith => 'víra';
-
-  @override
-  String get game_builder_dummyHoly => 'svatý';
-
-  @override
   String game_wordChoice_prompt(int current, int total) {
     return 'Doplň verš ($current / $total):';
   }

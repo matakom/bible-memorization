@@ -65,7 +65,7 @@ class _MyAppState extends ConsumerState<MyApp> {
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: ref.watch(themeProvider).maybeWhen(data: (mode) => mode, orElse: () => ThemeMode.light),
-      locale: ref.watch(languageProvider).maybeWhen(data: (locale) => locale, orElse: () => const Locale('cz')),
+      locale: ref.watch(languageProvider).maybeWhen(data: (locale) => locale, orElse: () => const Locale('cs')),
       supportedLocales: AppLocalizations.supportedLocales,
       localizationsDelegates: const [
         AppLocalizations.delegate,
