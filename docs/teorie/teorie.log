@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.1.6)  6 JAN 2026 11:24
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.1.6)  9 MAR 2026 09:32
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -294,60 +294,35 @@ Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 )
 \Hy@SectionHShift=\skip53
 )
-(/usr/share/texlive/texmf-dist/tex/latex/listings/listings.sty
-\lst@mode=\count285
-\lst@gtempboxa=\box53
-\lst@token=\toks24
-\lst@length=\count286
-\lst@currlwidth=\dimen163
-\lst@column=\count287
-\lst@pos=\count288
-\lst@lostspace=\dimen164
-\lst@width=\dimen165
-\lst@newlines=\count289
-\lst@lineno=\count290
-\lst@maxwidth=\dimen166
-
-(/usr/share/texlive/texmf-dist/tex/latex/listings/lstmisc.sty
-File: lstmisc.sty 2023/02/27 1.9 (Carsten Heinz)
-\c@lstnumber=\count291
-\lst@skipnumbers=\count292
-\lst@framebox=\box54
-)
-(/usr/share/texlive/texmf-dist/tex/latex/listings/listings.cfg
-File: listings.cfg 2023/02/27 1.9 listings configuration
-))
-Package: listings 2023/02/27 1.9 (Carsten Heinz)
-
 (/usr/share/texlive/texmf-dist/tex/latex/parskip/parskip.sty
 Package: parskip 2021-03-14 v2.0h non-zero parskip adjustments
 )
 (/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2024-01-04 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count293
-\l__pdf_internal_box=\box55
+\l__color_backend_stack_int=\count285
+\l__pdf_internal_box=\box53
 )
 (./teorie.aux)
 \openout1 = `teorie.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 18.
+LaTeX Font Info:    ... okay on input line 18.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 18.
+LaTeX Font Info:    ... okay on input line 18.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 18.
+LaTeX Font Info:    ... okay on input line 18.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 18.
+LaTeX Font Info:    ... okay on input line 18.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 18.
+LaTeX Font Info:    ... okay on input line 18.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 18.
+LaTeX Font Info:    ... okay on input line 18.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 18.
+LaTeX Font Info:    ... okay on input line 18.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 18.
+LaTeX Font Info:    ... okay on input line 18.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 18.
+LaTeX Font Info:    ... okay on input line 18.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -385,17 +360,17 @@ LaTeX Font Info:    ... okay on input line 21.
 
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count294
-\scratchdimen=\dimen167
-\scratchbox=\box56
-\nofMPsegments=\count295
-\nofMParguments=\count296
-\everyMPshowfont=\toks25
-\MPscratchCnt=\count297
-\MPscratchDim=\dimen168
-\MPnumerator=\count298
-\makeMPintoPDFobject=\count299
-\everyMPtoPDFconversion=\toks26
+\scratchcounter=\count286
+\scratchdimen=\dimen163
+\scratchbox=\box54
+\nofMPsegments=\count287
+\nofMParguments=\count288
+\everyMPshowfont=\toks24
+\MPscratchCnt=\count289
+\MPscratchDim=\dimen164
+\MPnumerator=\count290
+\makeMPintoPDFobject=\count291
+\everyMPtoPDFconversion=\toks25
 ) (/usr/share/texlive/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
@@ -417,103 +392,59 @@ Package: lscape 2020/05/28 v3.02 Landscape Pages (DPC)
 )
 Package pdflscape Info: Auto-detected driver: pdftex on input line 81.
 ))
-Package hyperref Info: Link coloring OFF on input line 21.
+Package hyperref Info: Link coloring OFF on input line 18.
  (./teorie.out)
 (./teorie.out)
 \@outlinefile=\write3
 \openout3 = `teorie.out'.
 
-\c@lstlisting=\count300
  [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 6
-6.
-
-(/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
-File: t1cmtt.fd 2023/04/13 v2.5m Standard LaTeX font definitions
-)
 pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has 
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.72 	\newpage
-               [1] [2] [3] [4] (./teorie.toc
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <12> on input line 5.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 5.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 5.
-)
+l.69 	\newpage
+               [1] [2] [3] (./teorie.toc)
 \tf@toc=\write4
 \openout4 = `teorie.toc'.
 
- [5]
-pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has 
-been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.157 	\section
-               {Závěr} [1]
-pdfTeX warning (ext4): destination with the same identifier (name{page.2}) has 
-been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.163 	\newpage
-                [2]
-pdfTeX warning (ext4): destination with the same identifier (name{page.3}) has 
-been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.174 	\newpage
-                [3] (./teorie.lof)
+ [4] [8] [9] (./teorie.lof)
 \tf@lof=\write5
 \openout5 = `teorie.lof'.
 
-
-pdfTeX warning (ext4): destination with the same identifier (name{page.4}) has 
-been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.181 	\newpage
-                [4]
-pdfTeX warning (ext4): destination with the same identifier (name{page.5}) has 
-been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.188 \end{document}
-                     [5] (./teorie.aux)
+ [10]
+[11] [12] (./teorie.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
  ***********
 Package rerunfilecheck Info: File `teorie.out' has not changed.
-(rerunfilecheck)             Checksum: 95B67AEAAD5320E906008BAB6052F911;899.
+(rerunfilecheck)             Checksum: 4229EA1E14EC94DAB189697770CC3FC8;159.
  ) 
 Here is how much of TeX's memory you used:
- 13027 strings out of 475277
- 203414 string characters out of 5768623
- 1927975 words of memory out of 5000000
- 34924 multiletter control sequences out of 15000+600000
- 568315 words of font info for 56 fonts, out of 8000000 for 9000
+ 11615 strings out of 475277
+ 182784 string characters out of 5768623
+ 1925975 words of memory out of 5000000
+ 33533 multiletter control sequences out of 15000+600000
+ 565562 words of font info for 47 fonts, out of 8000000 for 9000
  473 hyphenation exceptions out of 8191
- 75i,5n,79p,499b,463s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,5n,79p,499b,467s stack positions out of 10000i,1000n,20000p,200000b,200000s
  </var/home/matakom/.texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm12
 00.600pk> </var/home/matakom/.texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec
 /ecbx1200.600pk> </var/home/matakom/.texlive2023/texmf-var/fonts/pk/ljfour/jkna
-ppen/ec/ecrm1200.600pk> </var/home/matakom/.texlive2023/texmf-var/fonts/pk/ljfo
-ur/jknappen/ec/ecit1200.600pk> </var/home/matakom/.texlive2023/texmf-var/fonts/
-pk/ljfour/jknappen/ec/ecti1200.600pk> </var/home/matakom/.texlive2023/texmf-var
-/fonts/pk/ljfour/jknappen/ec/ecbx1440.600pk> </var/home/matakom/.texlive2023/te
-xmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1728.600pk> </var/home/matakom/.texlive
-2023/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx2488.600pk> </var/home/matakom/.
-texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1440.600pk> </var/home/ma
-takom/.texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1728.600pk>
-Output written on teorie.pdf (11 pages, 114961 bytes).
+ppen/ec/ecti1200.600pk> </var/home/matakom/.texlive2023/texmf-var/fonts/pk/ljfo
+ur/jknappen/ec/ecrm1200.600pk> </var/home/matakom/.texlive2023/texmf-var/fonts/
+pk/ljfour/jknappen/ec/ecbx1440.600pk> </var/home/matakom/.texlive2023/texmf-var
+/fonts/pk/ljfour/jknappen/ec/ecrm1728.600pk> </var/home/matakom/.texlive2023/te
+xmf-var/fonts/pk/ljfour/jknappen/ec/ecbx2488.600pk> </var/home/matakom/.texlive
+2023/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1440.600pk> </var/home/matakom/.
+texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1728.600pk>
+Output written on teorie.pdf (10 pages, 85270 bytes).
 PDF statistics:
- 464 PDF objects out of 1000 (max. 8388607)
- 127 compressed objects within 2 object streams
- 21 named destinations out of 1000 (max. 500000)
- 65 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 353 PDF objects out of 1000 (max. 8388607)
+ 96 compressed objects within 1 object stream
+ 20 named destinations out of 1000 (max. 500000)
+ 17 words of extra memory for PDF output out of 10000 (max. 10000000)
 
