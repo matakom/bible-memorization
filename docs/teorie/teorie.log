@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.1.6)  9 MAR 2026 09:32
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.1.6)  10 MAR 2026 22:42
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -406,31 +406,38 @@ been already used, duplicate ignored
 <to be read again> 
                    \relax 
 l.69 	\newpage
-               [1] [2] [3] (./teorie.toc)
+               [1] [2] [3] (./teorie.toc
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <12> on input line 3.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 3.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 3.
+)
 \tf@toc=\write4
 \openout4 = `teorie.toc'.
 
- [4] [8] [9] (./teorie.lof)
+ [4] [8] [9] [10] [11] [12] [13]
+[14] (./teorie.lof)
 \tf@lof=\write5
 \openout5 = `teorie.lof'.
 
- [10]
-[11] [12] (./teorie.aux)
+ [15] [16] [17] (./teorie.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
  ***********
 Package rerunfilecheck Info: File `teorie.out' has not changed.
-(rerunfilecheck)             Checksum: 4229EA1E14EC94DAB189697770CC3FC8;159.
+(rerunfilecheck)             Checksum: EFA6CA72477791345E5A332F03F87B97;3189.
  ) 
 Here is how much of TeX's memory you used:
- 11615 strings out of 475277
- 182784 string characters out of 5768623
- 1925975 words of memory out of 5000000
- 33533 multiletter control sequences out of 15000+600000
- 565562 words of font info for 47 fonts, out of 8000000 for 9000
+ 11688 strings out of 475277
+ 183772 string characters out of 5768623
+ 1931975 words of memory out of 5000000
+ 33573 multiletter control sequences out of 15000+600000
+ 568000 words of font info for 55 fonts, out of 8000000 for 9000
  473 hyphenation exceptions out of 8191
- 75i,5n,79p,499b,467s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,5n,79p,799b,494s stack positions out of 10000i,1000n,20000p,200000b,200000s
  </var/home/matakom/.texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm12
 00.600pk> </var/home/matakom/.texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec
 /ecbx1200.600pk> </var/home/matakom/.texlive2023/texmf-var/fonts/pk/ljfour/jkna
@@ -441,10 +448,10 @@ pk/ljfour/jknappen/ec/ecbx1440.600pk> </var/home/matakom/.texlive2023/texmf-var
 xmf-var/fonts/pk/ljfour/jknappen/ec/ecbx2488.600pk> </var/home/matakom/.texlive
 2023/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1440.600pk> </var/home/matakom/.
 texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1728.600pk>
-Output written on teorie.pdf (10 pages, 85270 bytes).
+Output written on teorie.pdf (15 pages, 129383 bytes).
 PDF statistics:
- 353 PDF objects out of 1000 (max. 8388607)
- 96 compressed objects within 1 object stream
- 20 named destinations out of 1000 (max. 500000)
- 17 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 576 PDF objects out of 1000 (max. 8388607)
+ 223 compressed objects within 3 object streams
+ 46 named destinations out of 1000 (max. 500000)
+ 185 words of extra memory for PDF output out of 10000 (max. 10000000)
 
