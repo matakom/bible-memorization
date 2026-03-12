@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.1.6)  10 MAR 2026 22:42
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.1.6)  12 MAR 2026 16:26
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -401,12 +401,62 @@ Package hyperref Info: Link coloring OFF on input line 18.
  [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
+<zadani.pdf, id=105, 597.432pt x 844.11362pt>
+File: zadani.pdf Graphic file (type pdf)
+<use zadani.pdf>
+Package pdftex.def Info: zadani.pdf  used on input line 51.
+(pdftex.def)             Requested size: 597.43054pt x 844.11156pt.
+File: zadani.pdf Graphic file (type pdf)
+<use zadani.pdf>
+Package pdftex.def Info: zadani.pdf  used on input line 51.
+(pdftex.def)             Requested size: 597.43054pt x 844.11156pt.
+<zadani.pdf, id=108, page=1, 597.432pt x 844.11362pt>
+File: zadani.pdf Graphic file (type pdf)
+<use zadani.pdf, page 1>
+Package pdftex.def Info: zadani.pdf , page1 used on input line 51.
+(pdftex.def)             Requested size: 597.43054pt x 844.11156pt.
+File: zadani.pdf Graphic file (type pdf)
+<use zadani.pdf, page 1>
+Package pdftex.def Info: zadani.pdf , page1 used on input line 51.
+(pdftex.def)             Requested size: 597.93192pt x 844.81996pt.
+File: zadani.pdf Graphic file (type pdf)
+<use zadani.pdf, page 1>
+Package pdftex.def Info: zadani.pdf , page1 used on input line 51.
+(pdftex.def)             Requested size: 597.93192pt x 844.81996pt.
+File: zadani.pdf Graphic file (type pdf)
+<use zadani.pdf, page 1>
+Package pdftex.def Info: zadani.pdf , page1 used on input line 51.
+(pdftex.def)             Requested size: 597.93192pt x 844.81996pt.
+
 pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has 
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.69 	\newpage
-               [1] [2] [3] (./teorie.toc
+l.51 	\includepdf[pages={1-2}]{zadani.pdf}
+                                          
+File: zadani.pdf Graphic file (type pdf)
+<use zadani.pdf, page 1>
+Package pdftex.def Info: zadani.pdf , page1 used on input line 51.
+(pdftex.def)             Requested size: 597.93192pt x 844.81996pt.
+ [1
+
+ <./zadani.pdf>]
+<zadani.pdf, id=114, page=2, 597.432pt x 844.11362pt>
+File: zadani.pdf Graphic file (type pdf)
+<use zadani.pdf, page 2>
+Package pdftex.def Info: zadani.pdf , page2 used on input line 51.
+(pdftex.def)             Requested size: 597.93192pt x 844.81996pt.
+File: zadani.pdf Graphic file (type pdf)
+<use zadani.pdf, page 2>
+Package pdftex.def Info: zadani.pdf , page2 used on input line 51.
+(pdftex.def)             Requested size: 597.93192pt x 844.81996pt.
+File: zadani.pdf Graphic file (type pdf)
+<use zadani.pdf, page 2>
+Package pdftex.def Info: zadani.pdf , page2 used on input line 51.
+(pdftex.def)             Requested size: 597.93192pt x 844.81996pt.
+ [2
+
+ <./zadani.pdf>] [3] [4] [5] (./teorie.toc
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <12> on input line 3.
 LaTeX Font Info:    External font `cmex10' loaded for size
@@ -417,8 +467,7 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 \tf@toc=\write4
 \openout4 = `teorie.toc'.
 
- [4] [8] [9] [10] [11] [12] [13]
-[14] (./teorie.lof)
+ [6] [8] [9] [10] [11] [12] [13] [14] (./teorie.lof)
 \tf@lof=\write5
 \openout5 = `teorie.lof'.
 
@@ -431,13 +480,13 @@ Package rerunfilecheck Info: File `teorie.out' has not changed.
 (rerunfilecheck)             Checksum: EFA6CA72477791345E5A332F03F87B97;3189.
  ) 
 Here is how much of TeX's memory you used:
- 11688 strings out of 475277
- 183772 string characters out of 5768623
+ 11705 strings out of 475277
+ 184130 string characters out of 5768623
  1931975 words of memory out of 5000000
- 33573 multiletter control sequences out of 15000+600000
+ 33588 multiletter control sequences out of 15000+600000
  568000 words of font info for 55 fonts, out of 8000000 for 9000
  473 hyphenation exceptions out of 8191
- 75i,5n,79p,799b,494s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,17n,79p,799b,581s stack positions out of 10000i,1000n,20000p,200000b,200000s
  </var/home/matakom/.texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm12
 00.600pk> </var/home/matakom/.texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec
 /ecbx1200.600pk> </var/home/matakom/.texlive2023/texmf-var/fonts/pk/ljfour/jkna
@@ -448,10 +497,10 @@ pk/ljfour/jknappen/ec/ecbx1440.600pk> </var/home/matakom/.texlive2023/texmf-var
 xmf-var/fonts/pk/ljfour/jknappen/ec/ecbx2488.600pk> </var/home/matakom/.texlive
 2023/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1440.600pk> </var/home/matakom/.
 texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1728.600pk>
-Output written on teorie.pdf (15 pages, 129383 bytes).
+Output written on teorie.pdf (17 pages, 1301156 bytes).
 PDF statistics:
- 576 PDF objects out of 1000 (max. 8388607)
- 223 compressed objects within 3 object streams
- 46 named destinations out of 1000 (max. 500000)
- 185 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 592 PDF objects out of 1000 (max. 8388607)
+ 230 compressed objects within 3 object streams
+ 48 named destinations out of 1000 (max. 500000)
+ 210 words of extra memory for PDF output out of 10000 (max. 10000000)
 
