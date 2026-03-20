@@ -298,7 +298,27 @@
 		\item \textbf{Sociální interakce a žebříčky:} Prostřednictvím unikátního kódu přátelství (Friend Code) se mohou uživatelé propojovat. Osobní statistiky a postup v učení jsou následně vizualizovány a porovnávány v lokálních žebříčcích mezi přáteli. Na rozdíl od konkurenčních řešení je tento systém spravedlivější, neboť hodnotí reálnou aktivitu (např. čas strávený učením a udrženou denní řadu).
 	\end{itemize}
 	
+	\section{Závěr}
+	\subsection{Dosažené cíle a aktuální stav aplikace}
+	V rámci práce na maturitním projektu se podařilo úspěšně naimplementovat plně funkční klientskou aplikaci i serverovou část. Aplikace obsahuje všechny funkce specifikované v zadání. Uživatelé se mohou registrovat a přihlašovat pomocí účtu Google, procházet biblické texty a ukládat si verše k memorizaci. Úspěšně byl integrován algoritmus intervalového opakování (SM-2), který na základě úspěšnosti v minihrách dynamicky plánuje další revize textu. Funkční je rovněž offline režim, který ukládá postup do lokální databáze SQLite a po připojení k internetu data bezpečně synchronizuje se vzdáleným serverem. Sociální modul umožňuje propojování uživatelů přes unikátní kódy a porovnávání aktivity v žebříčcích.
+	
+	\subsection{Diskuze}
+	
+	\subsubsection{Zhodnocení splněných cílů}
+	Lze konstatovat, že všechny hlavní cíle vytyčené v úvodní analýze a zadání projektu byly naplněny. Vytvořená platforma demonstruje funkční propojení moderních technologií (Flutter pro mobilní klient a NestJS pro backend) s vědeckými metodami učení. Důraz na gamifikaci a sledování denních řad efektivně přispívá k vyšší motivaci uživatelů.
+	
+	\subsection{Porovnání s konkurenčními řešeními}
+	Ve srovnání s aplikacemi analyzovanými v úvodu práce přináší Bible Memorizer několik zásadních inovací. Na rozdíl od většiny konkurence nevyžaduje manuální zadávání referencí, ale nabízí integrovanou čtečku textu. Zásadní výhodou je implementace intervalového opakování, které u mnoha alternativ chybí. Sociální funkce a žebříčky jsou navíc spravedlivější, protože hodnotí skutečnou aktivitu v minihrách a čas strávený učením, nikoliv jen subjektivní odškrtnutí naučeného verše. Aplikace také plně podporuje českou lokalizaci.
 
+	\subsection{Problémy během vývoje a jejich řešení}
+	Největší technologickou výzvou během implementace byla obousměrná synchronizace dat mezi offline lokální databází (SQLite) a centrální serverovou databází (PostgreSQL. Zpočátku vyvstávala hrozba konfliktů při úpravě stejného záznamu na více zařízeních v offline režimu. Tento problém byl vyřešen zavedením robustního mechanismu založeného na časových razítkách (timestamps). Systém při slučování dat porovnává časová razítka a jako platný vždy přijímá ten nejnovější záznam.
+	
+	\subsection{Celkové shrnutí projektu}
+	Cílem maturitního projektu bylo navrhnout a vyvinout mobilní aplikaci pro operační systém Android, která uživatelům pomůže zapamatovat si biblické verše efektivním a zároveň zábavným způsobem. Výsledkem je moderní, bezpečná a plně funkční platforma Bible Memorizer. Díky využití frameworku Flutter poskytuje aplikace plynulý uživatelský zážitek a konzistentní vzhled, zatímco backend postavený na NestJS zajišťuje spolehlivou synchronizaci a ochranu dat. Implementace gamifikačních prvků a algoritmu intervalového opakování pomáhá uživatelům dosahovat lepších výsledků s menším úsilím.
+	
+	\subsection{Možnosti budoucího rozvoje}
+	Ačkoliv je aplikace v současném stavu plně použitelná, existuje zásadní prostor pro její další algoritmické vylepšení. Hlavním plánem do budoucna je nahrazení současného algoritmu SM-2 pokročilejším modelem HLR (Half-Life Regression). Tento model dokáže přesněji odhadovat pravděpodobnost zapomenutí konkrétního verše na základě širšího spektra proměnných a historie paměťových stop, což by vedlo k další optimalizaci intervalů opakování a celkovému zefektivnění procesu memorizace.
+	
 	% 8. Literatura
 	\newpage
 	\addcontentsline{toc}{section}{Literatura} % Adds to TOC manually
