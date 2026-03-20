@@ -38,7 +38,7 @@
 			\begin{flushleft}
 				\large
 				\textbf{Autor:} Matěj Komárek \\
-				\textbf{Obor:} Informační technologie \\ % TODO Is thic correct?
+				\textbf{Obor:} Informační technologie \\ 
 				\textbf{Třída:} 4. B \\
 				\textbf{Školní rok:} 2025/2026
 			\end{flushleft}
@@ -59,7 +59,7 @@
 		
 	\vspace{1cm}
 	
-	V Pardubicích 30. 3. 2023
+	V Pardubicích 30. 3. 2026
 	
 	\begin{flushright}
 		\textit{(vlastnoruční podpis)}
@@ -105,7 +105,7 @@
 	
 	\section{Úvod}
 	% TODO: Citace na 2.3 miliardy, 8 miliard
-	Ve světě žije přes 2.3 miliardy křesťanů. Což znamená, že více než čtvrtina lidí jsou křesťané. Častým cílem křesťanů je studium Bible a zapamatování jejich částí.
+	Ve světě žije přes 2.3 miliardy křesťanů, což znamená, že více než čtvrtina lidí jsou křesťané. Častým cílem křesťanů je studium Bible a zapamatování jejich částí.
 	Dlouhodobé zapamatování textu ale není jednoduchý úkol.	Existují aplikace, které memorizování částí Bible zjednodušují, ale ty jsou často zastaralé, těžké na používání a neaplikují metody učení, které uživateli pomáhají, urychlují a zpříjemňují celý proces.
 	
 	Za tímto účelem vznikla aplikace Bible Memorizer. Tato aplikace se snaží jejím uživatelům zjednodušit cíl zapamatování specifických biblických testů. K tomu používá dva hlavní principy. 
@@ -116,7 +116,7 @@
 	\subsection{Cílová skupina}
 	Jak lze z úvodu a celé koncepce projektu jednoduše odvodit, cílovou skupinou této aplikace jsou výhradně křesťané, kteří si chtějí memorizovat biblické verše.
 		
-	Aplikace však není vázána na specifickou denominaci. (církev)
+	Aplikace však není vázána na specifickou denominaci či církev.
 	
 	Aplikace zároveň podporuje lokalizaci, díky čemuž umožňuje používání křesťanům z jiných zemí, než jen Česká republika. (Aplikace momentálně podporuje český a anglický jazyk)
 	
@@ -131,7 +131,42 @@
 	Intervalové opakování je způsob učení, který se zakládá na postupně rostoucích intervalech. Vysvětleme si to na příkladu. Student se chce naučit nazpaměť jeden verš. První den se ho naučí. Druhý den si ho zopakuje. Třetí den vynechá, ale čtvrtý den se ujistí, že si ho stále pamatuje.
 	Tento interval postupně roste, takže student si danou informaci neopakuje každý den. Díky tomu může získaný čas využít na jiné učivo a pojmout tak více informací.
 
+	\section{Analýza existujících řešení}
+	V rámci rešerše trhu a mapování konkurenčního prostředí byly podrobně analyzovány čtyři existující mobilní aplikace s obdobným zaměřením. Ačkoliv je primární cíl těchto nástrojů totožný – pomoci uživateli s memorizací textu – analýza odhalila řadu kritických nedostatků, které otevírají prostor pro vytvoření nového, modernějšího řešení.
+	
+	Zásadním zjištěním je, že většina analyzovaných aplikací nevyužívá pokročilé a vědecky podložené metody učení, jako je například intervalové opakování (spaced repetition). Učení se tak stává méně efektivním. Dalším častým problémem je zastaralé a neintuitivní uživatelské prostředí (UI), které novým uživatelům ztěžuje orientaci a snižuje celkový zážitek z používání (UX).
+	
+	Z hlediska práce s biblickým textem je častým nedostatkem absence integrované čtečky. Aplikace se často spoléhají na textové pole, do kterého je nutné manuálně zadat přesnou referenci (např. „Jan 3:16“). Tento přístup je náchylný k chybám, uživatelsky nepřívětivý a v jedné z testovaných aplikací byl tento způsob vyhledávání dokonce zcela nefunkční.
+	
+	Analýza se zaměřila i na motivační a sociální prvky. Pouze jedno z testovaných řešení obsahovalo systém uživatelských žebříčků. Tento systém byl však navržen jako globální a hodnotil uživatele na základě celkového počtu „zapamatovaných“ veršů. Vzhledem k tomu, že stav zapamatování si určuje sám uživatel bez jakéhokoliv objektivního testování, je tento systém snadno zneužitelný a ve výsledku působí spíše demotivačně.
+	
+	V neposlední řadě představuje velkou bariéru pro tuzemské uživatele absence lokalizace. Žádná z testovaných aplikací nenabízela uživatelské prostředí v českém jazyce a pouze jedna umožňovala stažení českého překladu Bible. Možnosti synchronizace dat byly navíc u většiny aplikací omezené pouze na e-mail, případně na sociální síť Facebook.
 
+	\section{Analýza požadavků}
+	Na základě zjištění z analýzy existujících řešení a definování cílové skupiny byly stanoveny konkrétní požadavky na vyvíjenou aplikaci. Tyto požadavky se dělí na funkční, které popisují chování systému, a nefunkční, které definují jeho vlastnosti a kvalitu.
+	
+	\subsection{Funkční požadavky}
+	Systém musí uživatelům poskytovat následující funkcionalitu:
+	
+	\begin{itemize}
+		\item \textbf{Správa uživatelského účtu:} Systém musí umožňovat registraci a přihlášení pomocí účtu Google, odhlášení a kompletní smazání uživatelského účtu i s přidruženými daty.
+		\item \textbf{Práce s biblickým textem:} Aplikace musí zobrazovat text Bible s možností plynulého čtení a změny překladu.
+		\item \textbf{Správa veršů k memorizaci:} Uživatel musí mít možnost uložit si verš k zapamatování, a to přímým výběrem z textu Bible.
+		\item \textbf{Modul učení:} Aplikace musí nabízet procvičování konkrétního vybraného verše i automaticky generovanou sadu doporučených veršů na základě algoritmu intervalového opakování.
+		\item \textbf{Zobrazení statistik:} Systém musí uživateli vizualizovat jeho osobní statistiky a postup v učení.
+		\item \textbf{Sociální modul:} Uživatelé musí mít možnost přidávat a odebírat přátele (pomocí unikátního kódu), prohlížet si jejich statistiky a porovnávat své výsledky v žebříčku.
+		\item \textbf{Personalizace a nastavení:} Aplikace musí umožňovat změnu jazyka rozhraní, přepínání mezi světlým a tmavým motivem (light/dark mode) a úpravu velikosti textu.
+	\end{itemize}
+	
+	\subsection{Nefunkční požadavky}
+	Aby byla zajištěna vysoká kvalita a využitelnost softwaru, musí systém splňovat následující kritéria:
+	
+	\begin{itemize}
+		\item \textbf{Výkon a kompatibilita:} Aplikace musí být optimalizována pro plynulý běh i na starších zařízeních, musí podporovat různá rozlišení a poměry stran displeje. Minimální podporovaná verze operačního systému je Android 10.
+		\item \textbf{Spolehlivost a dostupnost (Offline režim):} Základní funkce aplikace, jako je prohlížení uložených veršů, hraní miniher a opakování, musí být plně dostupné i bez aktivního připojení k internetu. Uživatelská data se musí automaticky synchronizovat se serverem po obnovení připojení.
+		\item \textbf{Bezpečnost:} Veškeré datové přenosy mezi klientem a serverem musí být šifrovány. Systém musí implementovat spolehlivou autentizaci uživatelů a striktní autorizaci pro zajištění bezpečného oddělení dat mezi jednotlivými účty.
+		\item \textbf{Použitelnost a přístupnost:} Uživatelské prostředí musí být intuitivní. Důraz je kladen na motivaci a dlouhodobou angažovanost (gamifikace). Aplikace musí být přístupná širokému spektru uživatelů, včetně osob se zhoršeným zrakem (podpora změny velikosti písma).
+	\end{itemize}
 
 	\section{Technologie}
 	
@@ -173,21 +208,63 @@
 	\subsubsection{Synchronizace}
 	Synchronizační mechanismus zajišťuje konzistenci dat mezi lokální databází na mobilním zařízení a hlavní serverovou databází. Proces synchronizace je iniciován ze strany klienta. Aplikace vyfiltruje záznamy s vlastností \textit{needsSync} a odešle je formou dávky na server. Pro řešení případných datových konfliktů – například pokud uživatel procvičoval verše offline na dvou různých zařízeních – je implementován mechanismus „zdroje pravdy“ (source of truth) založený na časovém razítku poslední úpravy záznamu. Server při slučování dat porovná časová razítka (\textit{timestamp} nebo datum procvičení) a do hlavní databáze zapíše tu variantu záznamu, která nese nejnovější časový údaj.
 	
+	\section{Aplikace}
+	
+	\subsection{Datový model}
+	Pro zajištění perzistence dat a spolehlivého chodu aplikace byla navržena robustní databázová architektura. Architektura využívá kombinaci lokální databáze SQLite na mobilním zařízení a centrální relační databáze PostgreSQL na serveru. Následující datový model reflektuje strukturu hlavní serverové databáze.
+	
+	\subsubsection{Entity datového modelu}
+	Databázové schéma je rozděleno do čtyř klíčových entit, které reprezentují základní domény aplikace:
+	
+	\begin{itemize}
+		\item \textbf{Uživatel (users):} Centrální entita celého systému. Uchovává identifikační údaje uživatele (jméno, příjmení, e-mail) a jeho osobní preference v aplikaci, jako je zvolený jazyk rozhraní. Dále zaznamenává datum registrace a čas posledního přihlášení. E-mailová adresa slouží jako unikátní identifikátor a nesmí se v systému duplikovat.
+		\item \textbf{Uložený verš (saved\_verses):} Entita reprezentující konkrétní biblický text, který si uživatel zvolil k memorizaci. Obsahuje lokační údaje textu (kniha, kapitola, verš) a zvolený překlad. Pro účely intervalového opakování jsou zde uloženy klíčové dynamické atributy: datum posledního procvičení, datum dalšího naplánovaného procvičení a další údaje využívané pro algoritmus intervalového opakování. Každý verš je striktně vázán na právě jednoho uživatele.
+		\item \textbf{Procvičení (exercises):} Transakční entita sloužící k logování historie učení. Vzniká při každém dokončení minihry. Zaznamenává časový údaj (timestamp) provedení, celkovou dobu trvání cvičení v sekundách, typ zvolené minihry a hodnotu reprezentující úspěšnost. Záznam je relačně propojen s konkrétním uživatelem a konkrétním uloženým veršem.
+		\item \textbf{Přátelství (friendships):} Vazební entita realizující sociální funkce aplikace. Definuje vztah mezi dvěma různými uživateli. Obsahuje stav žádosti. Součástí je také časové razítko vytvoření vazby.
+	\end{itemize}
+	
+	\subsubsection{Zajištění integrity a relace}
+	Aby byla zaručena absolutní konzistence dat a ochrana proti anomáliím, využívá databázový model soustavu integritních omezení:
+	
+	\begin{itemize}
+		\item \textbf{Referenční integrita a kaskádové mazání: }Všechny cizí klíče (vazby na uživatele či verše) jsou definovány s pravidlem ON DELETE CASCADE. Pokud je odstraněn uživatelský účet, databáze automaticky a bezpečně odstraní i všechny jeho uložené verše, historii procvičování a vazby přátelství. Tím je zamezeno vzniku tzv. sirotčích záznamů.
+		
+		\item \textbf{Unikátní omezení: }Tabulka přátelství obsahuje unikátní omezení pro dvojici uživatelů, aby nedocházelo k duplicitním žádostem. Rovněž je pomocí omezující podmínky (Check constraint) zakázáno, aby uživatel odeslal žádost o přátelství sám sobě.
+		
+		\item \textbf{Ověření domén (Check constraints): }V databázi jsou definována přísná pravidla pro vkládané hodnoty. Číslo kapitoly, číslo verše a délka procvičení musí být vždy kladná čísla.
+		\item \textbf{Indexace: }Pro zajištění vysokého výkonu při synchronizaci a vyhledávání jsou nad všemi cizími klíči (např. identifikátor uživatele v tabulce historie) vytvořeny databázové indexy.
+	\end{itemize}
+	
+	\subsection{Bezpečnost}
+	Vzhledem k povaze ukládaných uživatelských dat (osobní e-maily, statistiky učení, seznamy přátel) byl kladen vysoký důraz na implementaci adekvátních bezpečnostních opatření, a to jak na straně klientské aplikace, tak na straně serverové infrastruktury.
+	
+	\subsubsection{Autentizace a ochrana identity}
+	Proces ověřování identity uživatelů (autentizace) je řešen výhradně pomocí Google účtu. Tento přístup přenáší odpovědnost za bezpečné ukládání hesel na poskytovatele třetí strany a uživateli nabízí pohodlnější a bezpečnější formu přístupu bez nutnosti vytvářet nové přihlašovací údaje.
+	
+	Pro sociální funkce (přidávání přátel) byl zaveden systém unikátních šestimístných alfanumerických identifikátorů (Friend Code). Díky tomu je při vyhledávání jiných uživatelů zcela skryta jejich skutečná e-mailová adresa.
+	
+	\subsubsection{Šifrování a síťová bezpečnost}
+	Veškerá komunikace mezi mobilním zařízením a serverem podléhá striktnímu šifrování v průchodu (encryption in transit). Toho je docíleno nasazením technologie Cloudflare Tunnel. Serverová komponenta díky tomuto řešení nemusí mít vystavené veřejné porty, čímž se drasticky snižuje riziko přímého útoku na infrastrukturu. Veškerý datový provoz je tak nuceně směrován přes zabezpečený protokol HTTPS, který zajišťuje důvěrnost a zabraňuje zachycení komunikace.
+	
+	\subsubsection{Autorizace a ochrana dat}
+	Serverová architektura postavená na frameworku NestJS využívá propracovaný systém kontrolerů a guardů (ochranných vrstev). Ty zajišťují, že každý požadavek směřující na aplikační programové rozhraní (API) je podroben kontrole přístupových práv. Uživatel může prostřednictvím synchronizačních endpointů číst, upravovat či odstraňovat výhradně ty databázové záznamy, které jsou jednoznačně přiřazeny k jeho vlastnímu identifikačnímu číslu (userId). Jakýkoliv pokus o manipulaci s daty jiných uživatelů je serverem automaticky zamítnut.
 	
 	
-	\section{API a komunikace klient-server}
+	
+	
+	\subsection{API a komunikace klient-server}
 	Architektura programového rozhraní (API) je navržena s ohledem na minimalizaci síťové zátěže a podporu offline běhu mobilní aplikace. Z tohoto důvodu je počet dostupných REST API endpointů záměrně redukován na nezbytné minimum. Přesun dat a udržování stavu mezi klientskou aplikací a serverem je řešen převážně prostřednictvím centralizované synchronizační logiky, namísto tradičního CRUD (Create, Read, Update, Delete) přístupu pro každou datovou entitu zvlášť.
 	
 	Komunikace je rozdělena do tří hlavních kontrolerů v rámci backendového frameworku NestJS:
 	
-	\subsection{Synchronizační endpointy (SyncController)}
+	\subsubsection{Synchronizační endpointy (SyncController)}
 	Základním pilířem datové výměny jsou dva endpointy obsluhující synchronizační proces. Tyto endpointy pracují na principu dávkového zpracování dat.
 	\begin{itemize}
 		\item \textbf{GET /sync/pull}: Slouží k získání dat ze serveru směrem do klientské aplikace. Klient v parametru dotazu odesílá časové razítko poslední úspěšné synchronizace (\textit{lastSync}). Server na základě tohoto údaje vyhledá a vrátí pouze ty záznamy (uložené verše, historii procvičení, stav přátelství a uživatelská data), které byly vytvořeny, upraveny nebo smazány po zadaném čase (s využitím tzv. soft-delete příznaku \textit{deletedAt}).
 		\item \textbf{POST /sync/push}: Zajišťuje nahrání lokálních změn z klientského zařízení na server. Klient odesílá objekt (DTO), který obsahuje pole nových či upravených entit. Server následně přijatá data iteruje a bezpečně ukládá do databáze, přičemž ověřuje identitu odesílatele pomocí přiřazeného \textit{userId}.
 	\end{itemize}
 	
-	\subsection{Uživatelské endpointy (UserController)}
+	\subsubsection{Uživatelské endpointy (UserController)}
 	Tento kontroler spravuje operace vázané na uživatelský profil, které nelze efektivně řešit pouhou synchronizací stavu.
 	\begin{itemize}
 		\item \textbf{GET /user/lookup}: Endpoint pro vyhledávání uživatelů za účelem navázání přátelství. K vyhledání slouží unikátní šestimístný alfanumerický identifikátor (\textit{friendCode}), čímž je chráněno soukromí uživatelů a skryta jejich e-mailová adresa.
@@ -196,9 +273,29 @@
 		\item \textbf{DELETE /user/me}: Zajišťuje kompletní a bezpečné odstranění uživatelského účtu. Operace je prováděna v rámci jedné databázové transakce, což garantuje korektní smazání veškerých navázaných dat (veršů, procvičení i přátelství) bez vzniku nekonzistencí či sirotčích záznamů.
 	\end{itemize}
 	
-	\subsection{Systémové endpointy (AppController)}
+	\subsubsection{Systémové endpointy (AppController)}
 	\begin{itemize}
 		\item \textbf{GET /health}: Standardní endpoint pro monitorování dostupnosti a životního cyklu aplikačního kontejneru.
+	\end{itemize}
+	
+	\subsection{Uživatelské rozhraní}
+	Vzhledem ke zjištěním z úvodní rešerše byl při návrhu klientské části kladen extrémní důraz na použitelnost, přístupnost a dlouhodobou motivaci uživatele. Uživatelské rozhraní (UI) bylo navrženo tak, aby bylo intuitivní a minimalizovalo kognitivní zátěž při každodenním používání.
+	
+	\subsubsection{Přístupnost a personalizace}
+	Aby aplikace vyhovovala co nejširšímu spektru uživatelů, včetně osob se specifickými potřebami, obsahuje systém několik úrovní personalizace:
+	\begin{itemize}
+		\item \textbf{Vizuální motivy:} Systém nativně podporuje přepínání mezi světlým (light mode) a tmavým (dark mode) motivem. Tmavý motiv snižuje únavu očí při používání aplikace ve zhoršených světelných podmínkách.
+		\item \textbf{Velikost typografie:} Aplikace nabízí možnost uživatelsky upravit velikost zobrazovaného textu. Tato funkce je kritická pro zajištění přístupnosti uživatelům se zhoršeným zrakem, čímž je naplněn jeden z hlavních nefunkčních požadavků.
+		\item \textbf{Lokalizace:} Prostředí aplikace je plně lokalizováno. Uživatel si může v nastavení zvolit preferovaný jazyk uživatelského rozhraní, což odstraňuje bariéry pro neanglicky mluvící uživatele.
+	\end{itemize}
+	
+	\subsection{Gamifikace a motivační prvky}
+	Samotný proces memorizace textu je kognitivně náročný. Pro zvýšení retence (udržení uživatele v aplikaci) byly implementovány prvky gamifikace, které proces učení transformují do poutavější formy:
+	
+	\begin{itemize}
+		\item \textbf{Minihry pro učení:} Namísto pouhého pasivního čtení textu je procvičování realizováno formou interaktivních miniher. Uživatel je například vyzván k doplňování chybějících slov nebo k sestavování frází ve správném pořadí. Tento přístup nutí uživatele nad textem aktivně přemýšlet.
+		\item \textbf{Sledování denní řady (Streak):} Aplikace vizualizuje konzistenci uživatele pomocí denní řady. Každý den, kdy uživatel úspěšně splní naplánované opakování, se jeho řada prodlužuje. Tento psychologický prvek silně motivuje k pravidelnému návratu do aplikace.
+		\item \textbf{Sociální interakce a žebříčky:} Prostřednictvím unikátního kódu přátelství (Friend Code) se mohou uživatelé propojovat. Osobní statistiky a postup v učení jsou následně vizualizovány a porovnávány v lokálních žebříčcích mezi přáteli. Na rozdíl od konkurenčních řešení je tento systém spravedlivější, neboť hodnotí reálnou aktivitu (např. čas strávený učením a udrženou denní řadu).
 	\end{itemize}
 	
 
