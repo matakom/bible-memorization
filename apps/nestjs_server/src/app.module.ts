@@ -37,6 +37,7 @@ import { SyncModule } from './sync/sync.module';
         entities: [User, Friendship, SavedVerse, Exercise],
 
         // 'synchronize: true' is for development only.
+        // It alters SQL structure on the go for faster development.
         synchronize: true,
       }),
     }),

@@ -1,7 +1,6 @@
 /* eslint-disable prettier/prettier */
 import {
     Controller,
-    Body,
     UseGuards,
     Get,
     Param,
@@ -14,7 +13,6 @@ import { AuthGuard } from '@nestjs/passport';
 import { UserService } from './user.service';
 import { GetUser } from '../auth/get-user.decorator';
 import { User } from './user.entity';
-import { UserStatsDto } from './dto/user-stats.dto';
 
 @Controller('user')
 export class UserController {
@@ -26,10 +24,7 @@ export class UserController {
             throw new NotFoundException("Friend code is required");
         }
 
-        console.log('code ', friendCode);
-
         const user = await this.userService.findByFriendCode(friendCode);
-        console.log('user ', user.email);
 
         if (!user) {
             throw new NotFoundException('User not found');
@@ -56,7 +51,7 @@ export class UserController {
     }
 
     @Delete('me')
-    @UseGuards(AuthGuard())
+    @UseGuards(AuthGuard('jwt'))
     async deleteAccount(@Req() req) {
         const userId = req.user.id;
         return this.userService.deleteUserFully(userId);

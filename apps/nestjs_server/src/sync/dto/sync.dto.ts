@@ -4,7 +4,7 @@ import { IsDateString, IsOptional, IsArray, IsObject } from 'class-validator';
 export class SyncPullQueryDto {
     @IsOptional()
     @IsDateString()
-    lastSync?: string; // e.g. "2025-11-01T10:00:00Z"
+    lastSync?: string;
 }
 
 export class SyncPushDto {

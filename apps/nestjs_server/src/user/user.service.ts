@@ -80,8 +80,6 @@ export class UserService {
     }
 
     async findByFriendCode(code: string): Promise<User | undefined> {
-        console.log(`test ${code}`)
-        console.log(await this.userRepository.count({where: {firstName: `Matěj`}}))
         return this.userRepository.findOne({
             where: { friendCode: code }
         });
@@ -93,8 +91,6 @@ export class UserService {
             throw new NotFoundException('User not found');
         }
 
-        // 1. Aggregate Query: Total Practices, Time Spent, and Score
-        // Note: ::int casts Postgres bigints back into JavaScript numbers
         const aggResult = await this.exerciseRepository.query(`
             SELECT 
                 COUNT(id)::int AS total_practices,
@@ -107,8 +103,6 @@ export class UserService {
 
         const { total_practices, time_spent, score } = aggResult[0];
 
-        // 2. Memorized Verses (Only counts if the *latest* practice was successful >= 3)
-        // Uses Window Functions (ROW_NUMBER) to grab the most recent attempt per verse
         const memorizedResult = await this.exerciseRepository.query(`
             SELECT COUNT(*)::int as memorized_count FROM (
                 SELECT grade,
@@ -120,7 +114,6 @@ export class UserService {
 
         const memorizedVerses = memorizedResult[0].memorized_count;
 
-        // 3. Daily Streak Calculation
         const datesResult = await this.exerciseRepository.query(`
             SELECT DISTINCT DATE(performed_at) as practice_date
             FROM exercises
@@ -130,7 +123,6 @@ export class UserService {
 
         let currentStreak = 0;
         
-        // Normalize dates to midnight for accurate day-by-day comparison
         const today = new Date();
         today.setHours(0, 0, 0, 0);
         
@@ -147,7 +139,6 @@ export class UserService {
             const todayTime = today.getTime();
             const yesterdayTime = yesterday.getTime();
             
-            // Streak must start either today or yesterday to be active
             let checkTime = -1;
             if (practiceDates.includes(todayTime)) {
                 checkTime = todayTime;
@@ -159,15 +150,14 @@ export class UserService {
                 for (const time of practiceDates) {
                     if (time === checkTime) {
                         currentStreak++;
-                        checkTime -= 86400000; // Subtract exactly 24 hours (1 day)
+                        checkTime -= 86400000;
                     } else if (time < checkTime) {
-                        break; // Gap found, streak broken
+                        break;
                     }
                 }
             }
         }
 
-        // 4. Return the exact JSON structure your Flutter app expects
         return {
             userId: user.id,
             fullName: `${user.firstName} ${user.lastName}`,
@@ -180,19 +170,15 @@ export class UserService {
     }
 
     async deleteUserFully(userId: string) {
-    // We use a transaction to ensure everything is deleted or nothing is
     return await this.userRepository.manager.transaction(async (transactionalEntityManager) => {
-        // 1. Delete relations first
         await transactionalEntityManager.delete(Exercise, { userId });
         await transactionalEntityManager.delete(SavedVerse, { userId });
         
-        // 2. Delete Friendships (where user is either the initiator or the friend)
         await transactionalEntityManager.delete(Friendship, [
             { userId },
             { friendId: userId }
         ]);
 
-        // 3. Finally, delete the user
         const deleteResult = await transactionalEntityManager.delete(User, { id: userId });
 
         if (deleteResult.affected === 0) {

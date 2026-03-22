@@ -28,7 +28,6 @@ export class User {
     @Column({ length: 10, default: 'en' })
     language: string;
 
-    // Fields for sync
     @UpdateDateColumn({ name: 'updated_at' })
     updatedAt: Date;
 
