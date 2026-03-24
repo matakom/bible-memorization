@@ -4,6 +4,7 @@ import 'package:flutter_app/data/models/saved_verse.dart';
 import 'package:flutter_app/data/models/practice_feedback.dart';
 import 'package:flutter_app/providers/practice/practice_session_controller.dart';
 import 'package:flutter_app/providers/reader/bible_provider.dart';
+import 'package:flutter_app/providers/reader/verse_text_provider.dart';
 import 'package:flutter_app/l10n/l10n_extension.dart';
 
 /// Internal model representing a word choice in the game's word bank.
@@ -37,17 +38,11 @@ class _VerseBuilderGameWidgetState extends ConsumerState<VerseBuilderGameWidget>
   int _currentIndex = 0;            
   int _mistakes = 0;
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (!_isInitialized) {
-      _setupGame();
-      _isInitialized = true;
-    }
-  }
+  Future<void> _setupGame(String verseText) async {
+    if (_isInitialized) return;
+    _isInitialized = true;
 
-  Future<void> _setupGame() async {
-    _rawWords = widget.verse.verseText.trim().split(RegExp(r'\s+'));
+    _rawWords = verseText.trim().split(RegExp(r'\s+'));
     if (_rawWords.isEmpty) _rawWords = ["Error"];
 
     _targetWords = [];
@@ -159,106 +154,120 @@ class _VerseBuilderGameWidgetState extends ConsumerState<VerseBuilderGameWidget>
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
+    final verseRef = VerseRef(bookId: widget.verse.book, chapter: widget.verse.chapter, verse: widget.verse.verse);
+    final textAsync = ref.watch(verseTextProvider(verseRef));
 
-    final theme = Theme.of(context);
-    final bookNameAsync = ref.watch(bookNameProvider(widget.verse.book));
+    return textAsync.when(
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (_, __) => const Center(child: Icon(Icons.error, color: Colors.red)),
+      data: (verseText) {
+        if (!_isInitialized) {
+          Future.microtask(() => _setupGame(verseText));
+          return const Center(child: CircularProgressIndicator());
+        }
 
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            bookNameAsync.when(
-              data: (name) => Text(
-                "$name ${widget.verse.chapter}:${widget.verse.verse}",
-                style: theme.textTheme.titleLarge?.copyWith(
-                  color: Colors.grey.shade600,
-                  fontWeight: FontWeight.bold,
+        if (_isLoading) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        final theme = Theme.of(context);
+        final bookNameAsync = ref.watch(bookNameProvider(widget.verse.book));
+
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                bookNameAsync.when(
+                  data: (name) => Text(
+                    "$name ${widget.verse.chapter}:${widget.verse.verse}",
+                    style: theme.textTheme.titleLarge?.copyWith(
+                      color: Colors.grey.shade600,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  loading: () => const SizedBox.shrink(),
+                  error: (_, __) => const SizedBox.shrink(),
                 ),
-                textAlign: TextAlign.center,
-              ),
-              loading: () => const SizedBox.shrink(),
-              error: (_, __) => const SizedBox.shrink(),
-            ),
-            
-            const SizedBox(height: 8),
-            Text(
-              context.l10n.game_builder_prompt,
-              style: TextStyle(color: theme.colorScheme.primary, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 24),
-      
-            Expanded(
-              flex: 3,
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.grey.shade300),
+                
+                const SizedBox(height: 8),
+                Text(
+                  context.l10n.game_builder_prompt,
+                  style: TextStyle(color: theme.colorScheme.primary, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
                 ),
-                child: SingleChildScrollView(
-                  child: Wrap(
-                    spacing: 6.0,
-                    runSpacing: 12.0,
-                    children: List.generate(_rawWords.length, (index) {
-                      if (index < _currentIndex) {
-                        return Text(
-                          _rawWords[index], 
-                          style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w600),
-                        );
-                      } else if (index == _currentIndex) {
-                        return Container(
-                          width: 50,
-                          decoration: BoxDecoration(
-                            border: Border(bottom: BorderSide(color: theme.colorScheme.primary, width: 3)),
-                          ),
-                          child: const Text(" ", style: TextStyle(fontSize: 24)),
-                        );
-                      } else {
-                        return Text(
-                          "_", 
-                          style: theme.textTheme.headlineSmall?.copyWith(color: Colors.grey.shade400),
-                        );
-                      }
-                    }),
+                const SizedBox(height: 24),
+          
+                Expanded(
+                  flex: 3,
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: Colors.grey.shade300),
+                    ),
+                    child: SingleChildScrollView(
+                      child: Wrap(
+                        spacing: 6.0,
+                        runSpacing: 12.0,
+                        children: List.generate(_rawWords.length, (index) {
+                          if (index < _currentIndex) {
+                            return Text(
+                              _rawWords[index], 
+                              style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w600),
+                            );
+                          } else if (index == _currentIndex) {
+                            return Container(
+                              width: 50,
+                              decoration: BoxDecoration(
+                                border: Border(bottom: BorderSide(color: theme.colorScheme.primary, width: 3)),
+                              ),
+                              child: const Text(" ", style: TextStyle(fontSize: 24)),
+                            );
+                          } else {
+                            return Text(
+                              "_", 
+                              style: theme.textTheme.headlineSmall?.copyWith(color: Colors.grey.shade400),
+                            );
+                          }
+                        }),
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
-            
-            const SizedBox(height: 24),
-      
-            Expanded(
-              flex: 2,
-              child: SingleChildScrollView(
-                child: Wrap(
-                  spacing: 12.0,
-                  runSpacing: 12.0,
-                  alignment: WrapAlignment.center,
-                  children: _wordBank.map((option) {
-                    return ActionChip(
-                      label: Text(
-                        option.text, 
-                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)
-                      ),
-                      backgroundColor: theme.colorScheme.surface,
-                      elevation: 2,
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                      onPressed: () => _onWordSelected(option),
-                    );
-                  }).toList(),
+                
+                const SizedBox(height: 24),
+          
+                Expanded(
+                  flex: 2,
+                  child: SingleChildScrollView(
+                    child: Wrap(
+                      spacing: 12.0,
+                      runSpacing: 12.0,
+                      alignment: WrapAlignment.center,
+                      children: _wordBank.map((option) {
+                        return ActionChip(
+                          label: Text(
+                            option.text, 
+                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)
+                          ),
+                          backgroundColor: theme.colorScheme.surface,
+                          elevation: 2,
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                          onPressed: () => _onWordSelected(option),
+                        );
+                      }).toList(),
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

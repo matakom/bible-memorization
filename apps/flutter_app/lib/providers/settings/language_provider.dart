@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/providers/user_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_app/data/local/app_database.dart' as db;
@@ -11,18 +12,26 @@ class LanguageNotifier extends AsyncNotifier<Locale> {
 
   @override
   Future<Locale> build() async {
+    final userAsync = ref.watch(userDataProvider);
+    
+    return userAsync.when(
+      data: (user) async {
+        if (user != null) {
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.setString(_kLangKey, user.language);
+          return Locale(user.language);
+        }
+        return _getInitialLocale();
+      },
+      error: (_, __) => _getInitialLocale(),
+      loading: () => _getInitialLocale(),
+    );
+  }
+
+  Future<Locale> _getInitialLocale() async {
     final prefs = await SharedPreferences.getInstance();
     final savedCode = prefs.getString(_kLangKey);
-    if (savedCode != null) return Locale(savedCode);
-
-    final database = ref.read(db.databaseProvider);
-    final localUser = await (database.select(database.users)..limit(1)).getSingleOrNull();
-    
-    if (localUser != null) {
-      await prefs.setString(_kLangKey, localUser.language);
-      return Locale(localUser.language);
-    }
-    return const Locale('cs');
+    return Locale(savedCode ?? 'cs');
   }
 
   Future<void> setLanguage(Locale newLanguage) async {
@@ -35,11 +44,19 @@ class LanguageNotifier extends AsyncNotifier<Locale> {
       final localUser = await (database.select(database.users)..limit(1)).getSingleOrNull();
 
       if (localUser != null) {
-        await (database.update(database.users)..where((t) => t.id.equals(localUser.id)))
-          .write(db.UsersCompanion(language: Value(newLanguage.languageCode)));
-        ref.read(syncServiceProvider.future).then((s) => s.runSync());
+        await (database.update(database.users)..where((t) => t.id.equals(localUser.id))).write(
+          db.UsersCompanion(
+            language: Value(newLanguage.languageCode),
+            needsSync: const Value(true),
+            updatedAt: Value(DateTime.now()),
+          ),
+        );
+        final sync = await ref.read(syncServiceProvider.future);
+        sync.runSync();
       }
-    } catch (_) {}
+    } catch (e) {
+      ref.invalidateSelf();
+    }
   }
 }
 

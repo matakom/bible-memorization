@@ -1111,6 +1111,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Something went wrong'**
   String get something_went_wrong;
+
+  /// No description provided for @notification_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Time to exercise!'**
+  String get notification_title;
+
+  /// No description provided for @notification_body.
+  ///
+  /// In en, this message translates to:
+  /// **'Now is the ideal time to refresh your memory!'**
+  String get notification_body;
 }
 
 class _AppLocalizationsDelegate

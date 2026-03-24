@@ -337,5 +337,8 @@
   "social_serverUnreachableDescription": "Our servers are taking a brief rest. Please try again later.",
   "social_unavailableServerOfflineDescription": "We couldn't reach the server to load your social profile. Please try again later.",
 
-  "something_went_wrong": "Something went wrong"
+  "something_went_wrong": "Something went wrong",
+
+  "notification_title": "Time to exercise!",
+  "notification_body": "Now is the ideal time to refresh your memory!"
 }

@@ -3,6 +3,7 @@ import {
     Controller,
     UseGuards,
     Get,
+    Post,
     Param,
     NotFoundException,
     Query,
@@ -18,16 +19,22 @@ import { User } from './user.entity';
 export class UserController {
     constructor(private readonly userService: UserService) { }
 
+    @Post('login')
+    @UseGuards(AuthGuard('jwt-login'))
+    loginUser(@GetUser() user: User) {
+        return user;
+    }
+
     @Get('lookup')
     async lookupFriend(@Query('friendCode') friendCode: string) {
         if (!friendCode) {
-            throw new NotFoundException("Friend code is required");
+            throw new NotFoundException();
         }
 
         const user = await this.userService.findByFriendCode(friendCode);
 
         if (!user) {
-            throw new NotFoundException('User not found');
+            throw new NotFoundException();
         }
 
         return {

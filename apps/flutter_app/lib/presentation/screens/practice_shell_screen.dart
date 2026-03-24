@@ -53,25 +53,25 @@ class PracticeShellScreen extends ConsumerWidget {
     Widget gameWidget;
     switch (currentTurn.gameType) {
       case GameType.wordChoice:
-        gameWidget = WordChoiceGameWidget(key: ValueKey(currentVerse.id), verse: currentVerse);
+        gameWidget = WordChoiceGameWidget(key: ValueKey(currentTurn.hashCode), verse: currentVerse);
         break;
       case GameType.firstLetterTyping:
-        gameWidget = FirstLetterTypingGameWidget(key: ValueKey(currentVerse.id), verse: currentVerse);
+        gameWidget = FirstLetterTypingGameWidget(key: ValueKey(currentTurn.hashCode), verse: currentVerse);
         break;
       case GameType.referenceMatch:
-        gameWidget = ReferenceMatchGameWidget(key: ValueKey(currentVerse.id), verse: currentVerse);
+        gameWidget = ReferenceMatchGameWidget(key: ValueKey(currentTurn.hashCode), verse: currentVerse);
         break;
       case GameType.verseBuilder:
-        gameWidget = VerseBuilderGameWidget(key: ValueKey(currentVerse.id), verse: currentVerse);
+        gameWidget = VerseBuilderGameWidget(key: ValueKey(currentTurn.hashCode), verse: currentVerse);
         break;
       case GameType.flashcard:
-        gameWidget = FlashcardGameWidget(key: ValueKey(currentVerse.id), verse: currentVerse);
+        gameWidget = FlashcardGameWidget(key: ValueKey(currentTurn.hashCode), verse: currentVerse);
         break;
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.l10n.practiceShell_remaining(sessionState.queue.length)),
+        title: Text(sessionState.isInfiniteMode ? '' : context.l10n.practiceShell_remaining(sessionState.queue.length)),
         leading: IconButton(icon: const Icon(Icons.close), onPressed: () => context.pop()),
       ),
       body: gameWidget,

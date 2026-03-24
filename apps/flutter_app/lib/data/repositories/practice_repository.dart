@@ -18,6 +18,7 @@ class PracticeRepository {
 
   Future<void> savePracticeResult(PracticeFeedback feedback) async {
     final now = DateTime.now();
+    final startOfDay = DateTime(now.year, now.month, now.day);
     final exerciseId = const Uuid().v4();
 
     await _db.transaction(() async {
@@ -34,30 +35,54 @@ class PracticeRepository {
         ),
       );
 
-      final verseRow = await (_db.select(_db.savedVerses)
-            ..where((t) => t.id.equals(feedback.verseId)))
-          .getSingleOrNull();
+      final todaysExercises = await (_db.select(_db.exercises)
+            ..where((e) => 
+                e.verseId.equals(feedback.verseId) & 
+                e.performedAt.isBiggerOrEqualValue(startOfDay) &
+                e.id.isNotValue(exerciseId)
+            )).get();
 
-      if (verseRow != null) {
-        final srsResult = SRSAlgorithm.processReview(
-          currentGrade: feedback.grade,
-          currentEaseFactor: verseRow.easeFactor,
-          currentRepetitionCount: verseRow.repetitionCount,
-          lastReviewDate: verseRow.lastReviewDate ?? now,
-          currentNextReviewDate: verseRow.nextReviewDate,
-        );
+      final bool alreadySucceededToday = todaysExercises.any((e) => e.grade >= 3);
+      final bool alreadyFailedToday = todaysExercises.any((e) => e.grade < 3);
 
-        await (_db.update(_db.savedVerses)..where((t) => t.id.equals(feedback.verseId)))
-            .write(
-          db.SavedVersesCompanion(
-            easeFactor: Value(srsResult.easeFactor),
-            repetitionCount: Value(srsResult.repetitionCount),
-            nextReviewDate: Value(srsResult.nextReviewDate),
-            lastReviewDate: Value(now),
-            updatedAt: Value(now),
-            needsSync: const Value(true),
-          ),
-        );
+      bool shouldUpdateSRS = false;
+
+      if (feedback.grade >= 3) {
+        if (!alreadySucceededToday) {
+          shouldUpdateSRS = true;
+        }
+      } else {
+        if (!alreadyFailedToday && !alreadySucceededToday) {
+          shouldUpdateSRS = true;
+        }
+      }
+
+      if (shouldUpdateSRS) {
+        final verseRow = await (_db.select(_db.savedVerses)
+              ..where((t) => t.id.equals(feedback.verseId)))
+            .getSingleOrNull();
+
+        if (verseRow != null) {
+          final srsResult = SRSAlgorithm.processReview(
+            currentGrade: feedback.grade,
+            currentEaseFactor: verseRow.easeFactor,
+            currentRepetitionCount: verseRow.repetitionCount,
+            lastReviewDate: verseRow.lastReviewDate ?? now,
+            currentNextReviewDate: verseRow.nextReviewDate,
+          );
+
+          await (_db.update(_db.savedVerses)..where((t) => t.id.equals(feedback.verseId)))
+              .write(
+            db.SavedVersesCompanion(
+              easeFactor: Value(srsResult.easeFactor),
+              repetitionCount: Value(srsResult.repetitionCount),
+              nextReviewDate: Value(srsResult.nextReviewDate),
+              lastReviewDate: Value(now),
+              updatedAt: Value(now),
+              needsSync: const Value(true),
+            ),
+          );
+        }
       }
     });
 

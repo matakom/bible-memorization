@@ -1,4 +1,7 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_app/l10n/app_localizations.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
@@ -12,19 +15,32 @@ class NotificationService {
 
     const AndroidInitializationSettings androidSettings =
         AndroidInitializationSettings('@mipmap/ic_launcher');
-    
+
     const InitializationSettings initSettings = InitializationSettings(
       android: androidSettings,
     );
 
-    await _notificationsPlugin.initialize(
-      settings: initSettings,
-    );
+    await _notificationsPlugin.initialize(settings: initSettings);
+  }
+
+  static Future<AppLocalizations> _getL10n() async {
+    final prefs = await SharedPreferences.getInstance();
+    final savedCode = prefs.getString('language_code');
+
+    Locale locale;
+    if (savedCode != null) {
+      locale = Locale(savedCode);
+    } else {
+      locale = WidgetsBinding.instance.platformDispatcher.locale;
+    }
+
+    return await AppLocalizations.delegate.load(locale);
   }
 
   /// Schedules a recurring daily review reminder for 7 PM local time.
   static Future<void> scheduleDailyReminder(bool hasPracticedToday) async {
     await _notificationsPlugin.cancelAll();
+    final l10n = await _getL10n();
 
     final now = DateTime.now();
     DateTime scheduleDate = DateTime(now.year, now.month, now.day, 19, 0);
@@ -33,12 +49,15 @@ class NotificationService {
       scheduleDate = scheduleDate.add(const Duration(days: 1));
     }
 
-    final tz.TZDateTime scheduledTZDate = tz.TZDateTime.from(scheduleDate, tz.local);
+    final tz.TZDateTime scheduledTZDate = tz.TZDateTime.from(
+      scheduleDate,
+      tz.local,
+    );
 
     await _notificationsPlugin.zonedSchedule(
-      id: 0, 
-      title: 'Time to practice!', 
-      body: 'Keep your streak alive! Review your Bible verses for today.', 
+      id: 0,
+      title: l10n.notification_title,
+      body: l10n.notification_body,
       scheduledDate: scheduledTZDate,
       notificationDetails: const NotificationDetails(
         android: AndroidNotificationDetails(
@@ -55,19 +74,24 @@ class NotificationService {
 
   static Future<void> requestPermissions() async {
     final AndroidFlutterLocalNotificationsPlugin? androidImplementation =
-        _notificationsPlugin.resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>();
+        _notificationsPlugin
+            .resolvePlatformSpecificImplementation<
+              AndroidFlutterLocalNotificationsPlugin
+            >();
 
     await androidImplementation?.requestNotificationsPermission();
   }
 
   static Future<void> scheduleTestNotification() async {
-    final tz.TZDateTime scheduledDate = tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5));
+    final tz.TZDateTime scheduledDate = tz.TZDateTime.now(
+      tz.local,
+    ).add(const Duration(seconds: 5));
+    final l10n = await _getL10n();
 
     await _notificationsPlugin.zonedSchedule(
       id: 999,
-      title: 'Test Notification',
-      body: 'This notification was scheduled 5 seconds ago!',
+      title: l10n.notification_title,
+      body: l10n.notification_body,
       scheduledDate: scheduledDate,
       notificationDetails: const NotificationDetails(
         android: AndroidNotificationDetails(

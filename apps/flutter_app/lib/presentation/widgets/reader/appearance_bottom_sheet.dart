@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_app/providers/reader/reader_settings_controller.dart';
 import 'package:flutter_app/l10n/l10n_extension.dart';
-
 import '../../../utils/debugger.dart';
 
 /// Modal bottom sheet allowing users to customize text appearance in the Bible reader.

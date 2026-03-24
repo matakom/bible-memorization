@@ -340,5 +340,8 @@
   "social_serverUnreachableDescription": "Naše servery si dávají krátkou pauzu. Zkuste to prosím později.",
   "social_unavailableServerOfflineDescription": "Nepodařilo se nám připojit k serveru pro načtení vašeho sociálního profilu. Zkuste to prosím později.",
 
-  "something_went_wrong": "Něco se nepovedlo"
+  "something_went_wrong": "Něco se nepovedlo",
+
+  "notification_title": "Čas cvičit!",
+  "notification_body": "Teď je ideální čas zopakovat si co už umíš!"
 }

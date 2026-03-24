@@ -585,4 +585,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get something_went_wrong => 'Something went wrong';
+
+  @override
+  String get notification_title => 'Time to exercise!';
+
+  @override
+  String get notification_body =>
+      'Now is the ideal time to refresh your memory!';
 }

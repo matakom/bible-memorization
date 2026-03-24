@@ -5,7 +5,6 @@ import 'package:flutter_app/providers/friendships/friendships_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_app/l10n/l10n_extension.dart';
-
 import '../../utils/debugger.dart';
 
 /// Screen displaying the progress and statistics of a specific friend.

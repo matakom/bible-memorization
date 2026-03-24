@@ -4,6 +4,7 @@ import 'package:flutter_app/data/models/saved_verse.dart';
 import 'package:flutter_app/data/models/practice_feedback.dart';
 import 'package:flutter_app/providers/practice/practice_session_controller.dart';
 import 'package:flutter_app/providers/reader/saved_verses_controller.dart';
+import 'package:flutter_app/providers/reader/verse_text_provider.dart';
 import 'package:flutter_app/l10n/l10n_extension.dart';
 
 /// A practice mode where users must select the missing words from a verse provided as multiple-choice options.
@@ -27,18 +28,10 @@ class _WordChoiceGameWidgetState extends ConsumerState<WordChoiceGameWidget> {
   int _currentStep = 0;
   late List<String> _currentOptions;
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (!_isInitialized) {
-      _setupGame();
-      _stopwatch.start();
-      _isInitialized = true;
-    }
-  }
+  void _setupGame(String verseText) {
+    if (_isInitialized) return;
 
-  void _setupGame() {
-    _words = widget.verse.verseText.trim().split(RegExp(r'\s+'));
+    _words = verseText.trim().split(RegExp(r'\s+'));
     if (_words.isEmpty) {
       _words = [
         context.l10n.game_wordChoice_errorFallback1, 
@@ -60,6 +53,11 @@ class _WordChoiceGameWidgetState extends ConsumerState<WordChoiceGameWidget> {
 
     _buildGlobalDictionary();
     _generateOptionsForCurrentStep();
+
+    setState(() {
+      _isInitialized = true;
+      _stopwatch.start();
+    });
   }
 
   void _buildGlobalDictionary() {
@@ -161,82 +159,95 @@ class _WordChoiceGameWidgetState extends ConsumerState<WordChoiceGameWidget> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final verseRef = VerseRef(bookId: widget.verse.book, chapter: widget.verse.chapter, verse: widget.verse.verse);
+    final textAsync = ref.watch(verseTextProvider(verseRef));
 
-    return Padding(
-      padding: const EdgeInsets.all(24.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(
-            context.l10n.game_wordChoice_prompt(_currentStep + 1, _blankIndices.length),
-            style: const TextStyle(color: Colors.grey, fontSize: 16),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 32),
-          
-          Expanded(
-            flex: 2,
-            child: SingleChildScrollView(
-              child: Wrap(
-                spacing: 8.0, 
-                runSpacing: 12.0,
-                alignment: WrapAlignment.center,
-                children: _words.asMap().entries.map((entry) {
-                  final index = entry.key;
-                  final word = entry.value;
+    return textAsync.when(
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (_, __) => const Center(child: Icon(Icons.error, color: Colors.red)),
+      data: (verseText) {
+        if (!_isInitialized) {
+          Future.microtask(() => _setupGame(verseText));
+          return const Center(child: CircularProgressIndicator());
+        }
 
-                  if (_blankIndices.contains(index)) {
-                    final blankOrder = _blankIndices.indexOf(index);
-                    
-                    if (blankOrder < _currentStep) {
-                      return Text(word, style: theme.textTheme.titleLarge?.copyWith(color: Colors.green, fontWeight: FontWeight.bold));
-                    } else if (blankOrder == _currentStep) {
-                      return Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: theme.colorScheme.primaryContainer,
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: theme.colorScheme.primary, width: 2),
-                        ),
-                        child: const Text("?", style: TextStyle(fontWeight: FontWeight.bold)),
-                      );
-                    } else {
-                      return Text("_____", style: theme.textTheme.titleLarge?.copyWith(color: Colors.grey.shade400));
-                    }
-                  }
-
-                  return Text(word, style: theme.textTheme.titleLarge);
-                }).toList(),
+        return Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                context.l10n.game_wordChoice_prompt(_currentStep + 1, _blankIndices.length),
+                style: const TextStyle(color: Colors.grey, fontSize: 16),
+                textAlign: TextAlign.center,
               ),
-            ),
-          ),
-          
-          Expanded(
-            flex: 1,
-            child: GridView.count(
-              crossAxisCount: 2,
-              mainAxisSpacing: 16,
-              crossAxisSpacing: 16,
-              childAspectRatio: 2.5,
-              physics: const NeverScrollableScrollPhysics(),
-              children: _currentOptions.map((option) {
-                return ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    elevation: 4,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              const SizedBox(height: 32),
+              
+              Expanded(
+                flex: 2,
+                child: SingleChildScrollView(
+                  child: Wrap(
+                    spacing: 8.0, 
+                    runSpacing: 12.0,
+                    alignment: WrapAlignment.center,
+                    children: _words.asMap().entries.map((entry) {
+                      final index = entry.key;
+                      final word = entry.value;
+
+                      if (_blankIndices.contains(index)) {
+                        final blankOrder = _blankIndices.indexOf(index);
+                        
+                        if (blankOrder < _currentStep) {
+                          return Text(word, style: theme.textTheme.titleLarge?.copyWith(color: Colors.green, fontWeight: FontWeight.bold));
+                        } else if (blankOrder == _currentStep) {
+                          return Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: theme.colorScheme.primaryContainer,
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(color: theme.colorScheme.primary, width: 2),
+                            ),
+                            child: const Text("?", style: TextStyle(fontWeight: FontWeight.bold)),
+                          );
+                        } else {
+                          return Text("_____", style: theme.textTheme.titleLarge?.copyWith(color: Colors.grey.shade400));
+                        }
+                      }
+
+                      return Text(word, style: theme.textTheme.titleLarge);
+                    }).toList(),
                   ),
-                  onPressed: () => _submitAnswer(option),
-                  child: Text(
-                    option, 
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.center,
-                  ),
-                );
-              }).toList(),
-            ),
+                ),
+              ),
+              
+              Expanded(
+                flex: 1,
+                child: GridView.count(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 16,
+                  crossAxisSpacing: 16,
+                  childAspectRatio: 2.5,
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: _currentOptions.map((option) {
+                    return ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        elevation: 4,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      ),
+                      onPressed: () => _submitAnswer(option),
+                      child: Text(
+                        option, 
+                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.center,
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

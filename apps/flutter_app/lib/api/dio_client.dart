@@ -30,6 +30,10 @@ Dio createDioClient(SecurityContext securityContext, Ref ref) {
   dio.interceptors.add(
     QueuedInterceptorsWrapper(
       onRequest: (options, handler) async {
+        if (options.path == '/health' || options.extra['skipAuth'] == true) {
+          return handler.next(options);
+        }
+
         final authRepo = ref.read(authRepositoryProvider);
         final String? token = await authRepo.getAuthToken();
 
@@ -40,7 +44,7 @@ Dio createDioClient(SecurityContext securityContext, Ref ref) {
           return handler.reject(
             DioException(
               requestOptions: options,
-              error: "Auth token not available yet",
+              error: "Auth token not available",
               type: DioExceptionType.cancel,
             ),
           );

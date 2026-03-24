@@ -12,6 +12,7 @@ export class SyncController {
     constructor(private syncService: SyncService) { }
 
     @Get('pull')
+    @UseGuards(AuthGuard('jwt'))
     async pull(
         @GetUser() user: User,
         @Query() query: SyncPullQueryDto,
@@ -20,6 +21,7 @@ export class SyncController {
     }
 
     @Post('push')
+    @UseGuards(AuthGuard('jwt'))
     async push(
         @GetUser() user: User,
         @Body() body: SyncPushDto,

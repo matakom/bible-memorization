@@ -17,22 +17,26 @@ class PracticeSessionState {
   final List<PracticeTurn> queue;
   final int completedCount;
   final bool isFinished;
+  final bool isInfiniteMode;
 
   PracticeSessionState({
     required this.queue,
     this.completedCount = 0,
     this.isFinished = false,
+    this.isInfiniteMode = false,
   });
 
   PracticeSessionState copyWith({
     List<PracticeTurn>? queue,
     int? completedCount,
     bool? isFinished,
+    bool? isInfiniteMode,
   }) {
     return PracticeSessionState(
       queue: queue ?? this.queue,
       completedCount: completedCount ?? this.completedCount,
       isFinished: isFinished ?? this.isFinished,
+      isInfiniteMode: isInfiniteMode ?? this.isInfiniteMode,
     );
   }
 }
@@ -40,21 +44,32 @@ class PracticeSessionState {
 /// Orchestrates the practice session flow, handles game randomization, and processes results.
 class PracticeSessionController extends Notifier<PracticeSessionState> {
   final _random = Random();
+  GameType? _lastGame;
 
   @override
   PracticeSessionState build() {
     return PracticeSessionState(queue: []);
   }
 
-  GameType _getRandomGame() {
+  GameType _getRandomGame({bool isInfiniteSession = false}) {
     final availableGames = [
       GameType.flashcard, 
       GameType.wordChoice, 
-      GameType.referenceMatch,
       GameType.firstLetterTyping,
       GameType.verseBuilder
     ];
-    return availableGames[_random.nextInt(availableGames.length)];
+    if(!isInfiniteSession){
+      availableGames.add(GameType.referenceMatch);
+    }
+
+    if (_lastGame != null && availableGames.length > 1) {
+      availableGames.remove(_lastGame);
+    }
+
+    final selectedGame = availableGames[_random.nextInt(availableGames.length)];
+    _lastGame = selectedGame;
+
+    return selectedGame;
   }
 
   void startSession(List<SavedVerse> verses, {GameType? forcedGameType}) {
@@ -65,7 +80,14 @@ class PracticeSessionController extends Notifier<PracticeSessionState> {
       );
     }).toList()..shuffle();
 
-    state = PracticeSessionState(queue: initialQueue);
+    state = PracticeSessionState(queue: initialQueue, isInfiniteMode: false);
+  }
+
+  void startInfiniteSession(SavedVerse verse) {
+    state = PracticeSessionState(
+      queue: [PracticeTurn(verse: verse, gameType: _getRandomGame(isInfiniteSession: true))],
+      isInfiniteMode: true,
+    );
   }
 
   Future<void> submitFeedback(PracticeFeedback feedback) async {
@@ -75,6 +97,15 @@ class PracticeSessionController extends Notifier<PracticeSessionState> {
 
     final newQueue = List<PracticeTurn>.from(state.queue);
     newQueue.removeAt(0);
+
+    if (state.isInfiniteMode) {
+      newQueue.add(PracticeTurn(verse: currentTurn.verse, gameType: _getRandomGame(isInfiniteSession: true)));
+      state = state.copyWith(
+        queue: newQueue,
+        completedCount: state.completedCount + 1,
+      );
+      return;
+    }
 
     int newCompletedCount = state.completedCount;
 

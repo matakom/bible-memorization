@@ -4,27 +4,26 @@ import 'package:flutter_app/data/repositories/user_repository.dart';
 import 'package:flutter_app/providers/auth_provider.dart';
 
 /// Provides the current application user profile, with an offline fallback for authenticated Firebase users.
-class UserDataNotifier extends AsyncNotifier<AppUser?> {
-  @override
-  Future<AppUser?> build() async {
-    final authUser = ref.watch(authStreamProvider).value;
-    if (authUser == null) return null; 
+final userDataProvider = StreamProvider<AppUser?>((ref) {
+  final authAsync = ref.watch(authStreamProvider);
 
-    final repo = await ref.watch(userRepositoryProvider.future);
-    final localUser = await repo.getLocalUser();
-    if (localUser != null) return localUser;
+  return authAsync.maybeWhen(
+    data: (authUser) {
+      if (authUser == null) {
+        return Stream.value(null);
+      }
 
-    final nameParts = (authUser.displayName ?? 'Offline User').split(' ');
-    return AppUser(
-      id: authUser.uid,
-      email: authUser.email ?? '',
-      firstName: nameParts.isNotEmpty ? nameParts.first : 'Offline',
-      lastName: nameParts.length > 1 ? nameParts.sublist(1).join(' ') : '',
-      language: 'cs',
-      friendCode: '',
-      registeredAt: DateTime.now(),
-    );
-  }
-}
+      final repoAsync = ref.watch(userRepositoryProvider);
 
-final userDataProvider = AsyncNotifierProvider<UserDataNotifier, AppUser?>(UserDataNotifier.new);
+      return repoAsync.maybeWhen(
+        data: (repo) {
+          return repo.watchLocalUser();
+        },
+        orElse: () {
+          return const Stream.empty();
+        },
+      );
+    },
+    orElse: () => const Stream.empty(),
+  );
+});

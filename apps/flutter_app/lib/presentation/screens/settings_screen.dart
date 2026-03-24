@@ -101,7 +101,7 @@ class SettingsScreen extends ConsumerWidget {
                       content: Text(
                         isFullSuccess
                             ? context.l10n.settings_syncSuccess
-                            : context.l10n.settings_syncPartialSuccess,
+                            : context.l10n.settings_syncFailed,
                       ),
                       backgroundColor: isFullSuccess ? null : Colors.orange,
                     ),
@@ -196,6 +196,10 @@ class _AccountSection extends ConsumerWidget {
           );
         }
 
+        final String firstLetter = (currentUser.firstName.trim().isEmpty) 
+        ? '?' 
+        : currentUser.firstName[0].toUpperCase();
+
         return Card(
           elevation: 0,
           color: theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
@@ -210,9 +214,7 @@ class _AccountSection extends ConsumerWidget {
                   radius: 30,
                   backgroundColor: theme.colorScheme.primary,
                   child: Text(
-                    currentUser.firstName.isNotEmpty
-                        ? currentUser.firstName[0].toUpperCase()
-                        : '?',
+                    firstLetter,
                     style: const TextStyle(
                       fontSize: 24,
                       color: Colors.white,

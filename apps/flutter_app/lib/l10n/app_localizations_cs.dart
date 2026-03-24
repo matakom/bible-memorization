@@ -585,4 +585,10 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get something_went_wrong => 'Něco se nepovedlo';
+
+  @override
+  String get notification_title => 'Čas cvičit!';
+
+  @override
+  String get notification_body => 'Teď je ideální čas zopakovat si co už umíš!';
 }

@@ -20,29 +20,37 @@ class UserRepository {
 
   Future<AppUser> getUserData({String? manualToken}) async {
     try {
-      final options = manualToken != null ? Options(headers: {'Authorization': 'Bearer $manualToken'}) : null;
-      final response = await _dio.get('/user', options: options);
+      final options = manualToken != null
+          ? Options(headers: {'Authorization': 'Bearer $manualToken'})
+          : null;
+      final response = await _dio.post('/user/login', options: options);
       final user = AppUser.fromJson(response.data as Map<String, dynamic>);
-      
+
       await _prefs.setString(_kCachedUserKey, json.encode(response.data));
-      await _db.into(_db.users).insert(
-        db.UsersCompanion.insert(
-          id: user.id,
-          email: user.email,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          language: Value(user.language), 
-          friendCode: Value(user.friendCode),
-          needsSync: const Value(false),
-          updatedAt: Value(DateTime.now()), 
-        ),
-        mode: InsertMode.insertOrReplace,
-      );
+      await _db
+          .into(_db.users)
+          .insert(
+            db.UsersCompanion.insert(
+              id: user.id,
+              email: user.email,
+              firstName: user.firstName,
+              lastName: user.lastName,
+              language: Value(user.language),
+              friendCode: Value(user.friendCode),
+              needsSync: const Value(false),
+              updatedAt: Value(DateTime.now()),
+            ),
+            mode: InsertMode.insertOrReplace,
+          );
 
       return user;
     } on DioException catch (e) {
-      final isOffline = e.type == DioExceptionType.connectionTimeout || e.type == DioExceptionType.receiveTimeout || e.error is SocketException;
-      final isServerDown = e.response?.statusCode != null && e.response!.statusCode! >= 500;
+      final isOffline =
+          e.type == DioExceptionType.connectionTimeout ||
+          e.type == DioExceptionType.receiveTimeout ||
+          e.error is SocketException;
+      final isServerDown =
+          e.response?.statusCode != null && e.response!.statusCode! >= 500;
 
       final localUser = await getLocalUser();
       if (localUser != null) return localUser;
@@ -51,6 +59,12 @@ class UserRepository {
       if (isOffline) throw OfflineException();
       throw Exception("Connection required for initial login.");
     }
+  }
+
+  Stream<AppUser?> watchLocalUser() {
+    return (_db.select(_db.users)..limit(1)).watchSingleOrNull().map(
+      (row) => row != null ? AppUser.fromDb(row) : null,
+    );
   }
 
   Future<AppUser?> getLocalUser() async {
@@ -62,15 +76,17 @@ class UserRepository {
         firstName: dbUser.firstName,
         lastName: dbUser.lastName,
         language: dbUser.language,
-        friendCode: dbUser.friendCode ?? '', 
-        registeredAt: dbUser.updatedAt
+        friendCode: dbUser.friendCode ?? '',
+        registeredAt: dbUser.updatedAt,
       );
     }
 
     final cachedString = _prefs.getString(_kCachedUserKey);
     if (cachedString != null) {
       try {
-        return AppUser.fromJson(json.decode(cachedString) as Map<String, dynamic>);
+        return AppUser.fromJson(
+          json.decode(cachedString) as Map<String, dynamic>,
+        );
       } catch (_) {}
     }
     return null;
@@ -79,7 +95,7 @@ class UserRepository {
   Future<void> deleteAccountLocally() async {
     try {
       await _dio.delete('/user/me');
-      
+
       await _db.transaction(() async {
         await _db.delete(_db.exercises).go();
         await _db.delete(_db.savedVerses).go();
@@ -89,8 +105,11 @@ class UserRepository {
 
       await _prefs.clear();
     } on DioException catch (e) {
-      if (e.type == DioExceptionType.connectionTimeout || e.type == DioExceptionType.receiveTimeout) {
-        throw Exception("Server unreachable. Please check your internet to delete your account.");
+      if (e.type == DioExceptionType.connectionTimeout ||
+          e.type == DioExceptionType.receiveTimeout) {
+        throw Exception(
+          "Server unreachable. Please check your internet to delete your account.",
+        );
       }
       rethrow;
     } catch (e) {
@@ -102,6 +121,6 @@ class UserRepository {
 final userRepositoryProvider = FutureProvider<UserRepository>((ref) async {
   final dio = await ref.watch(dioProvider.future);
   final prefs = await SharedPreferences.getInstance();
-  final database = ref.watch(db.databaseProvider); 
+  final database = ref.watch(db.databaseProvider);
   return UserRepository(dio, prefs, database);
 });

@@ -2,7 +2,7 @@
 import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 import { UserModule } from '../user/user.module';
-import { JwtStrategy } from './jwt.strategy';
+import { JwtLoginStrategy, JwtStrategy } from './jwt.strategy';
 
 @Module({
     imports: [
@@ -13,6 +13,7 @@ import { JwtStrategy } from './jwt.strategy';
     ],
     providers: [
         JwtStrategy,
+        JwtLoginStrategy
     ],
     exports: [PassportModule],
 })

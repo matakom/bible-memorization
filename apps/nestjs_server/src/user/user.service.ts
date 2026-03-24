@@ -1,14 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable prettier/prettier */
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { MoreThan, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { User } from './user.entity';
 import { SavedVerse } from 'src/saved_verses/saved_verses.entity';
 import { Exercise } from 'src/exercise/exercise.entity';
-import { UserStatsDto } from './dto/user-stats.dto';
-import { Friendship, FriendshipStatus } from 'src/friendships/friendships.entity';
+import { Friendship } from 'src/friendships/friendships.entity';
 
 interface FirebasePayload {
     email: string;
@@ -32,10 +31,8 @@ export class UserService {
         private readonly userRepository: Repository<User>,
         @InjectRepository(SavedVerse)
         private verseRepository: Repository<SavedVerse>,
-
         @InjectRepository(Exercise)
         private exerciseRepository: Repository<Exercise>,
-
         @InjectRepository(Friendship)
         private friendshipRepository: Repository<Friendship>,
     ) { }
@@ -44,6 +41,10 @@ export class UserService {
         await this.userRepository.update(userId, {
             ...(settings.language && { language: settings.language }),
         });
+    }
+
+    async findUserByEmail(email: string): Promise<User | null> {
+        return await this.userRepository.findOne({ where: { email } });
     }
 
     async findOrCreateUserFromFirebase(
@@ -62,7 +63,6 @@ export class UserService {
         const lastName = nameParts.slice(1).join(' ') || 'User';
         let newCode = generateFriendCode();
 
-        // Check for same code
         let existing = await this.userRepository.findOneBy({ friendCode: newCode });
         while (existing) {
             newCode = generateFriendCode();
@@ -88,7 +88,7 @@ export class UserService {
     async getUserStats(userId: string) {
         const user = await this.userRepository.findOne({ where: { id: userId } });
         if (!user) {
-            throw new NotFoundException('User not found');
+            throw new NotFoundException();
         }
 
         const aggResult = await this.exerciseRepository.query(`
@@ -170,23 +170,22 @@ export class UserService {
     }
 
     async deleteUserFully(userId: string) {
-    return await this.userRepository.manager.transaction(async (transactionalEntityManager) => {
-        await transactionalEntityManager.delete(Exercise, { userId });
-        await transactionalEntityManager.delete(SavedVerse, { userId });
-        
-        await transactionalEntityManager.delete(Friendship, [
-            { userId },
-            { friendId: userId }
-        ]);
+        return await this.userRepository.manager.transaction(async (transactionalEntityManager) => {
+            await transactionalEntityManager.delete(Exercise, { userId });
+            await transactionalEntityManager.delete(SavedVerse, { userId });
+            
+            await transactionalEntityManager.delete(Friendship, [
+                { userId },
+                { friendId: userId }
+            ]);
 
-        const deleteResult = await transactionalEntityManager.delete(User, { id: userId });
+            const deleteResult = await transactionalEntityManager.delete(User, { id: userId });
 
-        if (deleteResult.affected === 0) {
-            throw new NotFoundException('User not found');
-        }
+            if (deleteResult.affected === 0) {
+                throw new NotFoundException();
+            }
 
-        return { success: true };
-    });
-}
-
+            return { success: true };
+        });
+    }
 }

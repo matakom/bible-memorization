@@ -70,6 +70,7 @@ class Users extends Table {
   TextColumn get language => text().withDefault(const Constant('cs'))(); 
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
   BoolColumn get needsSync => boolean().withDefault(const Constant(false))();
+  DateTimeColumn get registeredAt => dateTime().withDefault(currentDateAndTime)();
 
   @override
   Set<Column> get primaryKey => {id};

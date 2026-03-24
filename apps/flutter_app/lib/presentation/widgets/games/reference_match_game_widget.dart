@@ -6,6 +6,7 @@ import 'package:flutter_app/data/models/practice_feedback.dart';
 import 'package:flutter_app/providers/practice/practice_session_controller.dart';
 import 'package:flutter_app/providers/reader/saved_verses_controller.dart';
 import 'package:flutter_app/providers/reader/bible_provider.dart';
+import 'package:flutter_app/providers/reader/verse_text_provider.dart';
 import 'package:flutter_app/l10n/l10n_extension.dart';
 
 /// Internal data class representing a multiple-choice reference option.
@@ -125,6 +126,9 @@ class _ReferenceMatchGameWidgetState extends ConsumerState<ReferenceMatchGameWid
 
   @override
   Widget build(BuildContext context) {
+    final verseRef = VerseRef(bookId: widget.verse.book, chapter: widget.verse.chapter, verse: widget.verse.verse);
+    final textAsync = ref.watch(verseTextProvider(verseRef));
+
     return Padding(
       padding: const EdgeInsets.all(24.0),
       child: Column(
@@ -140,13 +144,17 @@ class _ReferenceMatchGameWidgetState extends ConsumerState<ReferenceMatchGameWid
             flex: 3,
             child: Center(
               child: SingleChildScrollView(
-                child: Text(
-                  widget.verse.verseText,
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    height: 1.5,
-                    fontStyle: FontStyle.italic,
+                child: textAsync.when(
+                  loading: () => const CircularProgressIndicator(),
+                  error: (_, __) => const Icon(Icons.error, color: Colors.red),
+                  data: (verseText) => Text(
+                    verseText,
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      height: 1.5,
+                      fontStyle: FontStyle.italic,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
                 ),
               ),
             ),

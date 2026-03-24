@@ -2066,6 +2066,18 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
     ),
     defaultValue: const Constant(false),
   );
+  static const VerificationMeta _registeredAtMeta = const VerificationMeta(
+    'registeredAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> registeredAt = GeneratedColumn<DateTime>(
+    'registered_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -2076,6 +2088,7 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
     language,
     updatedAt,
     needsSync,
+    registeredAt,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -2142,6 +2155,15 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
         needsSync.isAcceptableOrUnknown(data['needs_sync']!, _needsSyncMeta),
       );
     }
+    if (data.containsKey('registered_at')) {
+      context.handle(
+        _registeredAtMeta,
+        registeredAt.isAcceptableOrUnknown(
+          data['registered_at']!,
+          _registeredAtMeta,
+        ),
+      );
+    }
     return context;
   }
 
@@ -2183,6 +2205,10 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
         DriftSqlType.bool,
         data['${effectivePrefix}needs_sync'],
       )!,
+      registeredAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}registered_at'],
+      )!,
     );
   }
 
@@ -2201,6 +2227,7 @@ class User extends DataClass implements Insertable<User> {
   final String language;
   final DateTime updatedAt;
   final bool needsSync;
+  final DateTime registeredAt;
   const User({
     required this.id,
     required this.email,
@@ -2210,6 +2237,7 @@ class User extends DataClass implements Insertable<User> {
     required this.language,
     required this.updatedAt,
     required this.needsSync,
+    required this.registeredAt,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -2224,6 +2252,7 @@ class User extends DataClass implements Insertable<User> {
     map['language'] = Variable<String>(language);
     map['updated_at'] = Variable<DateTime>(updatedAt);
     map['needs_sync'] = Variable<bool>(needsSync);
+    map['registered_at'] = Variable<DateTime>(registeredAt);
     return map;
   }
 
@@ -2239,6 +2268,7 @@ class User extends DataClass implements Insertable<User> {
       language: Value(language),
       updatedAt: Value(updatedAt),
       needsSync: Value(needsSync),
+      registeredAt: Value(registeredAt),
     );
   }
 
@@ -2256,6 +2286,7 @@ class User extends DataClass implements Insertable<User> {
       language: serializer.fromJson<String>(json['language']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
       needsSync: serializer.fromJson<bool>(json['needsSync']),
+      registeredAt: serializer.fromJson<DateTime>(json['registeredAt']),
     );
   }
   @override
@@ -2270,6 +2301,7 @@ class User extends DataClass implements Insertable<User> {
       'language': serializer.toJson<String>(language),
       'updatedAt': serializer.toJson<DateTime>(updatedAt),
       'needsSync': serializer.toJson<bool>(needsSync),
+      'registeredAt': serializer.toJson<DateTime>(registeredAt),
     };
   }
 
@@ -2282,6 +2314,7 @@ class User extends DataClass implements Insertable<User> {
     String? language,
     DateTime? updatedAt,
     bool? needsSync,
+    DateTime? registeredAt,
   }) => User(
     id: id ?? this.id,
     email: email ?? this.email,
@@ -2291,6 +2324,7 @@ class User extends DataClass implements Insertable<User> {
     language: language ?? this.language,
     updatedAt: updatedAt ?? this.updatedAt,
     needsSync: needsSync ?? this.needsSync,
+    registeredAt: registeredAt ?? this.registeredAt,
   );
   User copyWithCompanion(UsersCompanion data) {
     return User(
@@ -2304,6 +2338,9 @@ class User extends DataClass implements Insertable<User> {
       language: data.language.present ? data.language.value : this.language,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
       needsSync: data.needsSync.present ? data.needsSync.value : this.needsSync,
+      registeredAt: data.registeredAt.present
+          ? data.registeredAt.value
+          : this.registeredAt,
     );
   }
 
@@ -2317,7 +2354,8 @@ class User extends DataClass implements Insertable<User> {
           ..write('friendCode: $friendCode, ')
           ..write('language: $language, ')
           ..write('updatedAt: $updatedAt, ')
-          ..write('needsSync: $needsSync')
+          ..write('needsSync: $needsSync, ')
+          ..write('registeredAt: $registeredAt')
           ..write(')'))
         .toString();
   }
@@ -2332,6 +2370,7 @@ class User extends DataClass implements Insertable<User> {
     language,
     updatedAt,
     needsSync,
+    registeredAt,
   );
   @override
   bool operator ==(Object other) =>
@@ -2344,7 +2383,8 @@ class User extends DataClass implements Insertable<User> {
           other.friendCode == this.friendCode &&
           other.language == this.language &&
           other.updatedAt == this.updatedAt &&
-          other.needsSync == this.needsSync);
+          other.needsSync == this.needsSync &&
+          other.registeredAt == this.registeredAt);
 }
 
 class UsersCompanion extends UpdateCompanion<User> {
@@ -2356,6 +2396,7 @@ class UsersCompanion extends UpdateCompanion<User> {
   final Value<String> language;
   final Value<DateTime> updatedAt;
   final Value<bool> needsSync;
+  final Value<DateTime> registeredAt;
   final Value<int> rowid;
   const UsersCompanion({
     this.id = const Value.absent(),
@@ -2366,6 +2407,7 @@ class UsersCompanion extends UpdateCompanion<User> {
     this.language = const Value.absent(),
     this.updatedAt = const Value.absent(),
     this.needsSync = const Value.absent(),
+    this.registeredAt = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   UsersCompanion.insert({
@@ -2377,6 +2419,7 @@ class UsersCompanion extends UpdateCompanion<User> {
     this.language = const Value.absent(),
     this.updatedAt = const Value.absent(),
     this.needsSync = const Value.absent(),
+    this.registeredAt = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
        email = Value(email),
@@ -2391,6 +2434,7 @@ class UsersCompanion extends UpdateCompanion<User> {
     Expression<String>? language,
     Expression<DateTime>? updatedAt,
     Expression<bool>? needsSync,
+    Expression<DateTime>? registeredAt,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -2402,6 +2446,7 @@ class UsersCompanion extends UpdateCompanion<User> {
       if (language != null) 'language': language,
       if (updatedAt != null) 'updated_at': updatedAt,
       if (needsSync != null) 'needs_sync': needsSync,
+      if (registeredAt != null) 'registered_at': registeredAt,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -2415,6 +2460,7 @@ class UsersCompanion extends UpdateCompanion<User> {
     Value<String>? language,
     Value<DateTime>? updatedAt,
     Value<bool>? needsSync,
+    Value<DateTime>? registeredAt,
     Value<int>? rowid,
   }) {
     return UsersCompanion(
@@ -2426,6 +2472,7 @@ class UsersCompanion extends UpdateCompanion<User> {
       language: language ?? this.language,
       updatedAt: updatedAt ?? this.updatedAt,
       needsSync: needsSync ?? this.needsSync,
+      registeredAt: registeredAt ?? this.registeredAt,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -2457,6 +2504,9 @@ class UsersCompanion extends UpdateCompanion<User> {
     if (needsSync.present) {
       map['needs_sync'] = Variable<bool>(needsSync.value);
     }
+    if (registeredAt.present) {
+      map['registered_at'] = Variable<DateTime>(registeredAt.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -2474,6 +2524,7 @@ class UsersCompanion extends UpdateCompanion<User> {
           ..write('language: $language, ')
           ..write('updatedAt: $updatedAt, ')
           ..write('needsSync: $needsSync, ')
+          ..write('registeredAt: $registeredAt, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -3676,6 +3727,7 @@ typedef $$UsersTableCreateCompanionBuilder =
       Value<String> language,
       Value<DateTime> updatedAt,
       Value<bool> needsSync,
+      Value<DateTime> registeredAt,
       Value<int> rowid,
     });
 typedef $$UsersTableUpdateCompanionBuilder =
@@ -3688,6 +3740,7 @@ typedef $$UsersTableUpdateCompanionBuilder =
       Value<String> language,
       Value<DateTime> updatedAt,
       Value<bool> needsSync,
+      Value<DateTime> registeredAt,
       Value<int> rowid,
     });
 
@@ -3736,6 +3789,11 @@ class $$UsersTableFilterComposer extends Composer<_$AppDatabase, $UsersTable> {
 
   ColumnFilters<bool> get needsSync => $composableBuilder(
     column: $table.needsSync,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get registeredAt => $composableBuilder(
+    column: $table.registeredAt,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -3788,6 +3846,11 @@ class $$UsersTableOrderingComposer
     column: $table.needsSync,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<DateTime> get registeredAt => $composableBuilder(
+    column: $table.registeredAt,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$UsersTableAnnotationComposer
@@ -3824,6 +3887,11 @@ class $$UsersTableAnnotationComposer
 
   GeneratedColumn<bool> get needsSync =>
       $composableBuilder(column: $table.needsSync, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get registeredAt => $composableBuilder(
+    column: $table.registeredAt,
+    builder: (column) => column,
+  );
 }
 
 class $$UsersTableTableManager
@@ -3862,6 +3930,7 @@ class $$UsersTableTableManager
                 Value<String> language = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
                 Value<bool> needsSync = const Value.absent(),
+                Value<DateTime> registeredAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => UsersCompanion(
                 id: id,
@@ -3872,6 +3941,7 @@ class $$UsersTableTableManager
                 language: language,
                 updatedAt: updatedAt,
                 needsSync: needsSync,
+                registeredAt: registeredAt,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -3884,6 +3954,7 @@ class $$UsersTableTableManager
                 Value<String> language = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
                 Value<bool> needsSync = const Value.absent(),
+                Value<DateTime> registeredAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => UsersCompanion.insert(
                 id: id,
@@ -3894,6 +3965,7 @@ class $$UsersTableTableManager
                 language: language,
                 updatedAt: updatedAt,
                 needsSync: needsSync,
+                registeredAt: registeredAt,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0

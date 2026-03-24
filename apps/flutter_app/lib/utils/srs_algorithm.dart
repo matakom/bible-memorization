@@ -43,7 +43,7 @@ class SRSAlgorithm {
       newRepetitionCount++;
     } else {
       newRepetitionCount = 0;
-      nextDate = DateTime.now().add(const Duration(days: 1));
+      nextDate = DateTime.now();
     }
 
     final q = currentGrade;

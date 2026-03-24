@@ -1,3 +1,7 @@
+import 'package:flutter_app/data/local/app_database.dart' as db;
+
+import '../../utils/debugger.dart';
+
 /// Core application user profile data.
 class AppUser {
   final String id;
@@ -28,5 +32,23 @@ class AppUser {
       lastName: json['lastName'] as String,
       registeredAt: DateTime.parse(json['registeredAt'] as String),
     );
+  }
+
+  factory AppUser.fromDb(db.User row) {
+    try {
+      return AppUser(
+        id: row.id,
+        email: row.email,
+        firstName: row.firstName,
+        lastName: row.lastName,
+        language: row.language,
+        friendCode: row.friendCode ?? '',
+        registeredAt: row.registeredAt,
+      );
+    } catch (e, stack) {
+      Debugger.log('❌ CRASH IN AppUser.fromDb: $e');
+      Debugger.log('Stack: $stack');
+      rethrow;
+    }
   }
 }
