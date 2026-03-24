@@ -45,10 +45,9 @@ class NotificationService {
           'daily_reminder_channel',
           'Daily Reminders',
           channelDescription: 'Reminds you to practice your verses daily',
-          importance: Importance.high,
-          priority: Priority.high,
+          importance: Importance.max,
+          priority: Priority.max,
         ),
-        iOS: DarwinNotificationDetails(),
       ),
       androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
     );
@@ -63,12 +62,12 @@ class NotificationService {
   }
 
   static Future<void> scheduleTestNotification() async {
-    final tz.TZDateTime scheduledDate = tz.TZDateTime.now(tz.local).add(const Duration(seconds: 10));
+    final tz.TZDateTime scheduledDate = tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5));
 
     await _notificationsPlugin.zonedSchedule(
       id: 999,
       title: 'Test Notification',
-      body: 'This notification was scheduled 10 seconds ago!',
+      body: 'This notification was scheduled 5 seconds ago!',
       scheduledDate: scheduledDate,
       notificationDetails: const NotificationDetails(
         android: AndroidNotificationDetails(
@@ -78,9 +77,8 @@ class NotificationService {
           importance: Importance.max,
           priority: Priority.high,
         ),
-        iOS: DarwinNotificationDetails(),
       ),
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
     );
   }
 }

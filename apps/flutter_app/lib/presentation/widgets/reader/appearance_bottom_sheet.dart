@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_app/providers/reader/reader_settings_controller.dart';
 import 'package:flutter_app/l10n/l10n_extension.dart';
 
+import '../../../utils/debugger.dart';
+
 /// Modal bottom sheet allowing users to customize text appearance in the Bible reader.
 class AppearanceBottomSheet extends ConsumerWidget {
   const AppearanceBottomSheet({super.key});
@@ -21,7 +23,10 @@ class AppearanceBottomSheet extends ConsumerWidget {
       ),
       child: settingsAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (err, _) => Center(child: Text('Error: $err')),
+        error: (err, _) { 
+          Debugger.log('Error: $err');
+          return Center(child: Text(context.l10n.something_went_wrong));
+        },
         data: (settings) {
           final controller = ref.read(readerSettingsProvider.notifier);
           

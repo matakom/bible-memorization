@@ -268,11 +268,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_debugDb => 'Debug DB';
 
   @override
-  String get settings_testNotification => 'Test 10s Notification';
+  String get settings_testNotification => 'Test 5s Notification';
 
   @override
   String get settings_notificationScheduled =>
-      'Notification scheduled for 10 seconds from now!';
+      'Notification scheduled for 5 seconds from now!';
 
   @override
   String get settings_forceSync => 'Force Sync Now';
@@ -582,4 +582,7 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get social_unavailableServerOfflineDescription =>
       'We couldn\'t reach the server to load your social profile. Please try again later.';
+
+  @override
+  String get something_went_wrong => 'Something went wrong';
 }

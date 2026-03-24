@@ -267,11 +267,11 @@ class AppLocalizationsCs extends AppLocalizations {
   String get settings_debugDb => 'Ladění DB';
 
   @override
-  String get settings_testNotification => 'Testovací oznámení (10s)';
+  String get settings_testNotification => 'Testovací oznámení (5s)';
 
   @override
   String get settings_notificationScheduled =>
-      'Oznámení je naplánováno za 10 sekund!';
+      'Oznámení je naplánováno za 5 sekund!';
 
   @override
   String get settings_forceSync => 'Vynutit synchronizaci';
@@ -582,4 +582,7 @@ class AppLocalizationsCs extends AppLocalizations {
   @override
   String get social_unavailableServerOfflineDescription =>
       'Nepodařilo se nám připojit k serveru pro načtení vašeho sociálního profilu. Zkuste to prosím později.';
+
+  @override
+  String get something_went_wrong => 'Něco se nepovedlo';
 }

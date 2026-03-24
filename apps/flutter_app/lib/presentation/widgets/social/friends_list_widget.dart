@@ -4,6 +4,7 @@ import 'package:flutter_app/presentation/widgets/social/leaderboard_widget.dart'
 import 'package:flutter_app/providers/friendships/friendships_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../utils/debugger.dart';
 import 'user.dart';
 import '../../../data/models/friendship.dart';
 
@@ -60,7 +61,10 @@ class _FriendsListWidgetState extends ConsumerState<FriendsListWidget> {
         await ref.read(friendshipsProvider.notifier).deleteFriendship(friendshipId);
       }
     } catch (e) {
-      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
+      if (mounted) {
+        Debugger.log('Error loading stats: $e');
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(context.l10n.something_went_wrong)));
+      }
     }
   }
 

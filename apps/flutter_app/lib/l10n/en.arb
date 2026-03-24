@@ -164,8 +164,8 @@
   "savedVerses_difficultyElite": "Elite",
 "settings_debugTools": "Debug Tools",
   "settings_debugDb": "Debug DB",
-  "settings_testNotification": "Test 10s Notification",
-  "settings_notificationScheduled": "Notification scheduled for 10 seconds from now!",
+  "settings_testNotification": "Test 5s Notification",
+  "settings_notificationScheduled": "Notification scheduled for 5 seconds from now!",
   "settings_forceSync": "Force Sync Now",
   "settings_forceSyncDescription": "Push/Pull data manually",
   "settings_syncing": "Syncing...",
@@ -335,5 +335,7 @@
   "social_connectButton": "Connect to Server",
   "social_serverUnreachableTitle": "Server Unreachable",
   "social_serverUnreachableDescription": "Our servers are taking a brief rest. Please try again later.",
-  "social_unavailableServerOfflineDescription": "We couldn't reach the server to load your social profile. Please try again later."
+  "social_unavailableServerOfflineDescription": "We couldn't reach the server to load your social profile. Please try again later.",
+
+  "something_went_wrong": "Something went wrong"
 }

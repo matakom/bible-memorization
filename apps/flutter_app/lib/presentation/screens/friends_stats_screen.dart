@@ -6,6 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_app/l10n/l10n_extension.dart';
 
+import '../../utils/debugger.dart';
+
 /// Screen displaying the progress and statistics of a specific friend.
 class FriendStatsScreen extends ConsumerWidget {
   final String friendId;
@@ -35,7 +37,10 @@ class FriendStatsScreen extends ConsumerWidget {
       ),
       body: friendStatsAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (err, _) => Center(child: Text('Error loading stats: $err')),
+        error: (err, _) { 
+          Debugger.log('Error loading stats: $err');
+          return Center(child: Text(context.l10n.something_went_wrong));
+        },
         data: (stats) => Center(
           child: Padding(
             padding: const EdgeInsets.all(16.0),

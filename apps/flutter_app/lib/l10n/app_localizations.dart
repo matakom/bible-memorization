@@ -569,13 +569,13 @@ abstract class AppLocalizations {
   /// No description provided for @settings_testNotification.
   ///
   /// In en, this message translates to:
-  /// **'Test 10s Notification'**
+  /// **'Test 5s Notification'**
   String get settings_testNotification;
 
   /// No description provided for @settings_notificationScheduled.
   ///
   /// In en, this message translates to:
-  /// **'Notification scheduled for 10 seconds from now!'**
+  /// **'Notification scheduled for 5 seconds from now!'**
   String get settings_notificationScheduled;
 
   /// No description provided for @settings_forceSync.
@@ -1105,6 +1105,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'We couldn\'t reach the server to load your social profile. Please try again later.'**
   String get social_unavailableServerOfflineDescription;
+
+  /// No description provided for @something_went_wrong.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong'**
+  String get something_went_wrong;
 }
 
 class _AppLocalizationsDelegate
