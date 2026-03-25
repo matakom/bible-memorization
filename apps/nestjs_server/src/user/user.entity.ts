@@ -24,7 +24,7 @@ export class User {
     @Column({ name: 'friend_code', unique: true, length: 6, nullable: false })
     friendCode: string;
 
-    @Column({ length: 10, default: 'en' })
+    @Column({ length: 10, default: 'cs' })
     language: string;
 
     @UpdateDateColumn({ name: 'updated_at' })
@@ -32,7 +32,4 @@ export class User {
 
     @CreateDateColumn({ name: 'registered_at', type: 'timestamp' })
     registeredAt: Date;
-
-    @Column({ name: 'last_login_at', type: 'timestamp', nullable: true })
-    lastLoginAt: Date | null;
 }

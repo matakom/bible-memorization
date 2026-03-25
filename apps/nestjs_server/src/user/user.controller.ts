@@ -44,14 +44,6 @@ export class UserController {
         };
     }
 
-    @Get()
-    @UseGuards(AuthGuard('jwt'))
-    getUser(
-        @GetUser() user: User
-    ) {
-        return user;
-    }
-
     @Get(':id/stats')
     async getUserStats(@Param('id') id: string) {
         return this.userService.getUserStats(id);
