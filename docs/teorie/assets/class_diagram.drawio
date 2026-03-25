@@ -1,0 +1,76 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64; rv:148.0) Gecko/20100101 Firefox/148.0" version="29.6.6">
+  <diagram id="class-diagram" name="BibleMemorizer">
+    <mxGraphModel dx="1476" dy="765" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="10" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=10;" value="&lt;b&gt;AppController&lt;/b&gt;&lt;hr&gt;- appService: AppService&lt;hr&gt;+ getHealth(): Object" vertex="1">
+          <mxGeometry height="90" width="200" x="40" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="11" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=10;" value="&lt;b&gt;UserController&lt;/b&gt;&lt;hr&gt;- userService: UserService&lt;hr&gt;+ loginUser(user: User): User&lt;br&gt;+ lookupFriend(friendCode: string): Object&lt;br&gt;+ getUserStats(id: string): Object&lt;br&gt;+ deleteAccount(req: Request): Object" vertex="1">
+          <mxGeometry height="140" width="280" x="280" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="12" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=10;" value="&lt;b&gt;SyncController&lt;/b&gt;&lt;hr&gt;- syncService: SyncService&lt;hr&gt;+ pull(user: User, query: SyncPullQueryDto): Object&lt;br&gt;+ push(user: User, body: SyncPushDto): Object" vertex="1">
+          <mxGeometry height="120" width="300" x="600" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="21" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=10;" value="&lt;b&gt;UserService&lt;/b&gt;&lt;hr&gt;- userRepository: Repository&amp;lt;User&amp;gt;&lt;br&gt;- verseRepository: Repository&amp;lt;SavedVerse&amp;gt;&lt;br&gt;- exerciseRepository: Repository&amp;lt;Exercise&amp;gt;&lt;br&gt;- friendshipRepository: Repository&amp;lt;Friendship&amp;gt;&lt;hr&gt;+ updateSettings(userId: string, settings: Object): void&lt;br&gt;+ findUserByEmail(email: string): User&lt;br&gt;+ findOrCreateUserFromFirebase(payload: FirebasePayload): User&lt;br&gt;+ findByFriendCode(code: string): User&lt;br&gt;+ getUserStats(userId: string): Object&lt;br&gt;+ deleteUserFully(userId: string): Object" vertex="1">
+          <mxGeometry height="240" width="280" x="280" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="22" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=10;" value="&lt;b&gt;SyncService&lt;/b&gt;&lt;hr&gt;- verseRepo: Repository&amp;lt;SavedVerse&amp;gt;&lt;br&gt;- exerciseRepo: Repository&amp;lt;Exercise&amp;gt;&lt;br&gt;- friendshipRepo: Repository&amp;lt;Friendship&amp;gt;&lt;br&gt;- userRepo: Repository&amp;lt;User&amp;gt;&lt;hr&gt;+ pullChanges(userId: string, lastSyncStr?: string): Object&lt;br&gt;+ pushChanges(userId: string, payload: SyncPushDto): Object" vertex="1">
+          <mxGeometry height="180" width="300" x="600" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="31" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=10;" value="&lt;b&gt;User&lt;/b&gt;&lt;hr&gt;+ id: string&lt;br&gt;+ firstName: string&lt;br&gt;+ lastName: string&lt;br&gt;+ email: string&lt;br&gt;+ friendCode: string&lt;br&gt;+ language: string&lt;br&gt;+ updatedAt: Date&lt;br&gt;+ registeredAt: Date" vertex="1">
+          <mxGeometry height="180" width="180" x="40" y="550" as="geometry" />
+        </mxCell>
+        <mxCell id="32" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=10;" value="&lt;b&gt;Friendship&lt;/b&gt;&lt;hr&gt;+ id: string&lt;br&gt;+ status: FriendshipStatus&lt;br&gt;+ userId: string&lt;br&gt;+ friendId: string&lt;br&gt;+ createdAt: Date" vertex="1">
+          <mxGeometry height="130" width="180" x="290" y="550" as="geometry" />
+        </mxCell>
+        <mxCell id="33" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=10;" value="&lt;b&gt;SavedVerse&lt;/b&gt;&lt;hr&gt;+ id: string&lt;br&gt;+ userId: string&lt;br&gt;+ book: number&lt;br&gt;+ chapter: number&lt;br&gt;+ verse: number&lt;br&gt;+ translation: string&lt;br&gt;+ nextReviewDate: Date&lt;br&gt;+ easeFactor: number&lt;br&gt;+ baseComplexity: number" vertex="1">
+          <mxGeometry height="190" width="200" x="500" y="550" as="geometry" />
+        </mxCell>
+        <mxCell id="34" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=10;" value="&lt;b&gt;Exercise&lt;/b&gt;&lt;hr&gt;+ id: string&lt;br&gt;+ userId: string&lt;br&gt;+ verseId: string&lt;br&gt;+ grade: number&lt;br&gt;+ durationSeconds: number&lt;br&gt;+ performedAt: Date" vertex="1">
+          <mxGeometry height="150" width="180" x="790" y="550" as="geometry" />
+        </mxCell>
+        <mxCell id="E1" edge="1" parent="1" source="11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endFill=0;" target="21" value="používá">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="E2" edge="1" parent="1" source="12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endFill=0;" target="22" value="používá">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="E3" edge="1" parent="1" source="31" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=diamond;startFill=1;endArrow=none;" target="33" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="130" y="770" />
+              <mxPoint x="600" y="770" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="E4" edge="1" parent="1" source="31" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=diamond;startFill=1;endArrow=none;" target="32" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="220" y="615" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="E5" edge="1" parent="1" source="31" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=diamond;startFill=1;endArrow=none;" target="34" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="130" y="800" />
+              <mxPoint x="830" y="800" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="E6" edge="1" parent="1" source="33" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=diamond;startFill=1;endArrow=none;" target="34" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="720" y="625" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="LdpL7Y0AtzUwsF4qDlDA-34" edge="1" parent="1" source="11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" target="11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

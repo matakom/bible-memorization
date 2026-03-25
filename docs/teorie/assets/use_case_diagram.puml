@@ -4,7 +4,7 @@ skinparam packageStyle rectangle
 
 actor User
 
-rectangle "Bible Memorization App" {
+rectangle "Bible Memorizer" {
     (Přihlášení pomocí Google účtu) as UC1
     (Odhlášení) as UC2
     (Smazání účtu) as UC3
@@ -39,8 +39,6 @@ User --> UC15
 User --> UC16
 
 User --> UC6
-UC6 .> UC6a : <<include>>
-UC6 .> UC6b : <<include>>
 
 User --> UC7
 User --> UC8

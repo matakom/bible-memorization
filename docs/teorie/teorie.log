@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.1.6)  20 MAR 2026 12:02
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.1.6)  25 MAR 2026 22:22
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -297,32 +297,48 @@ Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 (/usr/share/texlive/texmf-dist/tex/latex/parskip/parskip.sty
 Package: parskip 2021-03-14 v2.0h non-zero parskip adjustments
 )
+(/usr/share/texlive/texmf-dist/tex/latex/wrapfig/wrapfig.sty
+\wrapoverhang=\dimen163
+\WF@size=\dimen164
+\c@WF@wrappedlines=\count285
+\WF@box=\box53
+\WF@everypar=\toks24
+Package: wrapfig 2003/01/31  v 3.6
+)
+(/usr/share/texlive/texmf-dist/tex/latex/float/float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count286
+\float@exts=\toks25
+\float@box=\box54
+\@float@everytoks=\toks26
+\@floatcapt=\box55
+)
 (/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2024-01-04 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count285
-\l__pdf_internal_box=\box53
+\l__color_backend_stack_int=\count287
+\l__pdf_internal_box=\box56
 )
 (./teorie.aux)
 \openout1 = `teorie.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -360,17 +376,17 @@ LaTeX Font Info:    ... okay on input line 18.
 
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count286
-\scratchdimen=\dimen163
-\scratchbox=\box54
-\nofMPsegments=\count287
-\nofMParguments=\count288
-\everyMPshowfont=\toks24
-\MPscratchCnt=\count289
-\MPscratchDim=\dimen164
-\MPnumerator=\count290
-\makeMPintoPDFobject=\count291
-\everyMPtoPDFconversion=\toks25
+\scratchcounter=\count288
+\scratchdimen=\dimen165
+\scratchbox=\box57
+\nofMPsegments=\count289
+\nofMParguments=\count290
+\everyMPshowfont=\toks27
+\MPscratchCnt=\count291
+\MPscratchDim=\dimen166
+\MPnumerator=\count292
+\makeMPintoPDFobject=\count293
+\everyMPtoPDFconversion=\toks28
 ) (/usr/share/texlive/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
@@ -392,7 +408,7 @@ Package: lscape 2020/05/28 v3.02 Landscape Pages (DPC)
 )
 Package pdflscape Info: Auto-detected driver: pdftex on input line 81.
 ))
-Package hyperref Info: Link coloring OFF on input line 18.
+Package hyperref Info: Link coloring OFF on input line 19.
  (./teorie.out)
 (./teorie.out)
 \@outlinefile=\write3
@@ -401,58 +417,58 @@ Package hyperref Info: Link coloring OFF on input line 18.
  [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-<zadani.pdf, id=173, 597.432pt x 844.11362pt>
+<zadani.pdf, id=210, 597.432pt x 844.11362pt>
 File: zadani.pdf Graphic file (type pdf)
 <use zadani.pdf>
-Package pdftex.def Info: zadani.pdf  used on input line 51.
+Package pdftex.def Info: zadani.pdf  used on input line 52.
 (pdftex.def)             Requested size: 597.43054pt x 844.11156pt.
 File: zadani.pdf Graphic file (type pdf)
 <use zadani.pdf>
-Package pdftex.def Info: zadani.pdf  used on input line 51.
+Package pdftex.def Info: zadani.pdf  used on input line 52.
 (pdftex.def)             Requested size: 597.43054pt x 844.11156pt.
-<zadani.pdf, id=176, page=1, 597.432pt x 844.11362pt>
+<zadani.pdf, id=213, page=1, 597.432pt x 844.11362pt>
 File: zadani.pdf Graphic file (type pdf)
 <use zadani.pdf, page 1>
-Package pdftex.def Info: zadani.pdf , page1 used on input line 51.
+Package pdftex.def Info: zadani.pdf , page1 used on input line 52.
 (pdftex.def)             Requested size: 597.43054pt x 844.11156pt.
 File: zadani.pdf Graphic file (type pdf)
 <use zadani.pdf, page 1>
-Package pdftex.def Info: zadani.pdf , page1 used on input line 51.
+Package pdftex.def Info: zadani.pdf , page1 used on input line 52.
 (pdftex.def)             Requested size: 597.93192pt x 844.81996pt.
 File: zadani.pdf Graphic file (type pdf)
 <use zadani.pdf, page 1>
-Package pdftex.def Info: zadani.pdf , page1 used on input line 51.
+Package pdftex.def Info: zadani.pdf , page1 used on input line 52.
 (pdftex.def)             Requested size: 597.93192pt x 844.81996pt.
 File: zadani.pdf Graphic file (type pdf)
 <use zadani.pdf, page 1>
-Package pdftex.def Info: zadani.pdf , page1 used on input line 51.
+Package pdftex.def Info: zadani.pdf , page1 used on input line 52.
 (pdftex.def)             Requested size: 597.93192pt x 844.81996pt.
 
 pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has 
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.51 	\includepdf[pages={1-2}]{zadani.pdf}
+l.52 	\includepdf[pages={1-2}]{zadani.pdf}
                                           
 File: zadani.pdf Graphic file (type pdf)
 <use zadani.pdf, page 1>
-Package pdftex.def Info: zadani.pdf , page1 used on input line 51.
+Package pdftex.def Info: zadani.pdf , page1 used on input line 52.
 (pdftex.def)             Requested size: 597.93192pt x 844.81996pt.
  [1
 
  <./zadani.pdf>]
-<zadani.pdf, id=182, page=2, 597.432pt x 844.11362pt>
+<zadani.pdf, id=219, page=2, 597.432pt x 844.11362pt>
 File: zadani.pdf Graphic file (type pdf)
 <use zadani.pdf, page 2>
-Package pdftex.def Info: zadani.pdf , page2 used on input line 51.
+Package pdftex.def Info: zadani.pdf , page2 used on input line 52.
 (pdftex.def)             Requested size: 597.93192pt x 844.81996pt.
 File: zadani.pdf Graphic file (type pdf)
 <use zadani.pdf, page 2>
-Package pdftex.def Info: zadani.pdf , page2 used on input line 51.
+Package pdftex.def Info: zadani.pdf , page2 used on input line 52.
 (pdftex.def)             Requested size: 597.93192pt x 844.81996pt.
 File: zadani.pdf Graphic file (type pdf)
 <use zadani.pdf, page 2>
-Package pdftex.def Info: zadani.pdf , page2 used on input line 51.
+Package pdftex.def Info: zadani.pdf , page2 used on input line 52.
 (pdftex.def)             Requested size: 597.93192pt x 844.81996pt.
  [2
 
@@ -463,51 +479,276 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <8> on input line 3.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <6> on input line 3.
- [6])
+ [1])
 \tf@toc=\write4
 \openout4 = `teorie.toc'.
 
- [7] [8] [9] [10] [11] [12] [13] [14] [15]
-[16] [17] [18] [19] [20] [21] [22] (./teorie.lof)
+
+pdfTeX warning (ext4): destination with the same identifier (name{page.}) has b
+een already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.105 	\newpage
+                [2] [9]
+<assets/ForgettingCurve.pdf, id=306, 208.61131pt x 178.73163pt>
+File: assets/ForgettingCurve.pdf Graphic file (type pdf)
+<use assets/ForgettingCurve.pdf>
+Package pdftex.def Info: assets/ForgettingCurve.pdf  used on input line 145.
+(pdftex.def)             Requested size: 364.19667pt x 312.05682pt.
+
+
+LaTeX Warning: Citation `ebbinghaus_web' on page 10 undefined on input line 146
+.
+
+[10
+pdfTeX warning (ext4): destination with the same identifier (name{figure.1}) ha
+s been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.154 	
+        <./assets/ForgettingCurve.pdf>] [11] [12] [13]
+
+pdfTeX warning: /usr/bin/pdflatex (file ./assets/architecture.pdf): PDF inclusi
+on: found PDF version <1.7>, but at most version <1.5> allowed
+<assets/architecture.pdf, id=341, 594.30032pt x 217.77359pt>
+File: assets/architecture.pdf Graphic file (type pdf)
+<use assets/architecture.pdf>
+Package pdftex.def Info: assets/architecture.pdf  used on input line 213.
+(pdftex.def)             Requested size: 364.19667pt x 133.45642pt.
+
+LaTeX Warning: Citation `ebbinghaus_web' on page 14 undefined on input line 214
+.
+
+[14
+pdfTeX warning (ext4): destination with the same identifier (name{figure.2}) ha
+s been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.223 	
+        <./assets/architecture.pdf>] [15]
+
+pdfTeX warning: /usr/bin/pdflatex (file ./assets/er.pdf): PDF inclusion: found 
+PDF version <1.7>, but at most version <1.5> allowed
+<assets/er.pdf, id=365, 478.66827pt x 486.85887pt>
+File: assets/er.pdf Graphic file (type pdf)
+<use assets/er.pdf>
+Package pdftex.def Info: assets/er.pdf  used on input line 245.
+(pdftex.def)             Requested size: 364.19667pt x 370.4326pt.
+
+LaTeX Warning: Citation `ebbinghaus_web' on page 16 undefined on input line 246
+.
+
+[16] [17
+pdfTeX warning (ext4): destination with the same identifier (name{figure.3}) ha
+s been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.257 		\item \textbf
+                     {PÅ™Ã¡telstvÃ­ (friendships):} VazebnÃ­ entita realizuj...
+ <./assets/er.pdf>] [18] [19]
+LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 3
+00.
+
+(/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
+File: t1cmtt.fd 2023/04/13 v2.5m Standard LaTeX font definitions
+)
+Overfull \hbox (20.46925pt too wide) in paragraph at lines 301--302
+\T1/cmr/m/n/12 veru) a ob-jekt \T1/cmtt/m/n/12 changes \T1/cmr/m/n/12 se se-zna
+my no-vých £i upra-ve-ných en-tit (\T1/cmtt/m/n/12 verses\T1/cmr/m/n/12 , \T1/c
+mtt/m/n/12 exercises\T1/cmr/m/n/12 ,
+ []
+
+[20]
+Overfull \hbox (4.01863pt too wide) in paragraph at lines 334--335
+[]\T1/cmr/bx/n/12 Návratová hod-nota: \T1/cmr/m/n/12 Ob-jekt sta-tis-tik za-hr-
+nu-jící \T1/cmtt/m/n/12 streak \T1/cmr/m/n/12 (ak-tu-ální denní °ada),
+ []
+
+[21]
+<assets/screenshots/home.png, id=411, 1224.575pt x 2471.2325pt>
+File: assets/screenshots/home.png Graphic file (type png)
+<use assets/screenshots/home.png>
+Package pdftex.def Info: assets/screenshots/home.png  used on input line 360.
+(pdftex.def)             Requested size: 169.17839pt x 341.43306pt.
+ [22
+pdfTeX warning (ext4): destination with the same identifier (name{figure.4}) ha
+s been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.367 		\item \textbf
+                     {VizuÃ¡lnÃ­ motivy:} SystÃ©m nativnÄ› podporuje pÅ™epÃ­...
+ <./assets/screenshots/home.png>]
+<assets/screenshots/dark.png, id=419, 1224.575pt x 2471.2325pt>
+File: assets/screenshots/dark.png Graphic file (type png)
+<use assets/screenshots/dark.png>
+Package pdftex.def Info: assets/screenshots/dark.png  used on input line 374.
+(pdftex.def)             Requested size: 169.17839pt x 341.43306pt.
+<assets/screenshots/text-size.png, id=420, 1224.575pt x 2471.2325pt>
+File: assets/screenshots/text-size.png Graphic file (type png)
+<use assets/screenshots/text-size.png>
+Package pdftex.def Info: assets/screenshots/text-size.png  used on input line 3
+76.
+(pdftex.def)             Requested size: 169.17839pt x 341.43306pt.
+ [23
+pdfTeX warning (ext4): destination with the same identifier (name{figure.5}) ha
+s been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.382 	
+        <./assets/screenshots/dark.png> <./assets/screenshots/text-size.png>]
+<assets/screenshots/word-pick.png, id=428, 1224.575pt x 2471.2325pt>
+File: assets/screenshots/word-pick.png Graphic file (type png)
+<use assets/screenshots/word-pick.png>
+Package pdftex.def Info: assets/screenshots/word-pick.png  used on input line 3
+88.
+(pdftex.def)             Requested size: 169.17839pt x 341.43306pt.
+<assets/screenshots/skladani.png, id=429, 1224.575pt x 2471.2325pt>
+File: assets/screenshots/skladani.png Graphic file (type png)
+<use assets/screenshots/skladani.png>
+Package pdftex.def Info: assets/screenshots/skladani.png  used on input line 39
+0.
+(pdftex.def)             Requested size: 169.17839pt x 341.43306pt.
+<assets/screenshots/first-letter.png, id=430, 1224.575pt x 2471.2325pt>
+File: assets/screenshots/first-letter.png Graphic file (type png)
+<use assets/screenshots/first-letter.png>
+Package pdftex.def Info: assets/screenshots/first-letter.png  used on input lin
+e 392.
+(pdftex.def)             Requested size: 169.17839pt x 341.43306pt.
+<assets/screenshots/reference.png, id=431, 1224.575pt x 2471.2325pt>
+File: assets/screenshots/reference.png Graphic file (type png)
+<use assets/screenshots/reference.png>
+Package pdftex.def Info: assets/screenshots/reference.png  used on input line 3
+94.
+(pdftex.def)             Requested size: 169.17839pt x 341.43306pt.
+
+[24]
+Overfull \vbox (56.39484pt too high) has occurred while \output is active []
+
+
+[25
+pdfTeX warning (ext4): destination with the same identifier (name{figure.6}) ha
+s been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.398 		
+         <./assets/screenshots/word-pick.png> <./assets/screenshots/skladani.pn
+g> <./assets/screenshots/first-letter.png> <./assets/screenshots/reference.png>
+]
+<assets/screenshots/stats.png, id=447, 1224.575pt x 2471.2325pt>
+File: assets/screenshots/stats.png Graphic file (type png)
+<use assets/screenshots/stats.png>
+Package pdftex.def Info: assets/screenshots/stats.png  used on input line 404.
+(pdftex.def)             Requested size: 169.17839pt x 341.43306pt.
+<assets/screenshots/leaderboard.png, id=448, 1224.575pt x 2471.2325pt>
+File: assets/screenshots/leaderboard.png Graphic file (type png)
+<use assets/screenshots/leaderboard.png>
+Package pdftex.def Info: assets/screenshots/leaderboard.png  used on input line
+ 406.
+(pdftex.def)             Requested size: 169.17839pt x 341.43306pt.
+ [26
+pdfTeX warning (ext4): destination with the same identifier (name{figure.7}) ha
+s been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.412 	\newpage
+                <./assets/screenshots/stats.png> <./assets/screenshots/leaderbo
+ard.png>] [27]
+Overfull \hbox (59.16977pt too wide) in paragraph at lines 447--463
+ [][] 
+ []
+
+[28] [29
+pdfTeX warning (ext4): destination with the same identifier (name{table.1}) has
+ been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.482 	\newpage
+               ] [30] (./teorie.lof
+
+LaTeX Warning: Citation `ebbinghaus_web' on page 31 undefined on input line 2.
+
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 2.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 2.
+
+LaTeX Warning: Citation `ebbinghaus_web' on page 31 undefined on input line 3.
+
+
+LaTeX Warning: Citation `ebbinghaus_web' on page 31 undefined on input line 4.
+
+)
 \tf@lof=\write5
 \openout5 = `teorie.lof'.
 
- [23] [24] [25] (./teorie.aux)
+ [31] [32]
+<assets/usecase_diagram.png, id=502, 350.30875pt x 1249.66875pt>
+File: assets/usecase_diagram.png Graphic file (type png)
+<use assets/usecase_diagram.png>
+Package pdftex.def Info: assets/usecase_diagram.png  used on input line 520.
+(pdftex.def)             Requested size: 137.98825pt x 492.25824pt.
+ [33
+pdfTeX warning (ext4): destination with the same identifier (name{figure.8}) ha
+s been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.529 	\newpage
+                <./assets/usecase_diagram.png>]
+
+pdfTeX warning: /usr/bin/pdflatex (file ./assets/class_diagram.pdf): PDF inclus
+ion: found PDF version <1.7>, but at most version <1.5> allowed
+<assets/class_diagram.pdf, id=509, 673.55638pt x 557.20169pt>
+File: assets/class_diagram.pdf Graphic file (type pdf)
+<use assets/class_diagram.pdf>
+Package pdftex.def Info: assets/class_diagram.pdf  used on input line 538.
+(pdftex.def)             Requested size: 455.25787pt x 376.61354pt.
+[34
+pdfTeX warning (ext4): destination with the same identifier (name{figure.9}) ha
+s been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.543 \end{document}
+                     <./assets/class_diagram.pdf>] (./teorie.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
  ***********
 
-Package rerunfilecheck Warning: File `teorie.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
 
-Package rerunfilecheck Info: Checksums for `teorie.out':
-(rerunfilecheck)             Before: 414D8186F8F49F0942D7D8191450BA96;6247
-(rerunfilecheck)             After:  DC5696D5238E0444E8B3E156A2CDC82A;7478.
+LaTeX Warning: There were undefined references.
+
+Package rerunfilecheck Info: File `teorie.out' has not changed.
+(rerunfilecheck)             Checksum: 2FF05C807A23EF39555E1786BD1E3838;7931.
  ) 
 Here is how much of TeX's memory you used:
- 11754 strings out of 475277
- 184851 string characters out of 5768623
+ 12077 strings out of 475277
+ 192001 string characters out of 5768623
  1934975 words of memory out of 5000000
- 33605 multiletter control sequences out of 15000+600000
- 568000 words of font info for 55 fonts, out of 8000000 for 9000
+ 33891 multiletter control sequences out of 15000+600000
+ 570873 words of font info for 60 fonts, out of 8000000 for 9000
  473 hyphenation exceptions out of 8191
- 75i,17n,79p,824b,588s stack positions out of 10000i,1000n,20000p,200000b,200000s
- </var/home/matakom/.texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm12
+ 75i,17n,79p,799b,587s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ </var/home/matakom/.texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm10
 00.600pk> </var/home/matakom/.texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec
-/ecbx1200.600pk> </var/home/matakom/.texlive2023/texmf-var/fonts/pk/ljfour/jkna
-ppen/ec/ecti1200.600pk> </var/home/matakom/.texlive2023/texmf-var/fonts/pk/ljfo
-ur/jknappen/ec/ecrm1200.600pk> </var/home/matakom/.texlive2023/texmf-var/fonts/
-pk/ljfour/jknappen/ec/ecbx1440.600pk> </var/home/matakom/.texlive2023/texmf-var
-/fonts/pk/ljfour/jknappen/ec/ecrm1728.600pk> </var/home/matakom/.texlive2023/te
-xmf-var/fonts/pk/ljfour/jknappen/ec/ecbx2488.600pk> </var/home/matakom/.texlive
-2023/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1440.600pk> </var/home/matakom/.
-texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1728.600pk>
-Output written on teorie.pdf (26 pages, 1338940 bytes).
+/ecbx1000.600pk> </var/home/matakom/.texlive2023/texmf-var/fonts/pk/ljfour/jkna
+ppen/ec/ecrm1000.600pk> </var/home/matakom/.texlive2023/texmf-var/fonts/pk/ljfo
+ur/jknappen/ec/ecti1000.600pk> </var/home/matakom/.texlive2023/texmf-var/fonts/
+pk/ljfour/jknappen/ec/ectt1200.600pk> </var/home/matakom/.texlive2023/texmf-var
+/fonts/pk/ljfour/jknappen/ec/tcrm1200.600pk> </var/home/matakom/.texlive2023/te
+xmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1200.600pk> </var/home/matakom/.texlive
+2023/texmf-var/fonts/pk/ljfour/jknappen/ec/ecti1200.600pk> </var/home/matakom/.
+texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1200.600pk> </var/home/ma
+takom/.texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1440.600pk> </var/
+home/matakom/.texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1728.600pk>
+ </var/home/matakom/.texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx2488
+.600pk> </var/home/matakom/.texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec/e
+crm1440.600pk> </var/home/matakom/.texlive2023/texmf-var/fonts/pk/ljfour/jknapp
+en/ec/ecbx1728.600pk></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
+/cm/cmr12.pfb>
+Output written on teorie.pdf (34 pages, 2690839 bytes).
 PDF statistics:
- 777 PDF objects out of 1000 (max. 8388607)
- 357 compressed objects within 4 object streams
- 80 named destinations out of 1000 (max. 500000)
- 346 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1161 PDF objects out of 1200 (max. 8388607)
+ 510 compressed objects within 6 object streams
+ 101 named destinations out of 1000 (max. 500000)
+ 488 words of extra memory for PDF output out of 10000 (max. 10000000)
 

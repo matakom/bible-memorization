@@ -1,0 +1,58 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64; rv:148.0) Gecko/20100101 Firefox/148.0" version="29.6.6">
+  <diagram name="Page-1" id="NM88FF_Gi2_HJNHvG1ao">
+    <mxGraphModel dx="967" dy="537" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="fv7CvPMgJmlArjtZQpxQ-1" parent="1" style="swimlane;whiteSpace=wrap;html=1;startSize=23;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Mobilní aplikace (Klient)" vertex="1">
+          <mxGeometry height="300" width="240" x="40" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="fv7CvPMgJmlArjtZQpxQ-19" edge="1" parent="fv7CvPMgJmlArjtZQpxQ-1" source="fv7CvPMgJmlArjtZQpxQ-2" style="edgeStyle=none;curved=1;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=12;startSize=8;endSize=8;" target="fv7CvPMgJmlArjtZQpxQ-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fv7CvPMgJmlArjtZQpxQ-2" parent="fv7CvPMgJmlArjtZQpxQ-1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;" value="Uživatelské prostředí" vertex="1">
+          <mxGeometry height="40" width="160" x="40" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fv7CvPMgJmlArjtZQpxQ-20" edge="1" parent="fv7CvPMgJmlArjtZQpxQ-1" source="fv7CvPMgJmlArjtZQpxQ-3" style="edgeStyle=none;curved=1;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;fontSize=12;startSize=8;endSize=8;" target="fv7CvPMgJmlArjtZQpxQ-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fv7CvPMgJmlArjtZQpxQ-3" parent="fv7CvPMgJmlArjtZQpxQ-1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;" value="Aplikační logika" vertex="1">
+          <mxGeometry height="50" width="160" x="40" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="fv7CvPMgJmlArjtZQpxQ-4" parent="fv7CvPMgJmlArjtZQpxQ-1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#ffffff;" value="&lt;div&gt;Lokální úložiště&lt;/div&gt;&lt;div&gt;(SQLite)&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="140" x="50" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="fv7CvPMgJmlArjtZQpxQ-15" edge="1" parent="fv7CvPMgJmlArjtZQpxQ-1" source="fv7CvPMgJmlArjtZQpxQ-3" style="edgeStyle=none;curved=1;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;fontSize=12;startSize=8;endSize=8;" target="fv7CvPMgJmlArjtZQpxQ-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fv7CvPMgJmlArjtZQpxQ-5" parent="1" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" value="Cloudflare Tunnel" vertex="1">
+          <mxGeometry height="120" width="200" x="340" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="fv7CvPMgJmlArjtZQpxQ-6" parent="1" style="swimlane;whiteSpace=wrap;html=1;startSize=23;fillColor=#d5e8d4;strokeColor=#82b366;" value="Server (Backend)" vertex="1">
+          <mxGeometry height="300" width="260" x="600" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="fv7CvPMgJmlArjtZQpxQ-7" parent="fv7CvPMgJmlArjtZQpxQ-6" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;" value="&lt;div&gt;REST API (NestJS)&lt;/div&gt;&lt;div&gt;Modulární business logika&lt;/div&gt;" vertex="1">
+          <mxGeometry height="50" width="160" x="50" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fv7CvPMgJmlArjtZQpxQ-8" parent="fv7CvPMgJmlArjtZQpxQ-6" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;" value="Služby jednotlivých modulů" vertex="1">
+          <mxGeometry height="50" width="160" x="50" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="fv7CvPMgJmlArjtZQpxQ-9" parent="fv7CvPMgJmlArjtZQpxQ-6" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#ffffff;" value="&lt;div&gt;Primární databáze&lt;/div&gt;&lt;div&gt;(PostgreSQL)&lt;/div&gt;" vertex="1">
+          <mxGeometry height="70" width="140" x="60" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="fv7CvPMgJmlArjtZQpxQ-10" edge="1" parent="fv7CvPMgJmlArjtZQpxQ-6" source="fv7CvPMgJmlArjtZQpxQ-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" target="fv7CvPMgJmlArjtZQpxQ-9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fv7CvPMgJmlArjtZQpxQ-11" edge="1" parent="fv7CvPMgJmlArjtZQpxQ-6" source="fv7CvPMgJmlArjtZQpxQ-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="fv7CvPMgJmlArjtZQpxQ-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fv7CvPMgJmlArjtZQpxQ-12" edge="1" parent="1" source="fv7CvPMgJmlArjtZQpxQ-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.16;entryY=0.55;entryDx=0;entryDy=0;entryPerimeter=0;" target="fv7CvPMgJmlArjtZQpxQ-5" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fv7CvPMgJmlArjtZQpxQ-13" edge="1" parent="1" source="fv7CvPMgJmlArjtZQpxQ-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=0.875;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;" target="fv7CvPMgJmlArjtZQpxQ-6" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
