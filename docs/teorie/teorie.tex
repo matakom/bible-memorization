@@ -86,13 +86,13 @@
 	% \vspace{2cm}
 	
 	\section*{Klíčová slova}
-	Programování, gamifikace, intervalové opakování, učení, flutter, nestjs, Bible, memorizace
+	Programování, gamifikace, intervalové opakování, učení, Flutter, NestJS, Bible, memorizace
 	
 	\section*{Abstract}
 	This thesis documents the design and development of the Bible Memorizer mobile application, which focuses on the memorization of biblical texts. The implementation of the project includes a mobile application with offline mode support and a backend server for synchronization and social features. Furthermore, the mobile application supports gamification and learning through spaced repetition.
 	
 	\section*{Keywords}
-	Programming, gamification, spaced repetition, learning, flutter, nestjs, Bible, memorization
+	Programming, gamification, spaced repetition, learning, Flutter, NestJS, Bible, memorization
 	
 	% 6. Obsah
 	\newpage
@@ -109,9 +109,9 @@
 	
 	
 	\section{Úvod}
-	% TODO: Citace na 2.3 miliardy, 8 miliard
-	Ve světě žije přes 2.3 miliardy křesťanů, což znamená, že více než čtvrtina lidí jsou křesťané. Častým cílem křesťanů je studium Bible a zapamatování jejich částí.
+	Ve světě žije přes 2.3 miliardy křesťanů \cite{pocet-krestanu}, což znamená, že více než čtvrtina lidí jsou křesťané. Častým cílem křesťanů je studium Bible a zapamatování jejich částí.
 	Dlouhodobé zapamatování textu ale není jednoduchý úkol.	Existují aplikace, které memorizování částí Bible zjednodušují, ale ty jsou často zastaralé, těžké na používání a neaplikují metody učení, které uživateli pomáhají, urychlují a zpříjemňují celý proces.
+	% TODO citace na metody uceni?
 	
 	Za tímto účelem vznikla aplikace Bible Memorizer. Tato aplikace se snaží jejím uživatelům zjednodušit cíl zapamatování specifických biblických testů. K tomu používá dva hlavní principy. 
 	První z nich je gamifikace. Aplikace používá rozmanité minihry, které uživatele přirozeně nutí zastavit se nad daným textem a přemýšlet nad ním novým způsobem.
@@ -132,25 +132,28 @@
 	
 	Každý verš má svojí unikátní, neměnnou referenci většinou udávanou ve formě "název-knihy číslo-kapitoly:číslo-verše". (např. "Jan 3:16")
 	
+	% TODO citace Intervalove opakovani wiki rozcestnik
 	\subsubsection{Intervalové opakování}
 	Intervalové opakování je způsob učení, který se zakládá na postupně rostoucích intervalech. Vysvětleme si to na příkladu. Student se chce naučit nazpaměť jeden verš. První den se ho naučí. Druhý den si ho zopakuje. Třetí den vynechá, ale čtvrtý den se ujistí, že si ho stále pamatuje.
 	Tento interval postupně roste, takže student si danou informaci neopakuje každý den. Díky tomu může získaný čas využít na jiné učivo a pojmout tak více informací.
+	Ebbinghausova křivka zapomínání \cite{ebbinghaus} ukazuje, jak rychle člověk zapomíná informaci.
+	Jak můžeme vidět na obrázku \ref{fig:krivka}, tak daná křivka (v červené barvě) se zplošťuje s rostoucím počtem opakování.
 	
 	
-	% TODO Citace
-	% TODO Odkázat se na to v textu
-	% https://cs.wikipedia.org/wiki/K%C5%99ivka_zapom%C3%ADn%C3%A1n%C3%AD
 	\begin{figure}[htbp]
 		\centering
 		\includegraphics[width=0.8\textwidth]{assets/ForgettingCurve.pdf}
-		\caption{Ebbinghausova křivka zapomínání \cite{ebbinghaus_web}}
+		\caption{Křivka zapomínání \cite{ebbinghaus_web}}
 		\label{fig:krivka}
 	\end{figure}
 
-	\section{Analýza existujících řešení}
-	V rámci rešerše trhu a mapování konkurenčního prostředí byly podrobně analyzovány čtyři existující mobilní aplikace s obdobným zaměřením. Ačkoliv je primární cíl těchto nástrojů totožný – pomoci uživateli s memorizací textu – analýza odhalila řadu kritických nedostatků, které otevírají prostor pro vytvoření nového, modernějšího řešení.
 	
-	Zásadním zjištěním je, že většina analyzovaných aplikací nevyužívá pokročilé a vědecky podložené metody učení, jako je například intervalové opakování (spaced repetition). Učení se tak stává méně efektivním. Dalším častým problémem je zastaralé a neintuitivní uživatelské prostředí (UI), které novým uživatelům ztěžuje orientaci a snižuje celkový zážitek z používání (UX).
+	% TODO odkazat se na konkretni aplikace?
+
+	\section{Analýza existujících řešení}
+	V rámci rešerše trhu a mapování konkurenčního prostředí byly podrobně analyzovány čtyři existující mobilní aplikace: VerseLocker \cite{app_verselocker}, Bible Memory \cite{app_biblememory}, Remember Me \cite{app_rememberme} a BibleMe \cite{app_bibleme}. Ačkoliv je primární cíl těchto nástrojů totožný – pomoci uživateli s memorizací textu – analýza odhalila řadu kritických nedostatků, které otevírají prostor pro vytvoření nového, modernějšího řešení.
+	
+	Zásadním zjištěním je, že většina analyzovaných aplikací nevyužívá pokročilé metody učení, jako je například intervalové opakování (spaced repetition). Učení se tak stává méně efektivním. Dalším častým problémem je zastaralé a neintuitivní uživatelské prostředí (UI), které novým uživatelům ztěžuje orientaci a snižuje celkový zážitek z používání (UX).
 	
 	Z hlediska práce s biblickým textem je častým nedostatkem absence integrované čtečky. Aplikace se často spoléhají na textové pole, do kterého je nutné manuálně zadat přesnou referenci (např. „Jan 3:16“). Tento přístup je náchylný k chybám, uživatelsky nepřívětivý a v jedné z testovaných aplikací byl tento způsob vyhledávání dokonce zcela nefunkční.
 	
@@ -174,6 +177,8 @@
 		\item \textbf{Personalizace a nastavení:} Aplikace musí umožňovat změnu jazyka rozhraní, přepínání mezi světlým a tmavým motivem (light/dark mode) a úpravu velikosti textu.
 	\end{itemize}
 	
+	Komplexní přehled všech interakcí uživatele se systémem je zachycen v UML diagramu případů užití, který je součástí Přílohy 1.
+	
 	\subsection{Nefunkční požadavky}
 	Aby byla zajištěna vysoká kvalita a využitelnost softwaru, musí systém splňovat následující kritéria:
 	
@@ -186,32 +191,36 @@
 
 	\section{Technologie}
 	
+	% TODO
 	\subsection{Flutter}
 	Pro vývoj klientské části mobilní aplikace byl zvolen framework Flutter. Jeho klíčovým specifikem pro tento projekt je využití vlastního renderovacího enginu, který generuje nativní uživatelské rozhraní a zajišťuje jeho vizuální i funkční konzistenci napříč různými mobilními zařízeními. Tento přístup eliminuje závislost na nativních UI komponentách jednotlivých operačních systémů, čímž se předchází fragmentaci vzhledu a přispívá k lepší přístupnosti aplikace.
 	
+	% TODO
 	\subsection{NestJS}
 	Serverová logika (backend) je implementována pomocí frameworku NestJS. Nástroj vynucuje modulární architekturu, která umožňuje systematické rozdělení aplikace do izolovaných domén. Díky tomuto striktnímu strukturování jsou procesy jako autentizace, autorizace a především synchronizace dat bezpečně odděleny a spravovány, což radikálně snižuje riziko vzniku datových nekonzistencí na straně serveru.
 	
+	% TODO
 	\subsection{PostgreSQL}
-	Jako primární databázový systém pro běh na serveru je nasazen PostgreSQL. Slouží k trvalému ukládání relačně strukturovaných entit, mezi které patří uživatelská data, vazby přátelství, historie procvičování a žebříčky. Podpora komplexních relací a striktní dodržování pravidel transakčního zpracování zajišťují absolutní datovou integritu a konzistenci při souběžných aktualizacích a synchronizačních požadavcích od vícera klientů.
+	Jako primární databázový systém pro běh na serveru je nasazen PostgreSQL. Slouží k trvalému ukládání relačně strukturovaných  uživatelských dat. Podpora komplexních relací a striktní dodržování pravidel transakčního zpracování zajišťují absolutní datovou integritu a konzistenci při souběžných aktualizacích a synchronizačních požadavcích od vícera klientů.
 	
+	% TODO
 	\subsection{SQLite}
 	Pro správu lokálních dat přímo v paměti mobilního zařízení je využita databáze SQLite. Její implementace je nezbytnou podmínkou pro fungování aplikace v offline režimu. Entitní data o uložených verších, harmonogramu opakování a pokroku v učení jsou ukládána do tohoto lokálního úložiště a následně, po detekci obnoveného síťového připojení, asynchronně synchronizována s hlavní databází na serveru. Uživatel tak neztrácí kontinuitu učení ani při výpadcích sítě.
 	
+	% TODO
 	\subsection{Cloudflare Tunnel}
-	Infrastrukturní spojení mezi lokálním serverem a sítí internet zajišťuje démon Cloudflare Tunnel. Tato technologie vytváří šifrované odchozí spojení z aplikačního kontejneru přímo do sítě Cloudflare. Serverová aplikace (NestJS) díky tomu může bezpečně přijímat vnější požadavky bez nutnosti otevírání veřejných portů na serverovém firewallu, konfigurace NAT nebo nutnosti přidělení statické veřejné IP adresy, čímž se minimalizuje povrch pro potenciální síťové útoky.
+	Infrastrukturní spojení mezi lokálním serverem a sítí internet zajišťuje démon Cloudflare Tunnel. Tato technologie vytváří šifrované odchozí spojení z aplikačního kontejneru přímo do sítě Cloudflare. Serverová aplikace (NestJS) díky tomu může bezpečně přijímat vnější požadavky bez nutnosti otevírání veřejných portů na serverovém firewallu nebo nutnosti přidělení statické veřejné IP adresy, čímž se minimalizuje povrch pro potenciální síťové útoky.
 	
 	
 	
 	\section{Architektura}
 	Architektura systému je navržena jako klient-server, kde klientskou část tvoří mobilní aplikace a logiku zpracování dat centralizuje serverová část. Tyto dvě komponenty spolu komunikují převážně asynchronně, aby byla zachována vysoká dostupnost a možnost offline fungování.
+	Celkové schéma propojení klientské aplikace, zabezpečeného tunelu a serverového backendu je zobrazeno na obrázku \ref{fig:architecture}.
 	
-	% TODO Citace
-	% TODO Odkázat se na to v textu
 	\begin{figure}[htbp]
 		\centering
 		\includegraphics[width=0.8\textwidth]{assets/architecture.pdf}
-		\caption{Architektura projektu \cite{ebbinghaus_web}}
+		\caption{Architektura projektu}
 		\label{fig:architecture}
 	\end{figure}
 	
@@ -221,11 +230,13 @@
 	\subsubsection{Ukládání dat}
 	Lokální ukládání dat v mobilní aplikaci je primárně zajištěno pomocí relační databáze SQLite. Toto řešení je klíčové pro zajištění plnohodnotného běhu aplikace v offline režimu, kdy si uživatel může prohlížet a procvičovat uložené verše bez závislosti na momentálním internetovém připojení. Pro účely následné synchronizace je v lokálním databázovém schématu zavedena vlastnost (\textit{needsSync}), která označuje ty databázové záznamy, jež byly na zařízení nově vytvořeny nebo modifikovány a čekají na odeslání na backend.
 	
+	% TODO sm-2
 	\subsubsection{Algoritmy}
 	Jádrem logiky aplikace pro plánování učení je implementace principu intervalového opakování (Spaced Repetition). Konkrétně je využit algoritmus SM-2 (SuperMemo-2), který na základě předchozího hodnocení obtížnosti daného verše a zaznamenané úspěšnosti při aktuálním procvičování dynamicky vypočítává datum dalšího opakování. Tímto přístupem dochází k optimalizaci procesu učení – problematické verše jsou uživateli k procvičení předkládány v kratších intervalech, zatímco u dobře osvojených textů se interval do dalšího zobrazení exponenciálně prodlužuje.
 	
 	\subsection{Server}
-	Serverová část aplikačního řešení poskytuje REST API a spravuje primární databázové úložiště. Backend je postaven na frameworku NestJS. Z architektonického hlediska je aplikační kód rozdělen do logických modulů, což umožňuje systematické zapouzdření jednotlivých doménových funkcionalit. Toto modulární členění zajišťuje izolaci business logiky a bezpečné zpracování požadavků.
+	Serverová část aplikačního řešení poskytuje REST API a spravuje primární databázové úložiště. Backend je postaven na frameworku NestJS. Z architektonického hlediska je aplikační kód rozdělen do logických modulů, což umožňuje systematické zapouzdření jednotlivých doménových funkcionalit. Toto modulární členění zajišťuje izolaci business logiky a bezpečné zpracování požadavků. \\
+	Logická struktura tříd backendové aplikace, jejich metody a vzájemné vztahy jsou detailně zobrazeny v UML diagramu tříd v Příloze 2.
 	
 	\subsubsection{Cloudflare Tunnel}
 	Pro bezpečné vystavení lokálního serveru do prostředí sítě internet je využit nástroj Cloudflare Tunnel. Tato technologie vytváří zabezpečené odchozí spojení přímo do sítě Cloudflare, čímž eliminuje nutnost otevírání veřejných portů na serverovém firewallu či přiřazování statických veřejných IP adres. Zásadním přínosem tohoto řešení je nativní zajištění šifrované komunikace, kdy je veškerý datový provoz mezi klientskou aplikací a serverem automaticky směrován přes protokol HTTPS, což zaručuje důvěrnost a integritu přenášených dat.
@@ -237,13 +248,12 @@
 	
 	\subsection{Datový model}
 	Pro zajištění perzistence dat a spolehlivého chodu aplikace byla navržena robustní databázová architektura. Architektura využívá kombinaci lokální databáze SQLite na mobilním zařízení a centrální relační databáze PostgreSQL na serveru. Následující datový model reflektuje strukturu hlavní serverové databáze.
+	Struktura serverové databáze, včetně definic primárních a cizích klíčů, je vizualizována v ER diagramu na obrázku \ref{fig:er}.
 	
-	% TODO Citace
-	% TODO Odkázat se na to v textu
-	\begin{figure}[htbp]
+	\begin{figure}[H]
 		\centering
 		\includegraphics[width=0.8\textwidth]{assets/er.pdf}
-		\caption{Datový model \cite{ebbinghaus_web}}
+		\caption{Datový model}
 		\label{fig:er}
 	\end{figure}
 	
@@ -251,7 +261,7 @@
 	Databázové schéma je rozděleno do čtyř klíčových entit, které reprezentují základní domény aplikace:
 	
 	\begin{itemize}
-		\item \textbf{Uživatel (users):} Centrální entita celého systému. Uchovává identifikační údaje uživatele (jméno, příjmení, e-mail) a jeho osobní preference v aplikaci, jako je zvolený jazyk rozhraní. Dále zaznamenává datum registrace a čas posledního přihlášení. E-mailová adresa slouží jako unikátní identifikátor a nesmí se v systému duplikovat.
+		\item \textbf{Uživatel (users):} Centrální entita celého systému. Uchovává identifikační údaje uživatele (jméno, příjmení, e-mail) a jeho osobní preference v aplikaci, jako je zvolený jazyk rozhraní. E-mailová adresa slouží jako unikátní identifikátor a nesmí se v systému duplikovat.
 		\item \textbf{Uložený verš (saved\_verses):} Entita reprezentující konkrétní biblický text, který si uživatel zvolil k memorizaci. Obsahuje lokační údaje textu (kniha, kapitola, verš) a zvolený překlad. Pro účely intervalového opakování jsou zde uloženy klíčové dynamické atributy: datum posledního procvičení, datum dalšího naplánovaného procvičení a další údaje využívané pro algoritmus intervalového opakování. Každý verš je striktně vázán na právě jednoho uživatele.
 		\item \textbf{Procvičení (exercises):} Transakční entita sloužící k logování historie učení. Vzniká při každém dokončení minihry. Zaznamenává časový údaj (timestamp) provedení, celkovou dobu trvání cvičení v sekundách, typ zvolené minihry a hodnotu reprezentující úspěšnost. Záznam je relačně propojen s konkrétním uživatelem a konkrétním uloženým veršem.
 		\item \textbf{Přátelství (friendships):} Vazební entita realizující sociální funkce aplikace. Definuje vztah mezi dvěma různými uživateli. Obsahuje stav žádosti. Součástí je také časové razítko vytvoření vazby.
@@ -260,12 +270,13 @@
 	\subsubsection{Zajištění integrity a relace}
 	Aby byla zaručena absolutní konzistence dat a ochrana proti anomáliím, využívá databázový model soustavu integritních omezení:
 	
+	% TODO on delete cascade?
 	\begin{itemize}
 		\item \textbf{Referenční integrita a kaskádové mazání: }Všechny cizí klíče (vazby na uživatele či verše) jsou definovány s pravidlem ON DELETE CASCADE. Pokud je odstraněn uživatelský účet, databáze automaticky a bezpečně odstraní i všechny jeho uložené verše, historii procvičování a vazby přátelství. Tím je zamezeno vzniku tzv. sirotčích záznamů.
 		
-		\item \textbf{Unikátní omezení: }Tabulka přátelství obsahuje unikátní omezení pro dvojici uživatelů, aby nedocházelo k duplicitním žádostem. Rovněž je pomocí omezující podmínky (Check constraint) zakázáno, aby uživatel odeslal žádost o přátelství sám sobě.
+		\item \textbf{Unikátní omezení: }Tabulka přátelství obsahuje unikátní omezení pro dvojici uživatelů, aby nedocházelo k duplicitním žádostem. Rovněž je pomocí omezující podmínky zakázáno, aby uživatel odeslal žádost o přátelství sám sobě.
 		
-		\item \textbf{Ověření domén (Check constraints): }V databázi jsou definována přísná pravidla pro vkládané hodnoty. Číslo kapitoly, číslo verše a délka procvičení musí být vždy kladná čísla.
+		\item \textbf{Ověření domén: }V databázi jsou definována přísná pravidla pro vkládané hodnoty. Číslo kapitoly, číslo verše a délka procvičení musí být vždy kladná čísla.
 		\item \textbf{Indexace: }Pro zajištění vysokého výkonu při synchronizaci a vyhledávání jsou nad všemi cizími klíči (např. identifikátor uživatele v tabulce historie) vytvořeny databázové indexy.
 	\end{itemize}
 	
@@ -310,7 +321,7 @@
 	\end{itemize}
 	
 	\subsubsection{Uživatelské endpointy (UserController)}
-	Tento kontroler spravuje operace vázané na uživatelský profil, sociální interakce a výpočet pokroku.
+	Tento kontroler spravuje operace vázané na uživatelský profil a sociální interakce.
 	
 	\begin{itemize}
 		\item \textbf{POST /user/login}
@@ -353,16 +364,17 @@
 	
 	
 	\subsection{Uživatelské rozhraní}
-	Vzhledem ke zjištěním z úvodní rešerše byl při návrhu klientské části kladen extrémní důraz na použitelnost, přístupnost a dlouhodobou motivaci uživatele. Uživatelské rozhraní (UI) bylo navrženo tak, aby bylo intuitivní a minimalizovalo kognitivní zátěž při každodenním používání.
+	Vzhledem ke zjištěním z úvodní rešerše byl při návrhu klientské části kladen extrémní důraz na použitelnost, přístupnost a dlouhodobou motivaci uživatele. Uživatelské rozhraní (UI) bylo navrženo tak, aby bylo intuitivní a minimalizovalo kognitivní zátěž při každodenním používání. Hlavní rozvržení prvků aplikace je patrné z \textbf{obrázku \ref{fig:home}}.
 	
 	\begin{figure}[H]
 		\centering
-		\includegraphics[height=12cm]{assets/screenshots/home.png}
+		\includegraphics[height=10cm]{assets/screenshots/home.png}
 		\caption{Hlavní obrazovka aplikace}
+		\label{fig:home}
 	\end{figure}
 	
 	\subsubsection{Přístupnost a personalizace}
-	Aby aplikace vyhovovala co nejširšímu spektru uživatelů, včetně osob se specifickými potřebami, obsahuje systém několik úrovní personalizace:
+	Aby aplikace vyhovovala co nejširšímu spektru uživatelů, obsahuje systém několik úrovní personalizace (viz \textbf{obrázky \ref{fig:dark}} a \textbf{\ref{fig:text-size}}):
 	\begin{itemize}
 		\item \textbf{Vizuální motivy:} Systém nativně podporuje přepínání mezi světlým (light mode) a tmavým (dark mode) motivem. Tmavý motiv snižuje únavu očí při používání aplikace ve zhoršených světelných podmínkách.
 		\item \textbf{Velikost typografie:} Aplikace nabízí možnost uživatelsky upravit velikost zobrazovaného textu. Tato funkce je kritická pro zajištění přístupnosti uživatelům se zhoršeným zrakem, čímž je naplněn jeden z hlavních nefunkčních požadavků.
@@ -371,61 +383,98 @@
 	
 	\begin{figure}[H]
 		\centering
-		\includegraphics[height=12cm]{assets/screenshots/dark.png}
-		\hspace{1cm} % Mezera mezi obrázky
-		\includegraphics[height=12cm]{assets/screenshots/text-size.png}
-		\caption{Tmavý motiv a přizpůsobení velikosti textu}
+		\begin{minipage}{0.48\textwidth}
+			\centering
+			\includegraphics[height=10cm]{assets/screenshots/dark.png}
+			\caption{Tmavý motiv (Dark mode)}
+			\label{fig:dark}
+		\end{minipage}\hfill
+		\begin{minipage}{0.48\textwidth}
+			\centering
+			\includegraphics[height=10cm]{assets/screenshots/text-size.png}
+			\caption{Přizpůsobení velikosti textu}
+			\label{fig:text-size}
+		\end{minipage}
 	\end{figure}
 	
 	\subsection{Gamifikace a motivační prvky}
 	Samotný proces memorizace textu je kognitivně náročný. Pro zvýšení retence (udržení uživatele v aplikaci) byly implementovány prvky gamifikace, které proces učení transformují do poutavější formy:
 	
 	\begin{itemize}
-		\item \textbf{Minihry pro učení:} Namísto pouhého pasivního čtení textu je procvičování realizováno formou interaktivních miniher. Uživatel je například vyzván k doplňování chybějících slov nebo k sestavování frází ve správném pořadí. Tento přístup nutí uživatele nad textem aktivně přemýšlet.
+		\item \textbf{Minihry pro učení:} Namísto pasivního čtení je procvičování realizováno formou interaktivních miniher, jako je doplňování slov nebo skládání frází (viz \textbf{obrázky \ref{fig:word-pick}, \ref{fig:skladani}, \ref{fig:first-letter} a \ref{fig:reference}}). Tento přístup nutí uživatele nad textem aktivně přemýšlet.
 		
 		\begin{figure}[H]
 			\centering
-			\includegraphics[height=12cm]{assets/screenshots/word-pick.png}
-			\hspace{0.5cm}
-			\includegraphics[height=12cm]{assets/screenshots/skladani.png} \\
-			\vspace{0.5cm} % Mezera mezi horní a dolní řadou
-			\includegraphics[height=12cm]{assets/screenshots/first-letter.png}
-			\hspace{0.5cm}
-			\includegraphics[height=12cm]{assets/screenshots/reference.png}
-			\caption{Ukázka interaktivních miniher a výběru veršů}
-			\label{fig:minihry}
+			% První řada
+			\begin{minipage}{0.48\textwidth}
+				\centering
+				\includegraphics[height=10cm]{assets/screenshots/word-pick.png}
+				\caption{Minihra: Výběr slov}
+				\label{fig:word-pick}
+			\end{minipage}\hfill
+			\begin{minipage}{0.48\textwidth}
+				\centering
+				\includegraphics[height=10cm]{assets/screenshots/skladani.png}
+				\caption{Minihra: Skládání veršů}
+				\label{fig:skladani}
+			\end{minipage}
+			
+			\vspace{0.5cm} % Mezera mezi řadami
+			
+			% Druhá řada
+			\begin{minipage}{0.48\textwidth}
+				\centering
+				\includegraphics[height=10cm]{assets/screenshots/first-letter.png}
+				\caption{Minihra: První písmena}
+				\label{fig:first-letter}
+			\end{minipage}\hfill
+			\begin{minipage}{0.48\textwidth}
+				\centering
+				\includegraphics[height=10cm]{assets/screenshots/reference.png}
+				\caption{Minihra: Reference}
+				\label{fig:reference}
+			\end{minipage}
 		\end{figure}
 		
-		\item \textbf{Sledování denní řady (Streak):} Aplikace vizualizuje konzistenci uživatele pomocí denní řady. Každý den, kdy uživatel úspěšně splní naplánované opakování, se jeho řada prodlužuje. Tento psychologický prvek silně motivuje k pravidelnému návratu do aplikace.
-		\item \textbf{Sociální interakce a žebříčky:} Prostřednictvím unikátního kódu přátelství (Friend Code) se mohou uživatelé propojovat. Osobní statistiky a postup v učení jsou následně vizualizovány a porovnávány v lokálních žebříčcích mezi přáteli. Na rozdíl od konkurenčních řešení je tento systém spravedlivější, neboť hodnotí reálnou aktivitu (např. čas strávený učením a udrženou denní řadu).
+		\item \textbf{Sledování denní řady (Streak):} Aplikace vizualizuje konzistenci uživatele, což silně motivuje k pravidelnému návratu.
+		\item \textbf{Sociální interakce a žebříčky:} Uživatelé mohou porovnávat své výsledky s přáteli v žebříčcích založených na reálné aktivitě (viz \textbf{obrázky \ref{fig:stats}} a \textbf{\ref{fig:leaderboard}}).
 		
 		\begin{figure}[H]
 			\centering
-			\includegraphics[height=12cm]{assets/screenshots/stats.png}
-			\hspace{1cm}
-			\includegraphics[height=12cm]{assets/screenshots/leaderboard.png}
-			\caption{Osobní statistiky a žebříček přátel}
+			\begin{minipage}{0.48\textwidth}
+				\centering
+				\includegraphics[height=10cm]{assets/screenshots/stats.png}
+				\caption{Osobní statistiky a denní řada (Streak)}
+				\label{fig:stats}
+			\end{minipage}\hfill
+			\begin{minipage}{0.48\textwidth}
+				\centering
+				\includegraphics[height=10cm]{assets/screenshots/leaderboard.png}
+				\caption{Žebříček přátel (Leaderboard)}
+				\label{fig:leaderboard}
+			\end{minipage}
 		\end{figure}
 	\end{itemize}
 	
 	
 	\newpage
 	\section{Závěr}
-	\subsection{Dosažené cíle a aktuální stav aplikace}
 	
 	\subsection{Dosažené cíle a aktuální stav aplikace}
 	
-	V rámci realizace maturitního projektu byla úspěšně navržena a implementována klientská mobilní aplikace i robustní serverová část. Výsledný systém Bible Memorizer v aktuálním stavu plně pokrývá veškeré funkční požadavky, přičemž klade mimořádný důraz na prvky gamifikace, které zvyšují uživatelskou retenci a efektivitu učení.
+	V rámci realizace maturitního projektu byla úspěšně navržena a implementována klientská mobilní aplikace i serverová část. Výsledný systém Bible Memorizer v aktuálním stavu plně pokrývá veškeré funkční požadavky, přičemž klade mimořádný důraz na prvky gamifikace, které zvyšují uživatelskou retenci a efektivitu učení.
 	
 	Mezi klíčové dosažené milníky patří:
 	\begin{itemize}
+		% TODO feedback loop
 		\item \textbf{Implementace SM-2 algoritmu s herní smyčkou:} Jádrem aplikace je algoritmus intervalového opakování (Spaced Repetition), který je úzce propojen s herními mechanikami. Úspěšnost uživatele v minihrách (hodnocení $1$--$5$) přímo ovlivňuje obtížnost verše. Tento systém vytváří tzv. \textit{feedback loop}, kde je uživatel motivován k lepším výsledkům, aby mohl „postupovat“ v procesu zapamatování.
-		\item \textbf{Systém denních řad (Streaks):} Pro posílení dlouhodobého návyku byl implementován mechanismus \textit{streak}, který vizuálně odměňuje uživatele za každodenní aktivitu. Tento psychologický prvek využívá principu averze ke ztrátě, kdy uživatel usiluje o udržení nepřerušené řady procvičování.
-		\item \textbf{Sociální dynamika a žebříčky:} Aplikace obsahuje pokročilý sociální modul. Uživatelé mohou pomocí unikátních kódů navazovat přátelství a v reálném čase porovnávat své statistiky a skóre v žebříčcích. Tento prvek zdravé kompetice transformuje individuální učení v kolektivní zážitek.
+		% TODO streak
+		\item \textbf{Systém denních řad (Streaks):} Pro posílení dlouhodobého návyku byl implementován mechanismus \textit{streak}, který vizuálně odměňuje uživatele za každodenní aktivitu. Tento psychologický prvek využívá principu averze ke ztrátě, kdy uživatel usiluje o udržení nepřerušené řady procvičování. Tento systém je podpořen notifikacemi, které se uživateli zobrazí, neprocvičí-li daný den žádný verš.
+		\item \textbf{Sociální dynamika a žebříčky:} Aplikace obsahuje pokročilý sociální modul. Uživatelé mohou pomocí unikátních kódů navazovat přátelství a porovnávat své statistiky a skóre v žebříčcích. Tento prvek zdravé soutěživosti transformuje individuální učení v kolektivní zážitek.
 		\item \textbf{Offline režim a synchronizace:} Aby nebyla herní smyčka přerušena nedostatkem konektivity, byl vyvinut synchronizační mechanismus využívající lokální databázi SQLite a serverový PostgreSQL. Postup uživatele, jeho skóre i dosažené úspěchy jsou bezpečně ukládány a při obnovení připojení automaticky synchronizovány pomocí časových razítek (\textit{timestamps}).
 	\end{itemize}
 	
-	Aktuálně je aplikace ve stavu plně funkčního a otestovaného prototypu, který efektivně kombinuje vzdělávací cíle s principy herního designu.
+	Aktuálně je aplikace ve stavu plně funkčního a otestovaného prototypu, který efektivně kombinuje vzdělávací cíle s gamifikace.
 	
 	
 	\subsection{Diskuze}
@@ -433,7 +482,7 @@
 	\subsubsection{Zhodnocení splněných cílů}
 	Lze konstatovat, že všechny hlavní cíle vytyčené v úvodní analýze a zadání projektu byly naplněny. Vytvořená platforma demonstruje funkční propojení moderních technologií (Flutter pro mobilní klient a NestJS pro backend) s vědeckými metodami učení. Důraz na gamifikaci a sledování denních řad efektivně přispívá k vyšší motivaci uživatelů.
 	
-	\subsection{Porovnání s konkurenčními řešeními}
+	\subsubsection{Porovnání s konkurenčními řešeními}
 	
 	Ve srovnání s existujícími aplikacemi, které byly analyzovány v úvodu práce (VerseLocker, Bible Memory, Remember Me a BibleMe), přináší Bible Memorizer několik zásadních inovací a opravuje jejich největší nedostatky. 
 	
@@ -441,7 +490,8 @@
 	
 	Inovací prošel i sociální modul. Například aplikace VerseLocker sice žebříčky obsahuje, ale hodnotí pouze celkový počet „zapamatovaných“ veršů. Protože si tento stav určuje sám uživatel bez objektivního testování, je systém snadno zneužitelný a demotivační. Náš systém je spravedlivější, protože hodnotí skutečnou aktivitu v minihrách a udrženou denní řadu. V neposlední řadě Bible Memorizer jako jediný z testovaných plně podporuje české uživatelské rozhraní.
 	
-	\begin{table}[htbp]
+	% TODO citace na ty aplikace?
+	\begin{table}[H]
 		\centering
 		\renewcommand{\arraystretch}{1.4} % Lehce zvětší výšku řádků pro lepší čitelnost
 		\begin{tabular}{|l|c|c|c|c|}
@@ -462,20 +512,22 @@
 		\end{tabular}
 		\caption{Srovnání funkcionality aplikace Bible Memorizer s existujícími řešeními}
 		\label{tab:srovnani_aplikaci}
-	\end{table}
-	
 	\footnotesize{
 		\textit{* Žebříček v aplikaci VerseLocker hodnotí pouze počet veršů bez reálného testování znalostí. \\
 			*** Aplikace Remember Me podporuje stažení českého překladu Bible, ale samotné rozhraní aplikace do češtiny přeloženo není.}
-	}
-
-	\subsection{Problémy během vývoje a jejich řešení}
-	Největší technologickou výzvou během implementace byla obousměrná synchronizace dat mezi offline lokální databází (SQLite) a centrální serverovou databází (PostgreSQL. Zpočátku vyvstávala hrozba konfliktů při úpravě stejného záznamu na více zařízeních v offline režimu. Tento problém byl vyřešen zavedením robustního mechanismu založeného na časových razítkách (timestamps). Systém při slučování dat porovnává časová razítka a jako platný vždy přijímá ten nejnovější záznam.
+			}
+	\end{table}
 	
-	\subsection{Celkové shrnutí projektu}
+	
+
+	\subsubsection{Problémy během vývoje a jejich řešení}
+	Největší technologickou výzvou během implementace byla obousměrná synchronizace dat mezi offline lokální databází (SQLite) a centrální serverovou databází (PostgreSQL. Zpočátku vyvstávala hrozba konfliktů při úpravě stejného záznamu na více zařízeních v offline režimu. Tento problém byl vyřešen zavedením robustního mechanismu založeného na časových razítkách (timestamps). Systém při slučování dat porovnává časová razítka a jako platný vždy přijímá nejnovější záznam.
+	
+	\subsubsection{Celkové shrnutí projektu}
 	Cílem maturitního projektu bylo navrhnout a vyvinout mobilní aplikaci pro operační systém Android, která uživatelům pomůže zapamatovat si biblické verše efektivním a zároveň zábavným způsobem. Výsledkem je moderní, bezpečná a plně funkční platforma Bible Memorizer. Díky využití frameworku Flutter poskytuje aplikace plynulý uživatelský zážitek a konzistentní vzhled, zatímco backend postavený na NestJS zajišťuje spolehlivou synchronizaci a ochranu dat. Implementace gamifikačních prvků a algoritmu intervalového opakování pomáhá uživatelům dosahovat lepších výsledků s menším úsilím.
 	
-	\subsection{Možnosti budoucího rozvoje}
+	% TODO HLR
+	\subsubsection{Možnosti budoucího rozvoje}
 	Ačkoliv je aplikace v současném stavu plně použitelná, existuje zásadní prostor pro její další algoritmické vylepšení. Hlavním plánem do budoucna je nahrazení současného algoritmu SM-2 pokročilejším modelem HLR (Half-Life Regression). Tento model dokáže přesněji odhadovat pravděpodobnost zapomenutí konkrétního verše na základě širšího spektra proměnných a historie paměťových stop, což by vedlo k další optimalizaci intervalů opakování a celkovému zefektivnění procesu memorizace.
 	
 	% 8. Literatura
@@ -483,7 +535,13 @@
 	\addcontentsline{toc}{section}{Literatura} % Adds to TOC manually
 	
 	\begin{thebibliography}{99}
-		\bibitem{zdroj1} Citace
+		\bibitem{ebbinghaus_web}
+		\textit{Křivka zapomínání.} Online. In: WIKIMEDIA COMMONS. 2025. Dostupné z: https://commons.wikimedia.org/wiki/File:ForgettingCurve.svg. [cit. 2026-03-25].
+		\bibitem{pocet-krestanu}
+		HACKETT, Conrad. \textit{How the Global Religious Landscape Changed From 2010 to 2020.} Online. Pew Research Center. Dostupné z: https://www.pewresearch.org/religion/2025/06/09/how-the-global-religious-landscape-changed-from-2010-to-2020/. [cit. 2026-03-26].
+		\bibitem{ebbinghaus}
+		EBBINGHAUS, Hermann. \textit{Memory: a contribution to experimental psychology.} Nabu Press, 2012. ISBN 978-1272622725.
+		
 	\end{thebibliography}
 	
 	
@@ -509,7 +567,6 @@
 	\addcontentsline{toc}{section}{Přílohy} % Přidá "Přílohy" do hlavního obsahu
 	
 	
-	% TODO odkazat se
 	% --- PŘÍLOHA 1 ---
 	\subsection*{Příloha 1: Use Case diagram a specifikace případů užití}
 	
@@ -524,7 +581,6 @@
 	
 	\vspace{1cm}
 	
-	% TODO odkazat se
 	% --- PŘÍLOHA 2 ---
 	\newpage
 	\subsection*{Příloha 2: UML Class diagram backendu}
