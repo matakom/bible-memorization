@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.1.6)  26 MAR 2026 00:28
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.1.6)  26 MAR 2026 09:55
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -490,145 +490,129 @@ een already used, duplicate ignored
                    \relax 
 l.105 	\newpage
                 [2] [9]
-<assets/ForgettingCurve.pdf, id=305, 208.61131pt x 178.73163pt>
+<assets/ForgettingCurve.pdf, id=306, 208.61131pt x 178.73163pt>
 File: assets/ForgettingCurve.pdf Graphic file (type pdf)
 <use assets/ForgettingCurve.pdf>
-Package pdftex.def Info: assets/ForgettingCurve.pdf  used on input line 145.
+Package pdftex.def Info: assets/ForgettingCurve.pdf  used on input line 143.
 (pdftex.def)             Requested size: 364.19667pt x 312.05682pt.
-
-
-LaTeX Warning: Citation `app_verselocker' on page 10 undefined on input line 15
-4.
-
-
-LaTeX Warning: Citation `app_biblememory' on page 10 undefined on input line 15
-4.
-
-
-LaTeX Warning: Citation `app_rememberme' on page 10 undefined on input line 154
-.
-
-
-LaTeX Warning: Citation `app_bibleme' on page 10 undefined on input line 154.
-
-[10
+ [10
 pdfTeX warning (ext4): destination with the same identifier (name{figure.1}) ha
 s been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.156 	Z
+l.152 	Z
         ásadním zjištěním je, že většina analyzovaných aplikací ne...
  <./assets/ForgettingCurve.pdf>] [11] [12] [13]
 
 pdfTeX warning: /usr/bin/pdflatex (file ./assets/architecture.pdf): PDF inclusi
 on: found PDF version <1.7>, but at most version <1.5> allowed
-<assets/architecture.pdf, id=344, 594.30032pt x 217.77359pt>
+<assets/architecture.pdf, id=362, 594.30032pt x 217.77359pt>
 File: assets/architecture.pdf Graphic file (type pdf)
 <use assets/architecture.pdf>
-Package pdftex.def Info: assets/architecture.pdf  used on input line 222.
+Package pdftex.def Info: assets/architecture.pdf  used on input line 213.
 (pdftex.def)             Requested size: 364.19667pt x 133.45642pt.
-[14
+[14] [15
 pdfTeX warning (ext4): destination with the same identifier (name{figure.2}) ha
 s been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.230 	\subsubsection
-                     {Ukládání dat} <./assets/architecture.pdf>] [15]
+l.230 	
+        <./assets/architecture.pdf>]
 
 pdfTeX warning: /usr/bin/pdflatex (file ./assets/er.pdf): PDF inclusion: found 
 PDF version <1.7>, but at most version <1.5> allowed
-<assets/er.pdf, id=369, 478.66827pt x 486.85887pt>
+<assets/er.pdf, id=391, 478.66827pt x 486.85887pt>
 File: assets/er.pdf Graphic file (type pdf)
 <use assets/er.pdf>
-Package pdftex.def Info: assets/er.pdf  used on input line 255.
+Package pdftex.def Info: assets/er.pdf  used on input line 245.
 (pdftex.def)             Requested size: 364.19667pt x 370.4326pt.
 [16] [17
 pdfTeX warning (ext4): destination with the same identifier (name{figure.3}) ha
 s been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.266 		\item \textbf
+l.256 		\item \textbf
                      {Procvičení (exercises):} Transakční entita slouž�...
  <./assets/er.pdf>] [18] [19]
 LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 3
-11.
+00.
 
 (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 2023/04/13 v2.5m Standard LaTeX font definitions
 )
-Overfull \hbox (20.46925pt too wide) in paragraph at lines 312--313
+Overfull \hbox (20.46925pt too wide) in paragraph at lines 301--302
 \T1/cmr/m/n/12 veru) a ob-jekt \T1/cmtt/m/n/12 changes \T1/cmr/m/n/12 se se-zna
 my no-v�ch �i upra-ve-n�ch en-tit (\T1/cmtt/m/n/12 verses\T1/cmr/m/n/12 , \T1/c
 mtt/m/n/12 exercises\T1/cmr/m/n/12 ,
  []
 
 [20]
-Overfull \hbox (4.01863pt too wide) in paragraph at lines 345--346
+Overfull \hbox (4.01863pt too wide) in paragraph at lines 334--335
 []\T1/cmr/bx/n/12 N�vratov� hod-nota: \T1/cmr/m/n/12 Ob-jekt sta-tis-tik za-hr-
 nu-j�c� \T1/cmtt/m/n/12 streak \T1/cmr/m/n/12 (ak-tu-�ln� denn� �ada),
  []
 
 [21]
-<assets/screenshots/home.png, id=416, 1224.575pt x 2471.2325pt>
+<assets/screenshots/home.png, id=438, 1224.575pt x 2471.2325pt>
 File: assets/screenshots/home.png Graphic file (type png)
 <use assets/screenshots/home.png>
-Package pdftex.def Info: assets/screenshots/home.png  used on input line 371.
+Package pdftex.def Info: assets/screenshots/home.png  used on input line 360.
 (pdftex.def)             Requested size: 140.98198pt x 284.52756pt.
  [22
 pdfTeX warning (ext4): destination with the same identifier (name{figure.4}) ha
 s been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.380 		\item \textbf
+l.369 		\item \textbf
                      {Velikost typografie:} Aplikace nabízí možnost uživ...
  <./assets/screenshots/home.png>]
-<assets/screenshots/dark.png, id=428, 1224.575pt x 2471.2325pt>
+<assets/screenshots/dark.png, id=451, 1224.575pt x 2471.2325pt>
 File: assets/screenshots/dark.png Graphic file (type png)
 <use assets/screenshots/dark.png>
-Package pdftex.def Info: assets/screenshots/dark.png  used on input line 388.
+Package pdftex.def Info: assets/screenshots/dark.png  used on input line 377.
 (pdftex.def)             Requested size: 140.98198pt x 284.52756pt.
-<assets/screenshots/text-size.png, id=429, 1224.575pt x 2471.2325pt>
+<assets/screenshots/text-size.png, id=452, 1224.575pt x 2471.2325pt>
 File: assets/screenshots/text-size.png Graphic file (type png)
 <use assets/screenshots/text-size.png>
 Package pdftex.def Info: assets/screenshots/text-size.png  used on input line 3
-94.
+83.
 (pdftex.def)             Requested size: 140.98198pt x 284.52756pt.
  [23
 pdfTeX warning (ext4): destination with the same identifier (name{figure.5}) ha
 s been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.405 		
+l.394 		
         
 pdfTeX warning (ext4): destination with the same identifier (name{figure.6}) ha
 s been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.405 		
+l.394 		
          <./assets/screenshots/dark.png> <./assets/screenshots/text-size.png>]
-<assets/screenshots/word-pick.png, id=441, 1224.575pt x 2471.2325pt>
+<assets/screenshots/word-pick.png, id=463, 1224.575pt x 2471.2325pt>
 File: assets/screenshots/word-pick.png Graphic file (type png)
 <use assets/screenshots/word-pick.png>
 Package pdftex.def Info: assets/screenshots/word-pick.png  used on input line 4
-11.
+00.
 (pdftex.def)             Requested size: 140.98198pt x 284.52756pt.
-<assets/screenshots/skladani.png, id=442, 1224.575pt x 2471.2325pt>
+<assets/screenshots/skladani.png, id=464, 1224.575pt x 2471.2325pt>
 File: assets/screenshots/skladani.png Graphic file (type png)
 <use assets/screenshots/skladani.png>
-Package pdftex.def Info: assets/screenshots/skladani.png  used on input line 41
-7.
+Package pdftex.def Info: assets/screenshots/skladani.png  used on input line 40
+6.
 (pdftex.def)             Requested size: 140.98198pt x 284.52756pt.
-<assets/screenshots/first-letter.png, id=443, 1224.575pt x 2471.2325pt>
+<assets/screenshots/first-letter.png, id=465, 1224.575pt x 2471.2325pt>
 File: assets/screenshots/first-letter.png Graphic file (type png)
 <use assets/screenshots/first-letter.png>
 Package pdftex.def Info: assets/screenshots/first-letter.png  used on input lin
-e 427.
+e 416.
 (pdftex.def)             Requested size: 140.98198pt x 284.52756pt.
-<assets/screenshots/reference.png, id=444, 1224.575pt x 2471.2325pt>
+<assets/screenshots/reference.png, id=466, 1224.575pt x 2471.2325pt>
 File: assets/screenshots/reference.png Graphic file (type png)
 <use assets/screenshots/reference.png>
 Package pdftex.def Info: assets/screenshots/reference.png  used on input line 4
-33.
+22.
 (pdftex.def)             Requested size: 140.98198pt x 284.52756pt.
 
 [24] [25
@@ -636,41 +620,41 @@ pdfTeX warning (ext4): destination with the same identifier (name{figure.7}) ha
 s been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.440 		\item \textbf
+l.429 		\item \textbf
                      {Sociální interakce a žebříčky:} Uživatelé moho...
 
 pdfTeX warning (ext4): destination with the same identifier (name{figure.8}) ha
 s been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.440 		\item \textbf
+l.429 		\item \textbf
                      {Sociální interakce a žebříčky:} Uživatelé moho...
 
 pdfTeX warning (ext4): destination with the same identifier (name{figure.9}) ha
 s been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.440 		\item \textbf
+l.429 		\item \textbf
                      {Sociální interakce a žebříčky:} Uživatelé moho...
 
 pdfTeX warning (ext4): destination with the same identifier (name{figure.10}) h
 as been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.440 		\item \textbf
+l.429 		\item \textbf
                      {Sociální interakce a žebříčky:} Uživatelé moho...
  <./assets/screenshots/word-pick.png> <./assets/screenshots/skladani.png> <./as
 sets/screenshots/first-letter.png> <./assets/screenshots/reference.png>]
-<assets/screenshots/stats.png, id=464, 1224.575pt x 2471.2325pt>
+<assets/screenshots/stats.png, id=486, 1224.575pt x 2471.2325pt>
 File: assets/screenshots/stats.png Graphic file (type png)
 <use assets/screenshots/stats.png>
-Package pdftex.def Info: assets/screenshots/stats.png  used on input line 446.
+Package pdftex.def Info: assets/screenshots/stats.png  used on input line 435.
 (pdftex.def)             Requested size: 140.98198pt x 284.52756pt.
-<assets/screenshots/leaderboard.png, id=465, 1224.575pt x 2471.2325pt>
+<assets/screenshots/leaderboard.png, id=487, 1224.575pt x 2471.2325pt>
 File: assets/screenshots/leaderboard.png Graphic file (type png)
 <use assets/screenshots/leaderboard.png>
 Package pdftex.def Info: assets/screenshots/leaderboard.png  used on input line
- 452.
+ 441.
 (pdftex.def)             Requested size: 140.98198pt x 284.52756pt.
 
 [26
@@ -678,16 +662,16 @@ pdfTeX warning (ext4): destination with the same identifier (name{figure.11}) h
 as been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.460 	\newpage
+l.449 	\newpage
                
 pdfTeX warning (ext4): destination with the same identifier (name{figure.12}) h
 as been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.460 	\newpage
+l.449 	\newpage
                 <./assets/screenshots/stats.png> <./assets/screenshots/leaderbo
 ard.png>] [27]
-Overfull \hbox (59.16977pt too wide) in paragraph at lines 497--513
+Overfull \hbox (59.16977pt too wide) in paragraph at lines 483--499
  [][] 
  []
 
@@ -696,73 +680,183 @@ pdfTeX warning (ext4): destination with the same identifier (name{table.1}) has
  been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.532 	
+l.518 	
        ] [30]
-Underfull \hbox (badness 10000) in paragraph at lines 541--542
+Underfull \hbox (badness 10000) in paragraph at lines 527--528
 []\T1/cmr/m/n/12 HACKETT, Conrad. \T1/cmr/m/it/12 How the Glo-bal Re-li-gi-ous 
 Land-s-cape Chan-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 541--542
+Underfull \hbox (badness 10000) in paragraph at lines 527--528
 \T1/cmr/m/it/12 ged From 2010 to 2020. \T1/cmr/m/n/12 On-line. Pew Re-search Ce
 n-ter. Do-stupn� z:
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 541--542
+Underfull \hbox (badness 10000) in paragraph at lines 527--528
 \T1/cmr/m/n/12 https://www.pewresearch.org/religion/2025/06/09/how-the-global-r
 eligious-
  []
 
-[31] (./teorie.lof)
+
+Underfull \hbox (badness 10000) in paragraph at lines 532--533
+[]\T1/cmr/m/n/12 SCRIPTURE ME-MORY FELLOWSHIP. \T1/cmr/m/it/12 Bible Me-mory: V
+er-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 532--533
+\T1/cmr/m/it/12 se-Locker. \T1/cmr/m/n/12 On-line. 2018, ak-tu-a-li-zo-v�no 16.
+7.2025. Do-stupn� z:
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 532--533
+\T1/cmr/m/n/12 https://play.google.com/store/apps/details?id=com.audioverse.smf
+.audioverse.
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 535--536
+[]\T1/cmr/m/n/12 MILLENNIAL APPS - THE BIBLE ME-MORY APP. \T1/cmr/m/it/12 The B
+ible
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 535--536
+\T1/cmr/m/it/12 Me-mory App. \T1/cmr/m/n/12 On-line. 2013, ak-tu-a-li-zo-v�no 1
+3.3.2026. Do-stupn� z:
+ []
+
+
+Overfull \hbox (12.81473pt too wide) in paragraph at lines 535--536
+\T1/cmr/m/n/12 https://play.google.com/store/apps/details?id=com.millennialsolu
+tions.scripturetyper.
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 538--539
+[]\T1/cmr/m/n/12 REMEMBER ME - BIBLE ME-MORY APP. PO-I-MENA. \T1/cmr/m/it/12 Bi
+ble
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 538--539
+\T1/cmr/m/it/12 Me-mory. \T1/cmr/m/n/12 On-line. 2010, ak-tu-a-li-zo-v�no 22.3.
+2026. Do-stupn� z:
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 538--539
+\T1/cmr/m/n/12 https://play.google.com/store/apps/details?id=org.bible.remember
+_me. [cit.
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 544--545
+[]\T1/cmr/m/n/12 PUBMED CEN-T-RAL. \T1/cmr/m/it/12 The right time to learn: me-
+cha-nisms
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 544--545
+\T1/cmr/m/it/12 and op-ti-mi-zation of spa-ced lear-ning. \T1/cmr/m/n/12 On-lin
+e. 2016. Do-stupn� z:
+ []
+
+
+Underfull \hbox (badness 6157) in paragraph at lines 547--548
+[]\T1/cmr/m/it/12 Flutter do-cu-men-tation. \T1/cmr/m/n/12 On-line. 2017, ak-tu
+-a-li-zo-v�no 9.3.2026. Do-stupn� z:
+ []
+
+[31]
+Underfull \hbox (badness 10000) in paragraph at lines 553--554
+[]\T1/cmr/m/it/12 PostgreSQL 18.3 Do-cu-men-tation. \T1/cmr/m/n/12 On-line. 202
+5. Do-stupn� z:
+ []
+
+
+Underfull \hbox (badness 2237) in paragraph at lines 556--557
+[]\T1/cmr/m/it/12 SQLite Do-cu-men-tation. \T1/cmr/m/n/12 On-line. 2000, ak-tu-
+a-li-zo-v�no 13.11.2025. Do-stupn� z:
+ []
+
+
+Underfull \hbox (badness 5924) in paragraph at lines 562--563
+[]\T1/cmr/m/n/12 SUPERMEMO. \T1/cmr/m/it/12 Ap-pli-cation of a com-pu-ter to im
+-prove the re-sults ob-ta-i-
+ []
+
+
+Underfull \hbox (badness 4229) in paragraph at lines 562--563
+\T1/cmr/m/it/12 ned in wor-king with the Su-per-Memo me-thod. \T1/cmr/m/n/12 On
+-line. 1990. Do-stupn� z:
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 562--563
+\T1/cmr/m/n/12 https://www.supermemo.com/en/blog/application-of-a-computer-to-i
+mprove-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 565--566
+[]\T1/cmr/m/n/12 SETTLES, Burr a ME-E-DER, Bren-dan. \T1/cmr/m/it/12 A Tra-i-na
+-ble Spa-ced Re-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 565--566
+\T1/cmr/m/it/12 pe-ti-tion Mo-del for Lan-gu-age Lear-ning. \T1/cmr/m/n/12 On-l
+ine. 2016. Do-stupn� z:
+ []
+
+[32] (./teorie.lof)
 \tf@lof=\write5
 \openout5 = `teorie.lof'.
 
- [32] [33]
-<assets/usecase_diagram.png, id=526, 350.30875pt x 1249.66875pt>
+ [33] [34]
+<assets/usecase_diagram.png, id=555, 350.30875pt x 1249.66875pt>
 File: assets/usecase_diagram.png Graphic file (type png)
 <use assets/usecase_diagram.png>
-Package pdftex.def Info: assets/usecase_diagram.png  used on input line 577.
+Package pdftex.def Info: assets/usecase_diagram.png  used on input line 599.
 (pdftex.def)             Requested size: 137.98825pt x 492.25824pt.
- [34
+ [35
 pdfTeX warning (ext4): destination with the same identifier (name{figure.13}) h
 as been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.585 	\newpage
+l.607 	\newpage
                 <./assets/usecase_diagram.png>]
 
 pdfTeX warning: /usr/bin/pdflatex (file ./assets/class_diagram.pdf): PDF inclus
 ion: found PDF version <1.7>, but at most version <1.5> allowed
-<assets/class_diagram.pdf, id=533, 673.55638pt x 557.20169pt>
+<assets/class_diagram.pdf, id=562, 673.55638pt x 557.20169pt>
 File: assets/class_diagram.pdf Graphic file (type pdf)
 <use assets/class_diagram.pdf>
-Package pdftex.def Info: assets/class_diagram.pdf  used on input line 594.
+Package pdftex.def Info: assets/class_diagram.pdf  used on input line 616.
 (pdftex.def)             Requested size: 455.25787pt x 376.61354pt.
-[35
+[36
 pdfTeX warning (ext4): destination with the same identifier (name{figure.14}) h
 as been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.599 \end{document}
+l.621 \end{document}
                      <./assets/class_diagram.pdf>] (./teorie.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
  ***********
-
-
-LaTeX Warning: There were undefined references.
-
 Package rerunfilecheck Info: File `teorie.out' has not changed.
 (rerunfilecheck)             Checksum: 582E98F5DA95ABE5B81068D9F6534C69;7698.
  ) 
 Here is how much of TeX's memory you used:
- 12090 strings out of 475277
- 192250 string characters out of 5768623
+ 12115 strings out of 475277
+ 192575 string characters out of 5768623
  1934975 words of memory out of 5000000
- 33899 multiletter control sequences out of 15000+600000
+ 33911 multiletter control sequences out of 15000+600000
  569762 words of font info for 58 fonts, out of 8000000 for 9000
  473 hyphenation exceptions out of 8191
  75i,17n,79p,799b,587s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -779,10 +873,10 @@ texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx2488.600pk> </var/home/ma
 takom/.texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1440.600pk> </var/
 home/matakom/.texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1728.600pk>
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb>
-Output written on teorie.pdf (35 pages, 2673519 bytes).
+Output written on teorie.pdf (36 pages, 2682351 bytes).
 PDF statistics:
- 1106 PDF objects out of 1200 (max. 8388607)
- 525 compressed objects within 6 object streams
- 108 named destinations out of 1000 (max. 500000)
+ 1155 PDF objects out of 1200 (max. 8388607)
+ 556 compressed objects within 6 object streams
+ 121 named destinations out of 1000 (max. 500000)
  480 words of extra memory for PDF output out of 10000 (max. 10000000)
 

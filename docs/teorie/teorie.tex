@@ -111,7 +111,6 @@
 	\section{Úvod}
 	Ve světě žije přes 2.3 miliardy křesťanů \cite{pocet-krestanu}, což znamená, že více než čtvrtina lidí jsou křesťané. Častým cílem křesťanů je studium Bible a zapamatování jejich částí.
 	Dlouhodobé zapamatování textu ale není jednoduchý úkol.	Existují aplikace, které memorizování částí Bible zjednodušují, ale ty jsou často zastaralé, těžké na používání a neaplikují metody učení, které uživateli pomáhají, urychlují a zpříjemňují celý proces.
-	% TODO citace na metody uceni?
 	
 	Za tímto účelem vznikla aplikace Bible Memorizer. Tato aplikace se snaží jejím uživatelům zjednodušit cíl zapamatování specifických biblických testů. K tomu používá dva hlavní principy. 
 	První z nich je gamifikace. Aplikace používá rozmanité minihry, které uživatele přirozeně nutí zastavit se nad daným textem a přemýšlet nad ním novým způsobem.
@@ -132,9 +131,8 @@
 	
 	Každý verš má svojí unikátní, neměnnou referenci většinou udávanou ve formě "název-knihy číslo-kapitoly:číslo-verše". (např. "Jan 3:16")
 	
-	% TODO citace Intervalove opakovani wiki rozcestnik
 	\subsubsection{Intervalové opakování}
-	Intervalové opakování je způsob učení, který se zakládá na postupně rostoucích intervalech. Vysvětleme si to na příkladu. Student se chce naučit nazpaměť jeden verš. První den se ho naučí. Druhý den si ho zopakuje. Třetí den vynechá, ale čtvrtý den se ujistí, že si ho stále pamatuje.
+	Intervalové opakování \cite{space-repetition} je způsob učení, který se zakládá na postupně rostoucích intervalech. Vysvětleme si to na příkladu. Student se chce naučit nazpaměť jeden verš. První den se ho naučí. Druhý den si ho zopakuje. Třetí den vynechá, ale čtvrtý den se ujistí, že si ho stále pamatuje.
 	Tento interval postupně roste, takže student si danou informaci neopakuje každý den. Díky tomu může získaný čas využít na jiné učivo a pojmout tak více informací.
 	Ebbinghausova křivka zapomínání \cite{ebbinghaus} ukazuje, jak rychle člověk zapomíná informaci.
 	Jak můžeme vidět na obrázku \ref{fig:krivka}, tak daná křivka (v červené barvě) se zplošťuje s rostoucím počtem opakování.
@@ -148,8 +146,6 @@
 	\end{figure}
 
 	
-	% TODO odkazat se na konkretni aplikace?
-
 	\section{Analýza existujících řešení}
 	V rámci rešerše trhu a mapování konkurenčního prostředí byly podrobně analyzovány čtyři existující mobilní aplikace: VerseLocker \cite{app_verselocker}, Bible Memory \cite{app_biblememory}, Remember Me \cite{app_rememberme} a BibleMe \cite{app_bibleme}. Ačkoliv je primární cíl těchto nástrojů totožný – pomoci uživateli s memorizací textu – analýza odhalila řadu kritických nedostatků, které otevírají prostor pro vytvoření nového, modernějšího řešení.
 	
@@ -191,25 +187,20 @@
 
 	\section{Technologie}
 	
-	% TODO
 	\subsection{Flutter}
-	Pro vývoj klientské části mobilní aplikace byl zvolen framework Flutter. Jeho klíčovým specifikem pro tento projekt je využití vlastního renderovacího enginu, který generuje nativní uživatelské rozhraní a zajišťuje jeho vizuální i funkční konzistenci napříč různými mobilními zařízeními. Tento přístup eliminuje závislost na nativních UI komponentách jednotlivých operačních systémů, čímž se předchází fragmentaci vzhledu a přispívá k lepší přístupnosti aplikace.
+ 	Pro vývoj klientské aplikace byl zvolen framework Flutter. \cite{flutter} Vzhledem k implementaci interaktivních miniher a nutnosti plynulých animací při gamifikaci bylo klíčové zajistit konzistentní vykreslování napříč různými verzemi systému Android. Vlastní renderovací engine Flutteru tento problém řeší tím, že se nespoléhá na nativní komponenty OEM výrobců, čímž eliminuje vizuální fragmentaci a snižuje náročnost testování UI. Zároveň nativní podpora asynchronních operací (Dart) usnadnila implementaci náročného lokálního vyhodnocování algoritmu SM-2 bez blokování uživatelského rozhraní.
 	
-	% TODO
 	\subsection{NestJS}
-	Serverová logika (backend) je implementována pomocí frameworku NestJS. Nástroj vynucuje modulární architekturu, která umožňuje systematické rozdělení aplikace do izolovaných domén. Díky tomuto striktnímu strukturování jsou procesy jako autentizace, autorizace a především synchronizace dat bezpečně odděleny a spravovány, což radikálně snižuje riziko vzniku datových nekonzistencí na straně serveru.
+	Serverová logika je postavena na frameworku NestJS. \cite{nestjs} Pro projekt typu Bible Memorizer, který vyžaduje složitou obousměrnou synchronizaci offline dat, bylo nutné zajistit striktní oddělení business logiky. Architektura NestJS založená na závislosti (Dependency Injection) umožnila bezpečně izolovat modul pro autentizaci uživatelů od samotného synchronizačního jádra (SyncController). Toto rozdělení usnadnilo implementaci mechanismu 'zdroje pravdy' (source of truth) pro řešení datových konfliktů při slučování časových razítek, aniž by došlo k narušení ostatních doménových procesů.
 	
-	% TODO
 	\subsection{PostgreSQL}
-	Jako primární databázový systém pro běh na serveru je nasazen PostgreSQL. Slouží k trvalému ukládání relačně strukturovaných  uživatelských dat. Podpora komplexních relací a striktní dodržování pravidel transakčního zpracování zajišťují absolutní datovou integritu a konzistenci při souběžných aktualizacích a synchronizačních požadavcích od vícera klientů.
+	Jako primární databázový systém pro běh na serveru je nasazen PostgreSQL. \cite{postgresql} Slouží k trvalému ukládání relačně strukturovaných  uživatelských dat. Podpora komplexních relací a striktní dodržování pravidel transakčního zpracování zajišťují absolutní datovou integritu a konzistenci při souběžných aktualizacích a synchronizačních požadavcích od vícera klientů.
 	
-	% TODO
 	\subsection{SQLite}
-	Pro správu lokálních dat přímo v paměti mobilního zařízení je využita databáze SQLite. Její implementace je nezbytnou podmínkou pro fungování aplikace v offline režimu. Entitní data o uložených verších, harmonogramu opakování a pokroku v učení jsou ukládána do tohoto lokálního úložiště a následně, po detekci obnoveného síťového připojení, asynchronně synchronizována s hlavní databází na serveru. Uživatel tak neztrácí kontinuitu učení ani při výpadcích sítě.
+	Pro správu lokálních dat přímo v paměti mobilního zařízení je využita databáze SQLite. \cite{sqlite} Její implementace je nezbytnou podmínkou pro fungování aplikace v offline režimu. Entitní data o uložených verších, harmonogramu opakování a pokroku v učení jsou ukládána do tohoto lokálního úložiště a následně, po detekci obnoveného síťového připojení, asynchronně synchronizována s hlavní databází na serveru. Uživatel tak neztrácí kontinuitu učení ani při výpadcích sítě.
 	
-	% TODO
 	\subsection{Cloudflare Tunnel}
-	Infrastrukturní spojení mezi lokálním serverem a sítí internet zajišťuje démon Cloudflare Tunnel. Tato technologie vytváří šifrované odchozí spojení z aplikačního kontejneru přímo do sítě Cloudflare. Serverová aplikace (NestJS) díky tomu může bezpečně přijímat vnější požadavky bez nutnosti otevírání veřejných portů na serverovém firewallu nebo nutnosti přidělení statické veřejné IP adresy, čímž se minimalizuje povrch pro potenciální síťové útoky.
+	Infrastrukturní spojení mezi lokálním serverem a sítí internet zajišťuje démon Cloudflare Tunnel. \cite{cloudflare} Tato technologie vytváří šifrované odchozí spojení z aplikačního kontejneru přímo do sítě Cloudflare. Serverová aplikace (NestJS) díky tomu může bezpečně přijímat vnější požadavky bez nutnosti otevírání veřejných portů na serverovém firewallu nebo nutnosti přidělení statické veřejné IP adresy, čímž se minimalizuje povrch pro potenciální síťové útoky.
 	
 	
 	
@@ -230,9 +221,8 @@
 	\subsubsection{Ukládání dat}
 	Lokální ukládání dat v mobilní aplikaci je primárně zajištěno pomocí relační databáze SQLite. Toto řešení je klíčové pro zajištění plnohodnotného běhu aplikace v offline režimu, kdy si uživatel může prohlížet a procvičovat uložené verše bez závislosti na momentálním internetovém připojení. Pro účely následné synchronizace je v lokálním databázovém schématu zavedena vlastnost (\textit{needsSync}), která označuje ty databázové záznamy, jež byly na zařízení nově vytvořeny nebo modifikovány a čekají na odeslání na backend.
 	
-	% TODO sm-2
 	\subsubsection{Algoritmy}
-	Jádrem logiky aplikace pro plánování učení je implementace principu intervalového opakování (Spaced Repetition). Konkrétně je využit algoritmus SM-2 (SuperMemo-2), který na základě předchozího hodnocení obtížnosti daného verše a zaznamenané úspěšnosti při aktuálním procvičování dynamicky vypočítává datum dalšího opakování. Tímto přístupem dochází k optimalizaci procesu učení – problematické verše jsou uživateli k procvičení předkládány v kratších intervalech, zatímco u dobře osvojených textů se interval do dalšího zobrazení exponenciálně prodlužuje.
+	Jádrem logiky aplikace pro plánování učení je implementace principu intervalového opakování (Spaced Repetition). Konkrétně je využit algoritmus SM-2 (SuperMemo-2) \cite{sm-2}, který na základě předchozího hodnocení obtížnosti daného verše a zaznamenané úspěšnosti při aktuálním procvičování dynamicky vypočítává datum dalšího opakování. Tímto přístupem dochází k optimalizaci procesu učení – problematické verše jsou uživateli k procvičení předkládány v kratších intervalech, zatímco u dobře osvojených textů se interval do dalšího zobrazení exponenciálně prodlužuje.
 	
 	\subsection{Server}
 	Serverová část aplikačního řešení poskytuje REST API a spravuje primární databázové úložiště. Backend je postaven na frameworku NestJS. Z architektonického hlediska je aplikační kód rozdělen do logických modulů, což umožňuje systematické zapouzdření jednotlivých doménových funkcionalit. Toto modulární členění zajišťuje izolaci business logiky a bezpečné zpracování požadavků. \\
@@ -270,7 +260,6 @@
 	\subsubsection{Zajištění integrity a relace}
 	Aby byla zaručena absolutní konzistence dat a ochrana proti anomáliím, využívá databázový model soustavu integritních omezení:
 	
-	% TODO on delete cascade?
 	\begin{itemize}
 		\item \textbf{Referenční integrita a kaskádové mazání: }Všechny cizí klíče (vazby na uživatele či verše) jsou definovány s pravidlem ON DELETE CASCADE. Pokud je odstraněn uživatelský účet, databáze automaticky a bezpečně odstraní i všechny jeho uložené verše, historii procvičování a vazby přátelství. Tím je zamezeno vzniku tzv. sirotčích záznamů.
 		
@@ -466,9 +455,7 @@
 	
 	Mezi klíčové dosažené milníky patří:
 	\begin{itemize}
-		% TODO feedback loop
 		\item \textbf{Implementace SM-2 algoritmu s herní smyčkou:} Jádrem aplikace je algoritmus intervalového opakování (Spaced Repetition), který je úzce propojen s herními mechanikami. Úspěšnost uživatele v minihrách (hodnocení $1$--$5$) přímo ovlivňuje obtížnost verše. Tento systém vytváří tzv. \textit{feedback loop}, kde je uživatel motivován k lepším výsledkům, aby mohl „postupovat“ v procesu zapamatování.
-		% TODO streak
 		\item \textbf{Systém denních řad (Streaks):} Pro posílení dlouhodobého návyku byl implementován mechanismus \textit{streak}, který vizuálně odměňuje uživatele za každodenní aktivitu. Tento psychologický prvek využívá principu averze ke ztrátě, kdy uživatel usiluje o udržení nepřerušené řady procvičování. Tento systém je podpořen notifikacemi, které se uživateli zobrazí, neprocvičí-li daný den žádný verš.
 		\item \textbf{Sociální dynamika a žebříčky:} Aplikace obsahuje pokročilý sociální modul. Uživatelé mohou pomocí unikátních kódů navazovat přátelství a porovnávat své statistiky a skóre v žebříčcích. Tento prvek zdravé soutěživosti transformuje individuální učení v kolektivní zážitek.
 		\item \textbf{Offline režim a synchronizace:} Aby nebyla herní smyčka přerušena nedostatkem konektivity, byl vyvinut synchronizační mechanismus využívající lokální databázi SQLite a serverový PostgreSQL. Postup uživatele, jeho skóre i dosažené úspěchy jsou bezpečně ukládány a při obnovení připojení automaticky synchronizovány pomocí časových razítek (\textit{timestamps}).
@@ -488,12 +475,11 @@
 	
 	Jak shrnuje Tabulka \ref{tab:srovnani_aplikaci}, většina konkurence postrádá pokročilé metody učení. Zásadní výhodou naší aplikace je implementace intervalového opakování (SM-2), které u mnoha alternativ (např. VerseLocker či Remember Me) zcela chybí, což nutí uživatele spoléhat se na vlastní odhad toho, kdy si mají verš zopakovat. Na rozdíl od většiny konkurence také Bible Memorizer nevyžaduje manuální zadávání referencí do textových polí, což se v praxi ukázalo jako náchylné k chybám (u aplikace BibleMe to vedlo až k její nepoužitelnosti), ale nabízí integrovanou čtečku textu.
 	
-	Inovací prošel i sociální modul. Například aplikace VerseLocker sice žebříčky obsahuje, ale hodnotí pouze celkový počet „zapamatovaných“ veršů. Protože si tento stav určuje sám uživatel bez objektivního testování, je systém snadno zneužitelný a demotivační. Náš systém je spravedlivější, protože hodnotí skutečnou aktivitu v minihrách a udrženou denní řadu. V neposlední řadě Bible Memorizer jako jediný z testovaných plně podporuje české uživatelské rozhraní.
+	Inovací prošel i sociální modul. Například aplikace VerseLocker sice žebříčky obsahuje, ale hodnotí pouze celkový počet „zapamatovaných“ veršů. Protože si tento stav určuje sám uživatel bez objektivního testování, je systém snadno zneužitelný a demotivační. Navržený systém eliminuje tento nedostatek, jelikož hodnotí skutečnou aktivitu v minihrách a udrženou denní řadu. V neposlední řadě Bible Memorizer jako jediný z testovaných plně podporuje české uživatelské rozhraní.
 	
-	% TODO citace na ty aplikace?
 	\begin{table}[H]
 		\centering
-		\renewcommand{\arraystretch}{1.4} % Lehce zvětší výšku řádků pro lepší čitelnost
+		\renewcommand{\arraystretch}{1.4}
 		\begin{tabular}{|l|c|c|c|c|}
 			\hline
 			\textbf{Aplikace} & \textbf{Intervalové opakov.} & \textbf{Čtečka Bible} & \textbf{Žebříčkek} & \textbf{České UI} \\
@@ -528,7 +514,7 @@
 	
 	% TODO HLR
 	\subsubsection{Možnosti budoucího rozvoje}
-	Ačkoliv je aplikace v současném stavu plně použitelná, existuje zásadní prostor pro její další algoritmické vylepšení. Hlavním plánem do budoucna je nahrazení současného algoritmu SM-2 pokročilejším modelem HLR (Half-Life Regression). Tento model dokáže přesněji odhadovat pravděpodobnost zapomenutí konkrétního verše na základě širšího spektra proměnných a historie paměťových stop, což by vedlo k další optimalizaci intervalů opakování a celkovému zefektivnění procesu memorizace.
+	Ačkoliv je aplikace v současném stavu plně použitelná, existuje zásadní prostor pro její další algoritmické vylepšení. Hlavním plánem do budoucna je nahrazení současného algoritmu SM-2 pokročilejším modelem HLR (Half-Life Regression). \cite{hlr} Tento model dokáže přesněji odhadovat pravděpodobnost zapomenutí konkrétního verše na základě širšího spektra proměnných a historie paměťových stop, což by vedlo k další optimalizaci intervalů opakování a celkovému zefektivnění procesu memorizace.
 	
 	% 8. Literatura
 	\newpage
@@ -536,12 +522,48 @@
 	
 	\begin{thebibliography}{99}
 		\bibitem{ebbinghaus_web}
-		\textit{Křivka zapomínání.} Online. In: WIKIMEDIA COMMONS. 2025. Dostupné z: https://commons.wikimedia.org/wiki/File:ForgettingCurve.svg. [cit. 2026-03-25].
+		Icez, \textit{Křivka zapomínání.} Online. In: WIKIMEDIA COMMONS. 2025. Dostupné z: https://commons.wikimedia.org/wiki/File:ForgettingCurve.svg. [cit. 2026-03-25].
 		\bibitem{pocet-krestanu}
 		HACKETT, Conrad. \textit{How the Global Religious Landscape Changed From 2010 to 2020.} Online. Pew Research Center. Dostupné z: https://www.pewresearch.org/religion/2025/06/09/how-the-global-religious-landscape-changed-from-2010-to-2020/. [cit. 2026-03-26].
 		\bibitem{ebbinghaus}
 		EBBINGHAUS, Hermann. \textit{Memory: a contribution to experimental psychology.} Nabu Press, 2012. ISBN 978-1272622725.
 		
+		\bibitem{app_verselocker} 
+		SCRIPTURE MEMORY FELLOWSHIP. \textit{Bible Memory: VerseLocker.} Online. 2018, aktualizováno 16.7.2025. Dostupné z: https://play.google.com/store/apps/details?id=com.audioverse.smf.audioverse. [cit. 2026-03-26].
+		
+		\bibitem{app_biblememory} 
+		MILLENNIAL APPS - THE BIBLE MEMORY APP. \textit{The Bible Memory App.} Online. 2013, aktualizováno 13.3.2026. Dostupné z: https://play.google.com/store/apps/details?id=com.millennialsolutions.scripturetyper. [cit. 2026-03-26].
+		
+		\bibitem{app_rememberme} 
+		REMEMBER ME - BIBLE MEMORY APP. POIMENA. \textit{Bible Memory.} Online. 2010, aktualizováno 22.3.2026. Dostupné z: https://play.google.com/store/apps/details?id=org.bible.remember\_me. [cit. 2026-03-26].
+		
+		\bibitem{app_bibleme} 
+		EFIRE APPS. Bible Memory: \textit{BibleMe.} Online. 2016, aktualizováno 16.3.2026. Dostupné z: https://play.google.com/store/apps/details?id=com.efireapps.bibleme. [cit. 2026-03-26].
+		
+		\bibitem{space-repetition}
+		PUBMED CENTRAL. \textit{The right time to learn: mechanisms and optimization of spaced learning.} Online. 2016. Dostupné z: https://pmc.ncbi.nlm.nih.gov/articles/PMC5126970/. [cit. 2026-03-26].
+		
+		\bibitem{flutter}
+		\textit{Flutter documentation.} Online. 2017, aktualizováno 9.3.2026. Dostupné z: https://docs.flutter.dev/. [cit. 2026-03-26].
+		
+		\bibitem{nestjs}
+		\textit{NestJS documentation.} Online. 2017. Dostupné z: https://docs.nestjs.com/. [cit. 2026-03-26].
+		
+		\bibitem{postgresql}
+		\textit{PostgreSQL 18.3 Documentation.} Online. 2025. Dostupné z: https://www.postgresql.org/docs/18/index.html. [cit. 2026-03-26].
+		
+		\bibitem{sqlite}
+		\textit{SQLite Documentation.} Online. 2000, aktualizováno 13.11.2025. Dostupné z: https://sqlite.org/docs.html. [cit. 2026-03-26].
+		
+		\bibitem{cloudflare}
+		\textit{Cloudflare Docs.} Online. 2010. Dostupné z: https://developers.cloudflare.com/. [cit. 2026-03-26].
+		
+		\bibitem{sm-2}
+		SUPERMEMO. \textit{Application of a computer to improve the results obtained in working with the SuperMemo method.} Online. 1990. Dostupné z: https://www.supermemo.com/en/blog/application-of-a-computer-to-improve-the-results-obtained-in-working-with-the-supermemo-method. [cit. 2026-03-26].
+		
+		\bibitem{hlr}
+		SETTLES, Burr a MEEDER, Brendan. \textit{A Trainable Spaced Repetition Model for Language Learning.} Online. 2016. Dostupné z: https://research.duolingo.com/papers/settles.acl16.pdf. [cit. 2026-03-26].
+
 	\end{thebibliography}
 	
 	
