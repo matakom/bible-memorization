@@ -107,8 +107,8 @@
 	\setcounter{page}{9}
 	
 	
-	
-	\section{Úvod}
+	\addcontentsline{toc}{section}{Úvod}	
+	\section*{Úvod}
 	Ve světě žije přes 2.3 miliardy křesťanů \cite{pocet-krestanu}, což znamená, že více než čtvrtina lidí jsou křesťané. Častým cílem křesťanů je studium Bible a zapamatování jejich částí.
 	Dlouhodobé zapamatování textu ale není jednoduchý úkol.	Existují aplikace, které memorizování částí Bible zjednodušují, ale ty jsou často zastaralé, těžké na používání a neaplikují metody učení, které uživateli pomáhají, urychlují a zpříjemňují celý proces.
 	
@@ -117,21 +117,21 @@
 	
 	Druhý princip je intervalové opakování. Intervalové opakování je způsob memorování informace na základě postupně rostoucích intervalů. Díky tomu se uživatelem naučený text uživateli zobrazuje pouze občasně pro kontrolu jeho retence. Uživatel pak nemusí trávit tolik času opakováním veršů, které jsou pro něj jednoduché.
 	
-	\subsection{Cílová skupina}
-	Jak lze z úvodu a celé koncepce projektu jednoduše odvodit, cílovou skupinou této aplikace jsou výhradně křesťané, kteří si chtějí memorizovat biblické verše.
+	Jak lze z celé koncepce projektu jednoduše odvodit, cílovou skupinou této aplikace jsou výhradně křesťané, kteří si chtějí memorizovat biblické verše.
 		
-	Aplikace však není vázána na specifickou denominaci či církev.
+	Aplikace není vázána na specifickou denominaci či církev.
 	
 	Aplikace zároveň podporuje lokalizaci, díky čemuž umožňuje používání křesťanům z jiných zemí, než jen Česká republika. (Aplikace momentálně podporuje český a anglický jazyk)
 	
-	\subsection{Terminologie}
+	\newpage
+	\section{Terminologie}
 	
-	\subsubsection{Verš}
+	\subsection{Verš}
 	Verš je část textu Bible. Jeho délka je většinou jedna až dvě věty. Jednotlivé verše tvoří kapitoly a jednotlivé kapitoly tvoří biblické knihy, které pak tvoří Bibli.
 	
 	Každý verš má svojí unikátní, neměnnou referenci většinou udávanou ve formě "název-knihy číslo-kapitoly:číslo-verše". (např. "Jan 3:16")
 	
-	\subsubsection{Intervalové opakování}
+	\subsection{Intervalové opakování}
 	Intervalové opakování \cite{space-repetition} je způsob učení, který se zakládá na postupně rostoucích intervalech. Vysvětleme si to na příkladu. Student se chce naučit nazpaměť jeden verš. První den se ho naučí. Druhý den si ho zopakuje. Třetí den vynechá, ale čtvrtý den se ujistí, že si ho stále pamatuje.
 	Tento interval postupně roste, takže student si danou informaci neopakuje každý den. Díky tomu může získaný čas využít na jiné učivo a pojmout tak více informací.
 	Ebbinghausova křivka zapomínání \cite{ebbinghaus} ukazuje, jak rychle člověk zapomíná informaci.
@@ -140,12 +140,12 @@
 	
 	\begin{figure}[htbp]
 		\centering
-		\includegraphics[width=0.8\textwidth]{assets/ForgettingCurve.pdf}
+		\includegraphics[width=0.69\textwidth]{assets/ForgettingCurve.pdf}
 		\caption{Křivka zapomínání \cite{ebbinghaus_web}}
 		\label{fig:krivka}
 	\end{figure}
-
 	
+	\newpage
 	\section{Analýza existujících řešení}
 	V rámci rešerše trhu a mapování konkurenčního prostředí byly podrobně analyzovány čtyři existující mobilní aplikace: VerseLocker \cite{app_verselocker}, Bible Memory \cite{app_biblememory}, Remember Me \cite{app_rememberme} a BibleMe \cite{app_bibleme}. Ačkoliv je primární cíl těchto nástrojů totožný – pomoci uživateli s memorizací textu – analýza odhalila řadu kritických nedostatků, které otevírají prostor pro vytvoření nového, modernějšího řešení.
 	
@@ -157,6 +157,7 @@
 	
 	V neposlední řadě představuje velkou bariéru pro tuzemské uživatele absence lokalizace. Žádná z testovaných aplikací nenabízela uživatelské prostředí v českém jazyce a pouze jedna umožňovala stažení českého překladu Bible. Možnosti synchronizace dat byly navíc u většiny aplikací omezené pouze na e-mail, případně na sociální síť Facebook.
 
+	\newpage
 	\section{Analýza požadavků}
 	Na základě zjištění z analýzy existujících řešení a definování cílové skupiny byly stanoveny konkrétní požadavky na vyvíjenou aplikaci. Tyto požadavky se dělí na funkční, které popisují chování systému, a nefunkční, které definují jeho vlastnosti a kvalitu.
 	
@@ -185,6 +186,7 @@
 		\item \textbf{Použitelnost a přístupnost:} Uživatelské prostředí musí být intuitivní. Důraz je kladen na motivaci a dlouhodobou angažovanost (gamifikace). Aplikace musí být přístupná širokému spektru uživatelů, včetně osob se zhoršeným zrakem (podpora změny velikosti písma).
 	\end{itemize}
 
+	\newpage
 	\section{Technologie}
 	
 	\subsection{Flutter}
@@ -203,7 +205,7 @@
 	Infrastrukturní spojení mezi lokálním serverem a sítí internet zajišťuje démon Cloudflare Tunnel. \cite{cloudflare} Tato technologie vytváří šifrované odchozí spojení z aplikačního kontejneru přímo do sítě Cloudflare. Serverová aplikace (NestJS) díky tomu může bezpečně přijímat vnější požadavky bez nutnosti otevírání veřejných portů na serverovém firewallu nebo nutnosti přidělení statické veřejné IP adresy, čímž se minimalizuje povrch pro potenciální síťové útoky.
 	
 	
-	
+	\newpage
 	\section{Architektura}
 	Architektura systému je navržena jako klient-server, kde klientskou část tvoří mobilní aplikace a logiku zpracování dat centralizuje serverová část. Tyto dvě komponenty spolu komunikují převážně asynchronně, aby byla zachována vysoká dostupnost a možnost offline fungování.
 	Celkové schéma propojení klientské aplikace, zabezpečeného tunelu a serverového backendu je zobrazeno na obrázku \ref{fig:architecture}.
@@ -234,6 +236,7 @@
 	\subsubsection{Synchronizace}
 	Synchronizační mechanismus zajišťuje konzistenci dat mezi lokální databází na mobilním zařízení a hlavní serverovou databází. Proces synchronizace je iniciován ze strany klienta. Aplikace vyfiltruje záznamy s vlastností \textit{needsSync} a odešle je formou dávky na server. Pro řešení případných datových konfliktů – například pokud uživatel procvičoval verše offline na dvou různých zařízeních – je implementován mechanismus „zdroje pravdy“ (source of truth) založený na časovém razítku poslední úpravy záznamu. Server při slučování dat porovná časová razítka (\textit{timestamp} nebo datum procvičení) a do hlavní databáze zapíše tu variantu záznamu, která nese nejnovější časový údaj.
 	
+	\newpage
 	\section{Aplikace}
 	
 	\subsection{Datový model}
@@ -392,9 +395,9 @@
 	\begin{itemize}
 		\item \textbf{Minihry pro učení:} Namísto pasivního čtení je procvičování realizováno formou interaktivních miniher, jako je doplňování slov nebo skládání frází (viz \textbf{obrázky \ref{fig:word-pick}, \ref{fig:skladani}, \ref{fig:first-letter} a \ref{fig:reference}}). Tento přístup nutí uživatele nad textem aktivně přemýšlet.
 		
+		% PRVNÍ DVOJICE MINIHER
 		\begin{figure}[H]
 			\centering
-			% První řada
 			\begin{minipage}{0.48\textwidth}
 				\centering
 				\includegraphics[height=10cm]{assets/screenshots/word-pick.png}
@@ -407,10 +410,11 @@
 				\caption{Minihra: Skládání veršů}
 				\label{fig:skladani}
 			\end{minipage}
-			
-			\vspace{0.5cm} % Mezera mezi řadami
-			
-			% Druhá řada
+		\end{figure}
+		
+		% DRUHÁ DVOJICE MINIHER
+		\begin{figure}[H]
+			\centering
 			\begin{minipage}{0.48\textwidth}
 				\centering
 				\includegraphics[height=10cm]{assets/screenshots/first-letter.png}
@@ -428,6 +432,7 @@
 		\item \textbf{Sledování denní řady (Streak):} Aplikace vizualizuje konzistenci uživatele, což silně motivuje k pravidelnému návratu.
 		\item \textbf{Sociální interakce a žebříčky:} Uživatelé mohou porovnávat své výsledky s přáteli v žebříčcích založených na reálné aktivitě (viz \textbf{obrázky \ref{fig:stats}} a \textbf{\ref{fig:leaderboard}}).
 		
+		% STATISTIKY A ŽEBŘÍČEK
 		\begin{figure}[H]
 			\centering
 			\begin{minipage}{0.48\textwidth}
@@ -447,9 +452,8 @@
 	
 	
 	\newpage
-	\section{Závěr}
 	
-	\subsection{Dosažené cíle a aktuální stav aplikace}
+	\section{Shrnutí výsledků}
 	
 	V rámci realizace maturitního projektu byla úspěšně navržena a implementována klientská mobilní aplikace i serverová část. Výsledný systém Bible Memorizer v aktuálním stavu plně pokrývá veškeré funkční požadavky, přičemž klade mimořádný důraz na prvky gamifikace, které zvyšují uživatelskou retenci a efektivitu učení.
 	
@@ -463,58 +467,48 @@
 	
 	Aktuálně je aplikace ve stavu plně funkčního a otestovaného prototypu, který efektivně kombinuje vzdělávací cíle s gamifikace.
 	
+	\newpage
+	\phantomsection
+	\addcontentsline{toc}{section}{Závěr}	
+	\section*{Závěr}
 	
-	\subsection{Diskuze}
 	
-	\subsubsection{Zhodnocení splněných cílů}
-	Lze konstatovat, že všechny hlavní cíle vytyčené v úvodní analýze a zadání projektu byly naplněny. Vytvořená platforma demonstruje funkční propojení moderních technologií (Flutter pro mobilní klient a NestJS pro backend) s vědeckými metodami učení. Důraz na gamifikaci a sledování denních řad efektivně přispívá k vyšší motivaci uživatelů.
+	Lze konstatovat, že všechny hlavní cíle projektu byly naplněny. Vytvořená platforma Bible Memorizer demonstruje funkční propojení frameworků Flutter a NestJS s vědeckými metodami učení. Díky implementaci algoritmu intervalového opakování (SM-2) a prvků gamifikace aplikace efektivně zvyšuje motivaci uživatelů a řeší kritické nedostatky dosavadní konkurence.
 	
-	\subsubsection{Porovnání s konkurenčními řešeními}
-	
-	Ve srovnání s existujícími aplikacemi, které byly analyzovány v úvodu práce (VerseLocker, Bible Memory, Remember Me a BibleMe), přináší Bible Memorizer několik zásadních inovací a opravuje jejich největší nedostatky. 
-	
-	Jak shrnuje Tabulka \ref{tab:srovnani_aplikaci}, většina konkurence postrádá pokročilé metody učení. Zásadní výhodou naší aplikace je implementace intervalového opakování (SM-2), které u mnoha alternativ (např. VerseLocker či Remember Me) zcela chybí, což nutí uživatele spoléhat se na vlastní odhad toho, kdy si mají verš zopakovat. Na rozdíl od většiny konkurence také Bible Memorizer nevyžaduje manuální zadávání referencí do textových polí, což se v praxi ukázalo jako náchylné k chybám (u aplikace BibleMe to vedlo až k její nepoužitelnosti), ale nabízí integrovanou čtečku textu.
-	
-	Inovací prošel i sociální modul. Například aplikace VerseLocker sice žebříčky obsahuje, ale hodnotí pouze celkový počet „zapamatovaných“ veršů. Protože si tento stav určuje sám uživatel bez objektivního testování, je systém snadno zneužitelný a demotivační. Navržený systém eliminuje tento nedostatek, jelikož hodnotí skutečnou aktivitu v minihrách a udrženou denní řadu. V neposlední řadě Bible Memorizer jako jediný z testovaných plně podporuje české uživatelské rozhraní.
+	Ve srovnání s analyzovanými řešeními (VerseLocker, Bible Memory, Remember Me a BibleMe) přináší aplikace zásadní inovace, zejména integrovanou čtečku a spravedlivý sociální systém. Ten na rozdíl od aplikace VerseLocker nehodnotí subjektivní odhad zapamatování, ale skutečnou aktivitu v minihrách a délku denní řady. Výsledky srovnání shrnuje Tabulka \ref{tab:srovnani_aplikaci}.
 	
 	\begin{table}[H]
 		\centering
-		\renewcommand{\arraystretch}{1.4}
+		\renewcommand{\arraystretch}{1.2} % Mírně sníženo pro úsporu místa
+		\small % Menší písmo pro tabulku
 		\begin{tabular}{|l|c|c|c|c|}
 			\hline
-			\textbf{Aplikace} & \textbf{Intervalové opakov.} & \textbf{Čtečka Bible} & \textbf{Žebříčkek} & \textbf{České UI} \\
+			\textbf{Aplikace} & \textbf{Int. opakov.} & \textbf{Čtečka Bible} & \textbf{Žebříček} & \textbf{České UI} \\
 			\hline
 			\hline
 			\textbf{Bible Memorizer} & \textbf{Ano} & \textbf{Ano} & \textbf{Ano (Spravedlivý)} & \textbf{Ano} \\
 			\hline
 			Bible Memory & Ano & Ano & Ne & Ne \\
 			\hline
-			VerseLocker & Ne & Ne & Ano (Zavádějící)* & Ne \\
+			VerseLocker & Ne & Ne & Ano* & Ne \\
 			\hline
 			Remember Me & Ne & Ne & Ne & Ne** \\
 			\hline
-			BibleMe & Ne & Ne (Nefunkční) & Ne & Ne \\
+			BibleMe & Ne & Ne & Ne & Ne \\
 			\hline
 		\end{tabular}
-		\caption{Srovnání funkcionality aplikace Bible Memorizer s existujícími řešeními}
+		\caption{Srovnání funkcionality aplikace s existujícími řešeními}
 		\label{tab:srovnani_aplikaci}
-	\footnotesize{
-		\textit{* Žebříček v aplikaci VerseLocker hodnotí pouze počet veršů bez reálného testování znalostí. \\
-			*** Aplikace Remember Me podporuje stažení českého překladu Bible, ale samotné rozhraní aplikace do češtiny přeloženo není.}
-			}
+		\vspace{1mm}
+		\scriptsize{ % Menší písmo pro vysvětlivky
+			\textit{* Žebříček hodnotí pouze počet veršů bez testování znalostí. \\
+				*** Podporuje český překlad Bible, ale rozhraní aplikace nikoliv.}
+		}
 	\end{table}
 	
+	Největší technologickou výzvou byla obousměrná synchronizace dat mezi SQLite a PostgreSQL. Problém potenciálních konfliktů při úpravách ve více zařízeních v offline režimu byl vyřešen mechanismem založeným na časových razítkách (timestamps), který zajišťuje, že systém jako platný vždy přijímá nejnovější záznam.
 	
-
-	\subsubsection{Problémy během vývoje a jejich řešení}
-	Největší technologickou výzvou během implementace byla obousměrná synchronizace dat mezi offline lokální databází (SQLite) a centrální serverovou databází (PostgreSQL. Zpočátku vyvstávala hrozba konfliktů při úpravě stejného záznamu na více zařízeních v offline režimu. Tento problém byl vyřešen zavedením robustního mechanismu založeného na časových razítkách (timestamps). Systém při slučování dat porovnává časová razítka a jako platný vždy přijímá nejnovější záznam.
-	
-	\subsubsection{Celkové shrnutí projektu}
-	Cílem maturitního projektu bylo navrhnout a vyvinout mobilní aplikaci pro operační systém Android, která uživatelům pomůže zapamatovat si biblické verše efektivním a zároveň zábavným způsobem. Výsledkem je moderní, bezpečná a plně funkční platforma Bible Memorizer. Díky využití frameworku Flutter poskytuje aplikace plynulý uživatelský zážitek a konzistentní vzhled, zatímco backend postavený na NestJS zajišťuje spolehlivou synchronizaci a ochranu dat. Implementace gamifikačních prvků a algoritmu intervalového opakování pomáhá uživatelům dosahovat lepších výsledků s menším úsilím.
-	
-	% TODO HLR
-	\subsubsection{Možnosti budoucího rozvoje}
-	Ačkoliv je aplikace v současném stavu plně použitelná, existuje zásadní prostor pro její další algoritmické vylepšení. Hlavním plánem do budoucna je nahrazení současného algoritmu SM-2 pokročilejším modelem HLR (Half-Life Regression). \cite{hlr} Tento model dokáže přesněji odhadovat pravděpodobnost zapomenutí konkrétního verše na základě širšího spektra proměnných a historie paměťových stop, což by vedlo k další optimalizaci intervalů opakování a celkovému zefektivnění procesu memorizace.
+	Výsledkem je moderní, bezpečná a plně funkční platforma optimalizovaná pro Android. Ačkoliv je aplikace ve stavu funkčního prototypu, existuje prostor pro další vývoj. Hlavní možností pro rozvoj je nahrazení algoritmu SM-2 pokročilejším modelem HLR (Half-Life Regression) \cite{hlr}, který dokáže na základě historie paměťových stop přesněji predikovat pravděpodobnost zapomnění a dále tak optimalizovat proces učení.
 	
 	% 8. Literatura
 	\newpage
