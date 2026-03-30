@@ -16,9 +16,9 @@ services:
     image: postgres:18
     container_name: postgres_db_prod
     environment:
-      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_USER=${DB_USERNAME}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
-      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_DB=${DB_DATABASE}
     volumes:
       - db_data_prod:/var/lib/postgresql/data
     restart: unless-stopped
