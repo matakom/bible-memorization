@@ -13,6 +13,7 @@
 migrate_working_dir/
 .env*
 assets/bible
+private/
 
 # IntelliJ related
 *.iml

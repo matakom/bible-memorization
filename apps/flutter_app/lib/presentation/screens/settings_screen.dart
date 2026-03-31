@@ -49,7 +49,7 @@ class SettingsScreen extends ConsumerWidget {
             ),
           ),
 
-          GetTokenButton(),
+          // GetTokenButton(),
           ElevatedButton(
             child: Text(context.l10n.settings_debugDb),
             onPressed: () {

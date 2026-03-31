@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/data/local/app_database.dart';
 import 'package:flutter_app/l10n/app_localizations.dart';
@@ -15,11 +16,15 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
-const String environment = String.fromEnvironment('ENV', defaultValue: 'dev');
+String environment = String.fromEnvironment('ENV', defaultValue: 'dev');
 
 /// Initializes core services, Firebase, notifications, and runs the Flutter application.
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  if(!kDebugMode)
+  {
+    environment = 'prod';
+  }
   await dotenv.load(fileName: ".env.$environment");
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await NotificationService.init();
