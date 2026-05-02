@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.prod
-    container_name: nestjs_app_prod
+    container_name: bible_memorization-nestjs
     depends_on:
       - db
     ports:
@@ -14,7 +14,7 @@ services:
 
   db:
     image: postgres:18
-    container_name: postgres_db_prod
+    container_name: bible_memorization-postgresql
     environment:
       - POSTGRES_USER=${DB_USERNAME}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
@@ -25,7 +25,7 @@ services:
 
   tunnel:
     image: cloudflare/cloudflared:latest
-    container_name: cf_tunnel_prod
+    container_name: bible_memorization-tunnel
     command: tunnel --config /etc/cloudflared/config.yml run
     volumes:
       - /srv/bible_memorization/cloudflared:/etc/cloudflared:ro

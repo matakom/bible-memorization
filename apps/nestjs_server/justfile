@@ -1,0 +1,58 @@
+default:
+    @just --list
+
+# Variables
+dev_yml  := "docker-compose.dev.yml"
+prod_yml := "docker-compose.prod.yml"
+
+# --- General ---
+
+# Show status of all running containers
+status:
+    docker container ls
+
+# --- Development ---
+
+# [Dev] Build images
+build:
+    docker compose -f {{dev_yml}} build
+
+# [Dev] Start containers in background
+up:
+    docker compose -f {{dev_yml}} up -d
+
+# [Dev] Stop containers
+down:
+    docker compose -f {{dev_yml}} down
+
+# [Dev] Stop containers and wipe volumes (Careful!)
+down-v:
+    docker compose -f {{dev_yml}} down -v
+
+# [Dev] Tail logs
+logs:
+    docker compose -f {{dev_yml}} logs -f
+
+# [Dev] Full recycle: Down -> Build -> Up
+rebuild: down build up
+
+# --- Production ---
+
+# [Prod] Build production images
+build-prod:
+    docker compose -f {{prod_yml}} build
+
+# [Prod] Start production containers
+up-prod:
+    docker compose -f {{prod_yml}} up -d
+
+# [Prod] Stop production containers
+down-prod:
+    docker compose -f {{prod_yml}} down
+
+# [Prod] Tail production logs
+logs-prod:
+    docker compose -f {{prod_yml}} logs -f
+
+# [Prod] Full production recycle: Down -> Build -> Up
+rebuild-prod: down-prod build-prod up-prod
