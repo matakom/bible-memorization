@@ -23,6 +23,5 @@ final firebaseAuthProvider = Provider<FirebaseAuth>((ref) {
 /// Provides the AuthRepository initialized with Firebase and Google Sign-In instances.
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
   final auth = ref.watch(firebaseAuthProvider);
-  final googleSignIn = ref.watch(googleSignInProvider);
-  return AuthRepository(auth: auth, googleSignIn: googleSignIn);
+  return AuthRepository(auth: auth);
 });

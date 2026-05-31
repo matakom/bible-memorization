@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/l10n/l10n_extension.dart';
 import 'package:flutter_app/presentation/widgets/settings/delete_account_button.dart';
-import 'package:flutter_app/presentation/widgets/settings/get_token_button.dart';
 import 'package:flutter_app/presentation/widgets/settings/locale_select.dart';
 import 'package:flutter_app/presentation/widgets/authentication/sign_out_button.dart';
 import 'package:flutter_app/presentation/widgets/authentication/sign_in_button.dart';

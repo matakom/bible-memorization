@@ -4,24 +4,35 @@ import 'package:google_sign_in/google_sign_in.dart';
 /// Manages authentication via Firebase and Google Sign-In.
 class AuthRepository {
   final FirebaseAuth _auth;
-  final GoogleSignIn _googleSignIn;
 
   AuthRepository({
     required FirebaseAuth auth,
-    required GoogleSignIn googleSignIn,
-  }) : _auth = auth,
-        _googleSignIn = googleSignIn;
+  }) : _auth = auth;
 
   Future<String?> signInWithGoogle() async {
-    final GoogleSignInAccount account = await _googleSignIn.authenticate();
-    final GoogleSignInAuthentication authentication = account.authentication;
-    final AuthCredential credentials = GoogleAuthProvider.credential(idToken: authentication.idToken);
-    await _auth.signInWithCredential(credentials);
-    
-    if(_auth.currentUser != null){
-      return await _auth.currentUser!.getIdToken();
+    try {
+      final googleSignIn = GoogleSignIn.instance;
+      await googleSignIn.initialize(); 
+      final GoogleSignInAccount? account = await googleSignIn.authenticate(); 
+      if (account == null) {
+        return null;
+      }
+      final clientAuth = await account.authorizationClient.authorizeScopes(['email', 'profile']);
+      final GoogleSignInAuthentication authentication = await account.authentication;
+      final AuthCredential credentials = GoogleAuthProvider.credential(
+        idToken: authentication.idToken,
+        accessToken: clientAuth.accessToken,
+      );
+      await _auth.signInWithCredential(credentials);
+      
+      if(_auth.currentUser != null){
+        final token = await _auth.currentUser!.getIdToken();
+        return token;
+      }
+      return null;
+    } catch (e) {
+      rethrow;
     }
-    return null;
   }
 
   Future<String?> getAuthToken() async {
@@ -32,7 +43,7 @@ class AuthRepository {
   }
   
   Future<void> signOut() async {
-    await _googleSignIn.signOut();
+    await GoogleSignIn.instance.signOut();
     await _auth.signOut();
   }
 }
